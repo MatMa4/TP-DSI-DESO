@@ -1,4 +1,3 @@
-CU09
 @startuml
 
 actor Conserje
