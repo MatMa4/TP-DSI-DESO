@@ -1,0 +1,65 @@
+@startuml
+
+actor Conserje
+
+participant "UI- Mostrar Estado de Habitaciones" as UIMostrarHab
+participant "Gestor de reservas" as GDRes
+participant "ReservasDAO" as ResDAO
+participant "Gestor de habitaciones" as GDHab
+participant "HabitacionDAO" as HabDAO
+
+
+Conserje -> UIMostrarHab: Solicita estado de habitaciones
+activate UIMostrarHab
+loop mientras ingrese las fechas
+  UIMostrarHab -> Conserje: Mostrar campos por pantalla
+  loop Mientras ingrese "Desde fecha" invalida
+  Conserje -> UIMostrarHab: Ingresa datos "Desde fecha"
+    alt fecha invalida
+    UIMostrarHab -> Conserje: Mostrar por pantalla mensaje de error
+    end 
+  end
+  loop Mientras ingrese "Hasta fecha" invalida
+  Conserje -> UIMostrarHab: Ingresa datos "Hasta fecha"
+    alt fecha invalida
+    UIMostrarHab -> Conserje: Mostrar por pantalla mensaje de error
+    end
+  end
+end
+
+  UIMostrarHab -> GDHab: consultarEstadoHabitaciones()
+  deactivate UIMostrarHab
+  activate GDHab
+    GDHab -> HabDAO: obtenerCondicionHabitaciones()
+    deactivate GDHab
+    activate HabDAO
+    HabDAO -> GDHab: condicionHabitaciones[]
+    deactivate HabDAO
+    activate GDHab
+      loop Una vez por habitacion en servicio
+      GDHab -> Habitaciones: createHabitacionDTO()
+      deactivate GDHab
+      activate Habitaciones
+      Habitaciones -> GDHab: HabitacionDTO
+      deactivate Habitaciones
+      activate GDHab
+      end
+  GDHab -> UIMostrarHab: HabitacionesDTO[]
+  deactivate GDHab
+  activate UIMostrarHab
+
+
+  UIMostrarHab -> GDRes: obtenerEstadoHabitaciones(fechaDesde,fechaHasta,HabitacionesDTO[])
+  deactivate UIMostrarHab
+  activate GDRes
+    GDRes -> ResDAO: estadoHabitaciones(fechaDesde,fechaHasta,HabitacionesDTO[])
+    activate ResDAO
+    ResDAO -> GDRes: ReservasDTO[]
+    deactivate ResDAO
+  GDRes -> UIMostrarHab: ReservasDTO[]
+  deactivate GDRes
+  activate UIMostrarHab
+UIMostrarHab -> Conserje: Mostrar grilla por pantalla
+deactivate UIMostrarHab
+
+@endum

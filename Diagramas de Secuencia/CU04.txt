@@ -1,0 +1,85 @@
+CU04
+@startuml
+
+actor Conserje
+participant "UI- Reservar habitacion" as UIR
+participant "Gestor de reservas" as GDR
+participant "ReservasDAO" as ResDAO
+participant "ReservasDTO" as ResDTO
+
+
+Conserje -> UIR: Solicita reservar habitaciones
+activate UIR
+UIR -> Conserje: Navega a CU-05
+deactivate UIR
+alt Habitaciones disponibles
+  loop Mientras el conserje selecciones habitaciones
+  Conserje -> UIR: Selecciona habitaciones
+  activate UIR
+  UIR -> UIR: f:=verificarEstadoHabitaciones(listaHabitaciones[])
+    alt Fallo verificacion
+    UIR -> Conserje: Mostrar mensaje de fallo varificacion
+    end
+    UIR -> Conserje: Mostrar pantalla con los colores cambiados
+    deactivate UIR
+  end
+Conserje -> UIR: Presionar boton de confirmacion
+activate UIR
+
+UIR -> GDR: crearReservasDTO()
+deactivate UIR
+activate GDR
+  GDR -> ResDTO: crearReservasDTO()
+  deactivate GDR
+  activate ResDTO
+  ResDTO -> GDR
+  deactivate ResDTO
+  activate GDR
+GDR -> UIR
+deactivate GDR
+activate UIR
+UIR -> Conserje: Mostrar listado de reservas con mensaje de confirmacion
+deactivate UIR
+Conserje -> UIR: Responde confirmacion
+activate UIR
+  alt Confirmar
+  UIR -> Conserje: Mostrar formulario de nombre de reserva
+  deactivate UIR
+    loop Mientras campos incompletos
+    Conserje -> UIR: Rellena campos
+    activate UIR
+    UIR -> UIR: Verificar campos completos
+      alt Campos incompletos
+      UIR -> Conserje: Mostrar mensaje de error en el campo faltante
+      end
+    end
+    
+  UIR -> GDR: f:=crearReservas(reservaDTO)
+  deactivate UIR
+  activate GDR
+  
+    GDR -> ResDAO: f:=crearReservas(reservaDTO)
+    deactivate GDR
+    activate ResDAO
+    ResDAO -> GDR: reservaCreada
+    deactivate ResDAO
+    activate GDR
+    
+    GDR -> Reserva: f:=crearReservas(reservaDTO)
+    deactivate GDR
+    activate Reserva
+    Reserva -> GDR: reservaCreada
+    deactivate Reserva
+    activate GDR
+    
+  GDR -> UIR: reservaCreada
+  deactivate GDR
+  activate UIR
+  UIR -> Conserje: Mostrar reserva confirmada
+  deactivate UIR
+  else Rechazar
+  end
+else no hay habitaciones disponibles del tipo solicitado
+end
+
+@enduml

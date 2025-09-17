@@ -1,0 +1,526 @@
+@startuml
+top to bottom direction
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam classAttributeFontSize 11
+
+package "HuespedP" {
+class GestorDeHuespedes{
+ + buscarHuesped()
+ + darAltaHuesped()
+ + modificarhuesped()
+ + darBajaHuesped()
+ + verificarHospedaje()
+ + existeHuesped()
+ }
+interface HuespedDAO {
+ + obtenerHuesped()
+ + darAltaHuesped()
+ + modificarhuesped()
+ + darBajaHuesped()
+}
+class HuespedDTO{
+-apellido: String
+-nombre: String
+    -tipoDocumento: String
+    -numeroDocumento: String
+    -fechaNacimiento: Date
+    -direccionHuesped: Direccion
+    -telefono: String
+    -email: String
+    -ocupacion: String
+    -nacionalidad: String
+    -cuit: String
+    -posicionIVA: String
+}
+class Huesped{
+-apellido: String
+-nombre: String
+    -tipoDocumento: String
+    -numeroDocumento: String
+    -fechaNacimiento: Date
+    -direccionHuesped: Direccion
+    -telefono: String
+    -email: String
+    -ocupacion: String
+    -nacionalidad: String
+    -cuit: String
+    -posicionIVA: String
+  }
+}
+
+
+package "DireccionP" {
+interface DireccionDAO{
+  +crearDireccion()
+  +obtenerDireccion()
+}
+class DireccionDTO{
+-dir_calle: String
+    -dir_numero: Integer
+    -dir_departamento: String
+    -dir_piso: Integer
+    -dir_codigo-postal: Integer
+    -dir_localidad: String
+    -dir_provincia: String
+    -dir_pais: String
+    }
+class Direccion {
+    -dir_calle: String
+    -dir_numero: Integer
+    -dir_departamento: String
+    -dir_piso: Integer
+    -dir_codigo-postal: Integer
+    -dir_localidad: String
+    -dir_provincia: String
+    -dir_pais: String
+  }
+}
+
+package "HabitacionP" {
+class GestorDeHabitaciones{
++ obtenerEstadoHabitaciones()
++ actualizarEstadoHabitacion()
++ habitacionesDisponibles()
+ }
+interface HabitacionDAO{
+  +crearHabitacion()
+  +actualizarEstadoHabitacion()
+  +obtenerHabitacion()
+}
+class HabitacionDTO{
+    -numero: int
+    -costoPorNoche: float
+    -capacidad: int
+    -estado: String
+    -descripcion: String
+    -camasIndividuales: int
+    -camaDoble: int
+    -camaKingsize: int
+}
+abstract class Habitacion {}
+class IndividualEstandar{
+    -numero: int
+    -costoPorNoche: float
+    -capacidad: int
+    -estado: String
+    -descripcion: String
+    -camasIndividuales: int
+  }
+class DobleEstandar{
+    -numero: int
+    -costoPorNoche: float
+    -capacidad: int
+    -estado: String
+    -descripcion: String
+    -camaDoble: int
+    -camasIndividuales: int
+  }
+class DobleSuperior{
+    -numero: int
+    -costoPorNoche: float
+    -capacidad: int
+    -estado: String
+    -descripcion: String
+    -camaDoble: int
+    -camasIndividuales: int
+  }
+class SuperiorFamilyPlan{
+    -numero: int
+    -costoPorNoche: float
+    -capacidad: int
+    -estado: String
+    -descripcion: String
+    -camasDobles: int
+    -camasIndividuales: int
+  }
+class Suite{
+    -numero: int
+    -costoPorNoche: float
+    -capacidad: int
+    -estado: String
+    -descripcion: String
+    -camaKingsize: int
+  }
+}
+
+package "ReservaP" {
+interface ReservaDAO{
+  +crearReserva()
+  +obtenerReserva()
+  +cancelarReserva()
+}
+class ReservaDTO{
+    -idReserva: int
+    -fechaInicio: Date
+    -fechaFin: Date
+    -estado: String
+    -nombre: String
+    -apellido: String
+    -telefono: String
+}
+class Reserva {
+    -idReserva: int
+    -fechaInicio: Date
+    -fechaFin: Date
+    -estado: String
+    -nombre: String
+    -apellido: String
+    -telefono: String
+  }
+}
+
+package "OcupacionP" {
+interface OcupacionDAO{
+  +crearOcupacion()
+  +cancelarOcupacion()
+  +obtenerOcupacion()
+}
+class OcupacionDTO{
+-idOcupacion: int
+    -fechaInicio: Date
+    -fechaFin: Date
+    -checkIn: DateTime
+    -checkOut: DateTime
+}
+class Ocupacion {
+    -idOcupacion: int
+    -fechaInicio: Date
+    -fechaFin: Date
+    -checkIn: DateTime
+    -checkOut: DateTime
+  }
+interface ConsumoDAO{
+  +crearConsumo()
+  +obtenerConsumo()
+}
+class ConsumoDTO{
+-tipoServicio: String
+    -detalle: String
+    -monto: float
+}
+class Consumo {
+    -tipoServicio: String
+    -detalle: String
+    -monto: float
+  }
+}
+
+package "FacturaP" {
+interface FacturaDAO{
+  +crearFactura()
+  +obtenerFactura()
+  +cancelarFactura()
+}
+class FacturaDTO{
+    -numero: int
+    -fechaEmision: Date
+    -tipo: String
+    -montoTotal: float
+    -iva: float
+    -estado: String
+}
+class Factura {
+    -numero: int
+    -fechaEmision: Date
+    -tipo: String
+    -montoTotal: float
+    -iva: float
+    -estado: String
+  }
+interface NotaDeCreditoDAO{
+  +crearNotaDeCredito()
+  +obtenerNotaDeCredito()
+}
+class NotaDeCreditoDTO{
+    -numero: int
+    -fecha: Date
+    -importe: float
+}
+class NotaDeCredito {
+    -numero: int
+    -fecha: Date
+    -importe: float
+  }
+}
+
+package "PagoP" {
+
+interface PagoDAO{
+  +crearPago()
+  +obtenerPago()
+}
+class PagoDTO{
+    -fecha: Date
+    -monto: float
+}
+class Pago {
+    -fecha: Date
+    -monto: float
+  }
+abstract class MetodoDePago {}
+interface MetodoDePagoDAO{
+  +crearMetodoDePago()
+  +obtenerMetodoDePago()
+}
+class TarjetaDebitoDTO{
+    -tipo: String
+    -banco: String
+}
+class TarjetaCreditoDTO{
+    -tipo: String
+    -banco: String
+    -vencimiento: Date
+}
+class EfectivoDTO{
+id_efectivo: Integer
+}
+class MonedaExtranjeraDTO{
+    -tipoMoneda: String
+    -montoExtranjero: float
+    -cotizacion: float
+}
+class ChequeDTO{
+    -numero: String
+    -banco: String
+    -plaza: String
+    -fechaCobro: Date
+}
+class Cheque{
+    -numero: String
+    -banco: String
+    -plaza: String
+    -fechaCobro: Date
+  }
+class TarjetaCredito {
+    -tipo: String
+    -banco: String
+    -vencimiento: Date
+  }
+class TarjetaDebito {
+    -tipo: String
+    -banco: String
+  }
+class Efectivo {
+id_efectivo: Integer
+  }
+class MonedaExtranjera {
+    -tipoMoneda: String
+    -montoExtranjero: float
+    -cotizacion: float
+  }
+interface PersonaJuridicaDAO{
+  +crearPersonaJuridica()
+  +obtenerPersonaJuridica()
+}
+interface PersonaFisicaDAO{
+  +crearPersonaFisica()
+  +obtenerPersonaFisica()
+}
+class PersonaFisicaDTO{
+-id_per_fisica: Integer
+}
+class PersonaJuridicaDTO{
+    -razonSocial: String
+    -cuit: String
+    -direccionJuridica: Direccion
+    -telefono: String
+}
+abstract class ResponsableDePago {}
+class PersonaJuridica{
+    -razonSocial: String
+    -cuit: String
+    -direccionJuridica: Direccion
+    -telefono: String
+  }
+class PersonaFisica{
+-id_per_fisica: Integer
+}
+interface ResponsableDePagoDAO{
+  +crearResponsableDePago()
+  +obtenerResponsableDePago()
+  +eliminarResponsableDePago
+}
+class ResponsableDePagoDTO
+}
+
+package "UsuarioP" {
+interface UsuarioDAO{
+  +crearUsuario()
+  +modificarUsuario()
+  +eliminarUsuario()
+  +obtenerUsuario()
+}
+class UsuarioDTO{
+    -usuario: String
+    -contrasena: String
+    -rol: String
+}
+class Usuario {
+    -usuario: String
+    -contrasena: String
+    -rol: String
+  }
+}
+
+class GestorDeReservas{
++ reservarHabitacion()
++ cancelarReserva()
++ buscarReserva()
++ crearReserva()
+}
+
+class GestorDeOcupaciones{
++ ocuparHabitacion()
+registrarCheckIn()
++ registrarCheckOut()
+registrarConsumo()
+}
+
+class GestorDeFacturas{
+generarFactura()
+listarFacturas()
+ingresarNotaDeCredito()
+}
+
+class GestorDePagos{
+    + buscarResponsableDePago()
+    + altaResponsableDePago()
+    + modificarResponsableDePago()
+    + bajaResponsableDePago()
+    + listarCheques()
+    + listarPagos()
+    + ingresarPago()
+}
+
+' ========================== RELACIONES DE CLASES ==========================
+ResponsableDePago <|.. PersonaJuridica
+ResponsableDePago <|.. PersonaFisica
+
+MetodoDePago <|.. Cheque
+MetodoDePago <|.. TarjetaCredito
+MetodoDePago <|.. TarjetaDebito
+MetodoDePago <|.. Efectivo
+MetodoDePago <|.. MonedaExtranjera
+
+Habitacion <|.. IndividualEstandar
+Habitacion <|.. DobleEstandar
+Habitacion <|.. DobleSuperior
+Habitacion <|.. SuperiorFamilyPlan
+Habitacion <|.. Suite
+
+Huesped "1" -- "1" PersonaFisica
+Huesped "0..n" -- "1" Direccion
+PersonaJuridica "0..1" -- "1" Direccion
+Huesped "1" -- "0..n" Reserva
+Huesped "1..n" -- "0..n" Ocupacion
+Ocupacion "1" *-- "0..n" Consumo
+Reserva "0..n" -- "1" Habitacion
+Ocupacion "0..n" -- "1" Habitacion
+Ocupacion "1" -- "1..n" Factura
+Factura "1" -- "0..1" Pago
+Factura "1..n" -- "0..1" NotaDeCredito
+Pago "0..n" -- "1..n" MetodoDePago
+Factura "0..n" o-- "1" ResponsableDePago
+
+'============================= RELACIONES DE DAO ============================='
+
+HuespedDTO "1" -- "1" PersonaFisicaDTO
+HuespedDTO "0..n" -- "1" DireccionDTO
+PersonaJuridicaDTO "0..1" -- "1" DireccionDTO
+HuespedDTO "1" -- "0..n" ReservaDTO
+HuespedDTO "1..n" -- "0..n" OcupacionDTO
+OcupacionDTO "1" *-- "0..n" ConsumoDTO
+ReservaDTO "0..n" -- "1" HabitacionDTO
+OcupacionDTO "0..n" -- "1" HabitacionDTO
+OcupacionDTO "1" -- "1..n" FacturaDTO
+FacturaDTO "1" -- "0..1" PagoDTO
+FacturaDTO "1..n" -- "0..1" NotaDeCreditoDTO
+FacturaDTO "0..n" o-- "1" ResponsableDePagoDTO
+PagoDTO "0..n" -- "0..1" TarjetaDebitoDTO
+PagoDTO "0..n" -- "0..1" TarjetaCreditoDTO
+PagoDTO "0..n" -- "0..1" EfectivoDTO
+PagoDTO "0..n" -- "0..1" ChequeDTO
+PagoDTO "0..n" -- "0..1" MonedaExtranjeraDTO
+
+
+' ========================== RELACIONES DE GESTORES ==========================
+GestorDeHuespedes ..> HuespedDAO
+GestorDeHuespedes ..> Huesped
+GestorDeHuespedes ..> DireccionDAO
+GestorDeHuespedes ..> Direccion
+
+GestorDeReservas ..> ReservaDAO
+GestorDeReservas ..> HabitacionDAO
+GestorDeReservas ..> HuespedDAO
+GestorDeReservas ..> Reserva
+GestorDeReservas ..> Habitacion
+GestorDeReservas ..> Huesped
+
+GestorDeOcupaciones ..> OcupacionDAO
+GestorDeOcupaciones ..> HabitacionDAO
+GestorDeOcupaciones ..> HuespedDAO
+GestorDeOcupaciones ..> ReservaDAO
+GestorDeOcupaciones ..> ConsumoDAO
+GestorDeOcupaciones ..> Ocupacion
+GestorDeOcupaciones ..> Habitacion
+GestorDeOcupaciones ..> Huesped
+GestorDeOcupaciones ..> Reserva
+GestorDeOcupaciones ..> Consumo
+
+GestorDeHabitaciones ..> HabitacionDAO
+GestorDeHabitaciones ..> Habitacion
+
+GestorDeFacturas ..> FacturaDAO
+GestorDeFacturas ..> ConsumoDAO
+GestorDeFacturas ..> PagoDAO
+GestorDeFacturas ..> OcupacionDAO
+GestorDeFacturas ..> Factura
+GestorDeFacturas ..> Consumo
+GestorDeFacturas ..> Pago
+GestorDeFacturas ..> Ocupacion
+GestorDeFacturas ..> Direccion
+GestorDeFacturas ..> DireccionDAO
+GestorDeFacturas ..> NotaDeCreditoDAO
+GestorDeFacturas ..> NotaDeCredito
+
+GestorDePagos ..> PagoDAO
+GestorDePagos ..> FacturaDAO
+GestorDePagos ..> Pago
+GestorDePagos ..> Factura
+GestorDePagos ..> PersonaJuridicaDAO
+GestorDePagos ..> PersonaFisicaDAO
+GestorDePagos ..> ResponsableDePago
+GestorDePagos ..> ResponsableDePagoDAO
+GestorDePagos ..> MetodoDePagoDAO
+GestorDePagos ..> MetodoDePago
+
+GestorDeUsuario ..> UsuarioDAO
+GestorDeUsuario ..> Usuario
+
+
+DireccionDAO ..> DireccionDTO
+UsuarioDAO ..> UsuarioDTO
+HuespedDAO ..> DireccionDTO
+HuespedDAO ..> HuespedDTO
+ReservaDAO ..> ReservaDTO
+ReservaDAO ..> HuespedDTO
+ReservaDAO ..> HabitacionDTO
+HabitacionDAO ..> HabitacionDTO
+OcupacionDAO ..> OcupacionDTO
+ConsumoDAO ..> ConsumoDTO
+FacturaDAO ..> FacturaDTO
+PagoDAO ..> PagoDTO
+PersonaJuridicaDAO ..> PersonaJuridicaDTO
+PersonaFisicaDAO ..> PersonaFisicaDTO
+NotaDeCreditoDAO ..> NotaDeCreditoDTO
+ResponsableDePagoDAO ..> ResponsableDePagoDTO
+MetodoDePagoDAO ..> TarjetaDebitoDTO
+MetodoDePagoDAO ..> TarjetaCreditoDTO
+MetodoDePagoDAO ..> EfectivoDTO
+MetodoDePagoDAO ..> MonedaExtranjeraDTO
+MetodoDePagoDAO ..> ChequeDTO
+
+
+GestorDeHabitaciones -- GestorDeReservas
+@enduml

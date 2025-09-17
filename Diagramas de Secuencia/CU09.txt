@@ -1,0 +1,128 @@
+CU09
+@startuml
+
+actor Conserje
+participant "UI- Dar de Alta de Huesped" as UIH
+participant "Gestor De Huesped" as GDH
+participant "HuespedDAO" as HuesDAO
+participant "HuespedDTO" as HuesDTO
+Conserje -> UIH: Solicita crear Huesped
+activate UIH
+loop Mientras el Conserje quiera dar de alta huÃ©spedes
+
+    UIH -> Conserje: Mostrar pantalla vacia para ingresar datos
+    deactivate UIH
+    Conserje -> UIH: Ingresar datos
+    activate UIH
+    loop Mientras haya problemas con los datos
+     deactivate UIH
+     Conserje -> UIH: Ingresar datos
+     activate UIH
+     
+     UIH -> UIH: verificaCamposObligatorios()
+     alt campos obligarorios incompletos
+      UIH -> Conserje: Muestra mensajes sobre campos incompletos
+     else campos obligarorios completos
+      UIH -> GDH: consultarDocumento(NroDocumento)
+      deactivate UIH
+      activate GDH
+      GDH -> HuesDAO: consultarDocumento(NroDocumento)
+      deactivate GDH
+      activate HuesDAO
+      alt Husped ya existe
+        HuesDAO -> HuesDTO: buscarDatos()
+        deactivate HuesDAO
+        activate HuesDTO
+        HuesDTO -> HuesDAO: HuespedDTO
+        deactivate HuesDTO
+        activate HuesDAO
+        HuesDAO -> GDH: HuespedDTO
+        deactivate HuesDAO
+        activate GDH
+        GDH -> UIH: HuespedDTO
+        deactivate GDH
+        activate UIH
+        
+        UIH -> Conserje: Ya existe huesped
+        deactivate UIH
+        alt Aceptar igualmente
+          Conserje -> UIH: presiona aceptar igualmente
+          activate UIH
+          UIH -> GDH: RegistrarHuesped(HuespedDTO)
+          deactivate UIH
+          activate GDH
+          GDH -> HuesDAO: GuardarHuesped(HuespedDTO)
+          deactivate GDH
+          activate HuesDAO
+          HuesDAO -> GDH: Huesped guardado en BD
+          deactivate HuesDAO
+          activate GDH
+          GDH -> UIH: Huesped guardado en BD
+          deactivate GDH
+          activate UIH
+          UIH -> Conserje: Mensaje de Huesped guardado exitosamente
+          UIH -> Conserje: Mensaje de consulta para seguir cargando
+          deactivate UIH
+          Conserje -> UIH: Responde
+        else presiona corregir
+            Conserje -> UIH: presiona corregir
+            activate UIH
+            UIH -> Conserje: Muestra formulario con foco en el campo documento
+            deactivate UIH
+            activate HuesDAO
+        end
+      else huesped no existe
+         HuesDAO -> GDH: Huesped no existe
+         deactivate HuesDAO
+         activate GDH
+         GDH -> HuesDTO: añadirHuesped()
+         deactivate GDH
+         activate HuesDTO
+         HuesDTO -> GDH: HuespedDTO
+         deactivate HuesDTO
+         activate GDH
+         GDH -> UIH: HuespedCreado
+        deactivate GDH
+        activate UIH
+        UIH -> GDH: RegistrarHuesped(HuespedDTO)
+        deactivate UIH
+        activate GDH
+        GDH -> Huesped: crearHuesped(HuespedDTO)
+        deactivate GDH
+        activate Huesped
+        Huesped -> GDH
+        deactivate Huesped
+        activate GDH
+        GDH -> HuesDAO: GuardarHuesped(HuespedDTO)
+        deactivate GDH
+        activate HuesDAO
+        HuesDAO -> GDH
+        deactivate HuesDAO
+        activate GDH
+        GDH -> UIH: Huesped guardado en BD
+        deactivate GDH
+        activate UIH
+        UIH -> Conserje: Mensaje de Huesped guardado exitosamente
+        deactivate UIH
+        Conserje -> UIH: Mensaje de consulta para seguir cargando
+        activate UIH
+        UIH -> Conserje: Responde
+        end
+      activate UIH
+      else presiona cancelar
+        UIH -> Conserje: Muestra mensaje de confirmacion
+        deactivate UIH
+        alt presiona SI
+        Conserje -> UIH: Presiona SI
+        activate UIH
+        UIH -> Conserje: Navega a otro CU
+        deactivate UIH
+        else presiona NO
+        Conserje -> UIH: Presiona NO
+        activate UIH
+    deactivate UIH
+    end
+  end
+end
+end
+@enduml
