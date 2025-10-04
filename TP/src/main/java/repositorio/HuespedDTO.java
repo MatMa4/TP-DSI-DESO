@@ -2,13 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package dominio;
+package repositorio;
+
 import dominio.Direccion;
 import java.time.LocalDate;
 
-
-
-public class Huesped {
+/**
+ *
+ * @author mateo
+ */
+public class HuespedDTO {
     private String apellido;
     private String nombre;
     private String tipoDocumento;
@@ -22,8 +25,7 @@ public class Huesped {
     private String cuit;
     private String posicionIVA;
     
-    //============Creacion=============
-    private Huesped(Builder builder){
+        private HuespedDTO(Builder builder){
         this.apellido = builder.apellido;
         this.nombre = builder.nombre;
         this.tipoDocumento = builder.tipoDocumento;
@@ -38,56 +40,6 @@ public class Huesped {
         this.posicionIVA = builder.posicionIVA; //Consumidor final por omisión
     }
     
-    //Getters
-    public String getApellido() {
-    return apellido;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public String getTipoDocumento() {
-        return tipoDocumento;
-    }
-
-    public String getNumeroDocumento() {
-        return numeroDocumento;
-    }
-
-    public LocalDate getFechaNacimiento() {
-        return fechaNacimiento;
-    }
-
-    public Direccion getDireccionHuesped() {
-        return direccionHuesped;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getOcupacion() {
-        return ocupacion;
-    }
-
-    public String getNacionalidad() {
-        return nacionalidad;
-    }
-
-    public String getCuit() {
-        return cuit;
-    }
-
-    public String getPosicionIVA() {
-        return posicionIVA;
-    }
-    
-    //===============Builder==============
     public static class Builder{
         private String apellido;
         private String nombre;
@@ -150,8 +102,8 @@ public class Huesped {
             this.posicionIVA = posicionIVA;
             return this;
         }
-        public Huesped build(){
-            return new Huesped(this);
+        public HuespedDTO build(){
+            return new HuespedDTO(this);
         }
     }
 }
