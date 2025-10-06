@@ -54,6 +54,8 @@ public class HuespedDTO {
         private String cuit;
         private String posicionIVA;
         
+        //Hay que poner una validación de si es null y crear una excepción para cada campo obligatorio
+        //Lo mismo para los setters
         public Builder apellido(String apellido){
             this.apellido = apellido;
             return this;
@@ -105,5 +107,57 @@ public class HuespedDTO {
         public HuespedDTO build(){
             return new HuespedDTO(this);
         }
+
+
+
+    }
+
+    //Getters
+    public String getApellido() {
+    return apellido;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public String getNumeroDocumento() {
+        return numeroDocumento;
+    }
+
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public Direccion getDireccionHuesped() {
+        return direccionHuesped;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getOcupacion() {
+        return ocupacion;
+    }
+
+    public String getNacionalidad() {
+        return nacionalidad;
+    }
+
+    public String getCuit() {
+        return cuit;
+    }
+
+    public String getPosicionIVA() {
+        return posicionIVA;
     }
 }

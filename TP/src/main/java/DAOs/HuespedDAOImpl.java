@@ -47,6 +47,44 @@ public class HuespedDAOImpl implements HuespedDAO {
 
     @Override
     public void modificarHuesped(HuespedDTO huespedModificado, Huesped huespedAntiguo){
+         huespedes.stream()
+        .filter(h -> equals(h, huespedAntiguo))
+        .findFirst()
+        .ifPresent(h -> clonarDesdeDTO(huespedModificado, h));
+    }
 
+    @Override
+    public boolean equals(Huesped h, Huesped huespedAntiguo) {
+        return h.getApellido().equals(huespedAntiguo.getApellido()) && 
+                h.getNombre().equals(huespedAntiguo.getNombre()) &&
+                h.getTipoDocumento().equals(huespedAntiguo.getTipoDocumento()) &&
+                h.getNumeroDocumento().equals(huespedAntiguo.getNumeroDocumento()) &&
+                h.getFechaNacimiento().equals(huespedAntiguo.getFechaNacimiento()) &&
+                h.getDireccionHuesped().equals(huespedAntiguo.getDireccionHuesped()) &&
+                h.getTelefono().equals(huespedAntiguo.getTelefono()) &&
+                ((h.getEmail() == null && huespedAntiguo.getEmail() == null) || 
+                 (h.getEmail() != null && h.getEmail().equals(huespedAntiguo.getEmail()))) &&
+                h.getOcupacion().equals(huespedAntiguo.getOcupacion()) &&
+                h.getNacionalidad().equals(huespedAntiguo.getNacionalidad()) &&
+                ((h.getCuit() == null && huespedAntiguo.getCuit() == null) || 
+                 (h.getCuit() != null && h.getCuit().equals(huespedAntiguo.getCuit()))) &&
+                ((h.getPosicionIVA() == null && huespedAntiguo.getPosicionIVA() == null) || 
+                 (h.getPosicionIVA() != null && h.getPosicionIVA().equals(huespedAntiguo.getPosicionIVA())));
+    }
+
+    @Override
+    public void clonarDesdeDTO(HuespedDTO dto, Huesped h) {
+        h.setApellido(dto.getApellido());
+        h.setNombre(dto.getNombre());
+        h.setTipoDocumento(dto.getTipoDocumento());
+        h.setNumeroDocumento(dto.getNumeroDocumento());
+        h.setFechaNacimiento(dto.getFechaNacimiento());
+        h.setDireccionHuesped(dto.getDireccionHuesped());
+        h.setTelefono(dto.getTelefono());
+        h.setEmail(dto.getEmail()); //Ver si es null
+        h.setOcupacion(dto.getOcupacion()); 
+        h.setNacionalidad(dto.getNacionalidad());
+        h.setCuit(dto.getCuit()); //Ver si es null
+        h.setPosicionIVA(dto.getPosicionIVA()); //Ver si es null
     }
 }
