@@ -4,6 +4,8 @@
  */
 package DAOs;
 import repositorio.HuespedDTO;
+
+import java.util.ArrayList;
 import java.util.List;
 import dominio.Huesped;
 
@@ -13,6 +15,19 @@ import dominio.Huesped;
  */
 public class HuespedDAOImpl implements HuespedDAO {
     private List<Huesped> huespedes; // o la fuente de datos que uses
+    private static HuespedDAOImpl instancia;
+
+    //Patrón Singleton
+    private HuespedDAOImpl() {
+        huespedes = new ArrayList<>();
+    }
+
+    public static HuespedDAOImpl getHuespedDAO() {
+        if (instancia == null) {
+            instancia = new HuespedDAOImpl();
+        }
+        return instancia;
+    }
 
     @Override
     public HuespedDTO consultarDocumento(String tipoDocumento, String numeroDocumento) {

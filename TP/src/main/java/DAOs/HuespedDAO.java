@@ -15,5 +15,4 @@ public interface HuespedDAO {
     public void modificarHuesped(HuespedDTO huespedModificado, Huesped huespedAntiguo);
     public boolean equals(Huesped h, Huesped huespedAntiguo);
     public void clonarDesdeDTO(HuespedDTO dto, Huesped h);
-
 }
