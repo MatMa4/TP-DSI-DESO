@@ -21,7 +21,8 @@ public class GestorDeHuesped {
     }
 
     public void modificarHuesped(HuespedDTO huespedModificado, Huesped huespedAntiguo){
-
+        //Se fija si las direcciones son iguales, si no lo son, crea una nueva direccion y se la asigna
+        //Hace la funcion modificar Huesped y listo creo
     }
     
 }
