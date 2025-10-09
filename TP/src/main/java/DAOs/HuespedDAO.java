@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
 package DAOs;
+import dominio.Direccion;
 import dominio.Huesped;
 import repositorio.HuespedDTO;
 
@@ -13,6 +14,7 @@ import repositorio.HuespedDTO;
 public interface HuespedDAO {
     public HuespedDTO consultarDocumento(String tipoDocumento, String numeroDocumento);
     public void modificarHuesped(HuespedDTO huespedModificado, Huesped huespedAntiguo);
+    public void modificarHuesped(HuespedDTO huespedModificado, Huesped huespedAntiguo, Direccion direccionNueva);
     public boolean equals(Huesped h, Huesped huespedAntiguo);
     public void clonarDesdeDTO(HuespedDTO dto, Huesped h);
 }

@@ -4,10 +4,16 @@
  */
 package servicios;
 
-import DAOs.HuespedDAOImpl;
+
+import dominio.Direccion;
 import dominio.Huesped;
 import repositorio.HuespedDTO;
+import repositorio.DireccionDTO;
 import DAOs.HuespedDAO;
+import DAOs.HuespedDAOImpl;
+import DAOs.DireccionDAO;
+import DAOs.DireccionDAOImpl;
+
 
 /**
  *
@@ -21,9 +27,25 @@ public class GestorDeHuesped {
     }
 
     public void modificarHuesped(HuespedDTO huespedModificado, Huesped huespedAntiguo){
-        //Se fija si las direcciones son iguales, si no lo son, crea una nueva direccion y se la asigna
-        //Hace la funcion modificar Huesped y listo creo
+        //Se fija si las direcciones son iguales, si no lo son, le asigna la nueva direccion
+        DireccionDAO direccionDAO = DireccionDAOImpl.getDireccionDAO();
+        HuespedDAO huespedDAO= HuespedDAOImpl.getHuespedDAO();
+        Direccion direccionNueva = convertirADireccion(huespedModificado.getDireccionHuesped());    
+        if(!(direccionDAO.equals(huespedAntiguo.getDireccionHuesped(), direccionNueva))){
+           huespedDAO.modificarHuesped(huespedModificado, huespedAntiguo, direccionNueva);
+           direccionDAO.agregarDireccion(direccionNueva);
+        }else{
+            huespedDAO.modificarHuesped(huespedModificado, huespedAntiguo);
+        } 
     }
+
+    private Direccion convertirADireccion(DireccionDTO dirDTO){
+        Direccion direccion = new Direccion(dirDTO.getCalle(), dirDTO.getNumero(), dirDTO.getDepartamento(),
+                                            dirDTO.getPiso(), dirDTO.getCodigo(), dirDTO.getLocalidad(),
+                                            dirDTO.getProvincia(), dirDTO.getPais());
+        return direccion;
+    }
+
     
 }
 

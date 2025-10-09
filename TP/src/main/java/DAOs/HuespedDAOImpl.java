@@ -8,6 +8,7 @@ import repositorio.HuespedDTO;
 import java.util.ArrayList;
 import java.util.List;
 import dominio.Huesped;
+import dominio.Direccion;
 
 /**
  *
@@ -69,6 +70,15 @@ public class HuespedDAOImpl implements HuespedDAO {
     }
 
     @Override
+    public void modificarHuesped(HuespedDTO huespedModificado, Huesped huespedAntiguo, Direccion direccionNueva){
+         huespedes.stream()
+        .filter(h -> equals(h, huespedAntiguo))
+        .findFirst()
+        .ifPresent(h -> {clonarDesdeDTO(huespedModificado, h);
+                         h.setDireccionHuesped(direccionNueva);});
+    }
+
+    @Override
     public boolean equals(Huesped h, Huesped huespedAntiguo) {
         return h.getApellido().equals(huespedAntiguo.getApellido()) && 
                 h.getNombre().equals(huespedAntiguo.getNombre()) &&
@@ -88,13 +98,12 @@ public class HuespedDAOImpl implements HuespedDAO {
     }
 
     @Override
-    public void clonarDesdeDTO(HuespedDTO dto, Huesped h) {
+    public void clonarDesdeDTO(HuespedDTO dto, Huesped h) { //cambia todo menos la direccion
         h.setApellido(dto.getApellido());
         h.setNombre(dto.getNombre());
         h.setTipoDocumento(dto.getTipoDocumento());
         h.setNumeroDocumento(dto.getNumeroDocumento());
         h.setFechaNacimiento(dto.getFechaNacimiento());
-        h.setDireccionHuesped(dto.getDireccionHuesped());
         h.setTelefono(dto.getTelefono());
         h.setEmail(dto.getEmail()); //Ver si es null
         h.setOcupacion(dto.getOcupacion()); 

@@ -2,13 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package dominio;
+package repositorio;
+
+import dominio.Direccion;
 
 /**
  *
  * @author mateo
  */
-public class Direccion {
+public class DireccionDTO {
     private String calle;
     private String numero;
     private String departamento;
@@ -18,8 +20,8 @@ public class Direccion {
     private String provincia;
     private String pais;
 
-    public Direccion(String calle, String numero, String departamento, Integer piso,
-                     Integer codigo, String localidad, String provincia, String pais) {
+    public DireccionDTO(String calle, String numero, String departamento, Integer piso, 
+                        Integer codigo, String localidad, String provincia, String pais) {
         this.calle = calle;
         this.numero = numero;
         this.departamento = departamento;
@@ -62,5 +64,4 @@ public class Direccion {
     public String getPais() {
         return pais;
     }
-
 }

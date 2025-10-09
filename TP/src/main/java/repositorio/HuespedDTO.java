@@ -6,6 +6,7 @@ package repositorio;
 
 import dominio.Direccion;
 import java.time.LocalDate;
+import repositorio.DireccionDTO;
 
 /**
  *
@@ -17,7 +18,7 @@ public class HuespedDTO {
     private String tipoDocumento;
     private String numeroDocumento;
     private LocalDate fechaNacimiento;
-    private Direccion direccionHuesped;
+    private DireccionDTO direccionHuesped;
     private String telefono;
     private String email;
     private String ocupacion;
@@ -25,7 +26,7 @@ public class HuespedDTO {
     private String cuit;
     private String posicionIVA;
     
-        private HuespedDTO(Builder builder){
+    private HuespedDTO(Builder builder){
         this.apellido = builder.apellido;
         this.nombre = builder.nombre;
         this.tipoDocumento = builder.tipoDocumento;
@@ -46,7 +47,7 @@ public class HuespedDTO {
         private String tipoDocumento;
         private String numeroDocumento;
         private LocalDate fechaNacimiento;
-        private Direccion direccionHuesped;
+        private DireccionDTO direccionHuesped;
         private String telefono;
         private String email;
         private String ocupacion;
@@ -76,8 +77,16 @@ public class HuespedDTO {
             this.fechaNacimiento = fechaNacimiento;
             return this;
         }
-        public Builder direccionHuesped(Direccion direccionHuesped){
+        public Builder direccionHuesped(DireccionDTO direccionHuesped){
             this.direccionHuesped = direccionHuesped;
+            return this;
+        }
+        public Builder direccionHuesped(Direccion direccionHuesped){ //Para cuando le asignan un objeto Direccion
+            DireccionDTO dirDTO = new DireccionDTO(direccionHuesped.getCalle(), direccionHuesped.getNumero(),
+                                                 direccionHuesped.getDepartamento(), direccionHuesped.getPiso(),
+                                                 direccionHuesped.getCodigo(), direccionHuesped.getLocalidad(),
+                                                 direccionHuesped.getProvincia(), direccionHuesped.getPais());
+            this.direccionHuesped = dirDTO;
             return this;
         }
         public Builder telefono(String telefono){
@@ -133,7 +142,7 @@ public class HuespedDTO {
         return fechaNacimiento;
     }
 
-    public Direccion getDireccionHuesped() {
+    public DireccionDTO getDireccionHuesped() {
         return direccionHuesped;
     }
 

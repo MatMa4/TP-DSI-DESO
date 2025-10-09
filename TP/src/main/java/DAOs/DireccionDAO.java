@@ -4,10 +4,13 @@
  */
 package DAOs;
 
+import dominio.Direccion;
+
 /**
  *
  * @author mateo
  */
 public interface DireccionDAO {
-    
+    public boolean equals(Direccion direc1, Direccion direc2);
+    public void agregarDireccion(Direccion direccion);
 }
