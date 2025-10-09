@@ -4,8 +4,6 @@
  */
 package repositorio;
 
-import dominio.Direccion;
-
 /**
  *
  * @author mateo

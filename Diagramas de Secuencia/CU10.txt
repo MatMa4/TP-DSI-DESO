@@ -1,0 +1,102 @@
+@startuml
+ 
+actor Conserje
+participant "UI- Modificar Huesped" as UIH
+participant "Gestor De Huesped" as GDH
+participant "HuespedDAO" as HuesDAO
+Conserje -> UIH: Se quiere modificar un Huesped
+activate UIH
+ 
+  UIH -> Conserje: Mostrar pantalla vacia con datos del Huesped a modificar
+  loop Mientras hay problemas con los datos 
+    alt presiona SIGUIENTE
+    loop Mientras haya campos obligatorios incompletos o formatos de campos errorneos
+     deactivate UIH
+     Conserje -> UIH: Modifica datos y presiona SIGUIENTE
+     activate UIH
+     UIH -> UIH: verificaCampos()
+     opt campos obligarorios incompletos o formato de campos erroneo
+      UIH -> Conserje: Muestra mensajes sobre campos incompletos
+    end
+    end
+    opt si el documento no es el mismo que el original
+      UIH -> GDH: consultarDocumento(huespedModificadoDTO.TipoDocumento, huespedModificadoDTO.NroDocumento)
+      deactivate UIH
+      activate GDH
+      GDH -> HuesDAO: consultarDocumento(huespedDTO.TipoDocumento, huespedDTO.NroDocumento)
+      deactivate GDH
+      activate HuesDAO
+      HuesDAO -> GDH: HuespedDTO
+      deactivate HuesDAO
+    
+      opt hay un Husped con el mismo documento 
+        
+        activate GDH
+        GDH -> UIH: HuespedDTO
+        deactivate GDH
+        activate UIH
+        UIH -> Conserje: Ya existe huesped
+        deactivate UIH
+        alt Aceptar igualmente
+          Conserje -> UIH: presiona aceptar igualmente 
+        else presiona corregir
+            Conserje -> UIH: presiona corregir
+            activate UIH
+            UIH -> Conserje: Muestra formulario con foco en el campo documento
+            deactivate UIH
+      end
+      end
+      end
+      else presiona CANCELAR
+      UIH -> Conserje: Muestra mensaje de confirmacion
+      deactivate UIH
+      alt presiona SI
+      Conserje -> UIH: Presiona SI
+      activate UIH
+      UIH -> Conserje: Navega a otro CU
+      deactivate UIH
+      else presiona NO
+      Conserje -> UIH: Presiona NO
+      activate UIH
+      end
+    else presiona BORRAR
+      UIH -> Conserje: navegar a CU11: Dar baja de Huésped 
+  end
+  end
+  opt Se desean modificar los datos 
+      UIH -> GDH: modificarHuesped(huespedModificadoDTO, huespedAntiguo)
+      deactivate UIH
+        alt se modifico la direccion
+          create Direccion 
+          activate GDH
+          GDH -> Direccion: Direccion(huespedModificadoDTO)
+          deactivate GDH
+          activate Direccion
+          Direccion -> GDH: Direccion
+          deactivate Direccion
+          activate GDH
+          GDH -> HuesDAO: modificarHuesped(huespedModificadoDTO, huespedAntiguo, nuevaDireccion)
+          deactivate GDH
+          activate HuesDAO
+          HuesDAO -> Huesped: setDatos(): 
+          HuesDAO -> GDH: Huesped guardado en BD
+          deactivate HuesDAO
+          activate GDH
+        else se mantiene la direccion
+          GDH -> HuesDAO: modificarHuesped(huespedModificadoDTO, huespedAntiguo)
+          deactivate GDH
+          activate HuesDAO
+          HuesDAO -> Huesped: setDatos(): 
+          HuesDAO -> GDH: Huesped guardado en BD
+          deactivate HuesDAO
+          activate GDH
+        end
+          GDH -> UIH: Huesped guardado en BD
+          deactivate GDH
+          activate UIH
+          UIH -> Conserje: Mensaje de La operación ha culminado con éxito
+          deactivate UIH
+        
+  end
+
+@enduml
