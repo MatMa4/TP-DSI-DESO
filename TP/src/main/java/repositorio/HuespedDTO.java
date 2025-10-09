@@ -6,7 +6,6 @@ package repositorio;
 
 import dominio.Direccion;
 import java.time.LocalDate;
-import repositorio.DireccionDTO;
 
 /**
  *
