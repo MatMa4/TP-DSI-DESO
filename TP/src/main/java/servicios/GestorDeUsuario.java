@@ -8,6 +8,7 @@ import DAOs.UsuarioDAO;
 import Excepcion.ContrasenaInvalidaException;
 import Excepcion.UsuarioNoEncontradoException;
 import dominio.Usuario;
+import repositorio.UsuarioDTO;
 
 /**
  *
@@ -20,11 +21,11 @@ public class GestorDeUsuario {
         this.usuarioDAO = usuarioDAO;
     }
 
-    public Usuario autenticarUsuario(String username, String contrasena)
+    public Usuario autenticarUsuario(UsuarioDTO user)
             throws UsuarioNoEncontradoException, ContrasenaInvalidaException {
-        Usuario usuario = usuarioDAO.obtenerUsuario(username);
+        Usuario usuario = usuarioDAO.obtenerUsuario(user.getUsername());
 
-        if (!usuario.getContrasena().equals(contrasena)) {
+        if (!usuario.getContrasena().equals(user.getPassw())) {
             throw new ContrasenaInvalidaException("La contraseña no es válida.");
         }
         return usuario;
