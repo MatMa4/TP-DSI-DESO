@@ -12,6 +12,7 @@ import repositorio.HuespedDTO;
  * @author mateo
  */
 public interface HuespedDAO {
+    public void guardarHuesped(Huesped huesped);
     public HuespedDTO consultarDocumento(String tipoDocumento, String numeroDocumento);
     public void modificarHuesped(HuespedDTO huespedModificado, Huesped huespedAntiguo);
     public void modificarHuesped(HuespedDTO huespedModificado, Huesped huespedAntiguo, Direccion direccionNueva);

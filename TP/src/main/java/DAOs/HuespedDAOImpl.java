@@ -5,10 +5,17 @@
 package DAOs;
 import repositorio.HuespedDTO;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import java.io.File;
+import java.io.IOException;
+
+
 import java.util.ArrayList;
 import java.util.List;
 import dominio.Huesped;
 import dominio.Direccion;
+import Excepcion.HuespedNoEncontradoException;
 
 /**
  *
@@ -20,7 +27,7 @@ public class HuespedDAOImpl implements HuespedDAO {
 
     //Patrón Singleton
     private HuespedDAOImpl() {
-        huespedes = new ArrayList<>();
+        huespedes = cargarListaDesdeJSON();
     }
 
     public static HuespedDAOImpl getHuespedDAO() {
@@ -29,6 +36,42 @@ public class HuespedDAOImpl implements HuespedDAO {
         }
         return instancia;
     }
+
+    private List<Huesped> cargarListaDesdeJSON() {
+        ObjectMapper mapper = new ObjectMapper();
+        File archivo = new File("listaHuespedes.json");
+
+        if (!archivo.exists()) return new ArrayList<>();
+
+        try {
+            return List.of(mapper.readValue(archivo, Huesped[].class));
+        } catch (IOException e) {
+            throw new RuntimeException("Error al cargar la lista de huéspedes desde JSON", e);
+        }
+    }
+
+    @Override
+    public void guardarHuesped(Huesped huesped) {
+        if (huesped == null) {
+            throw new IllegalArgumentException("El huésped no puede ser null");
+        }
+
+        huespedes.add(huesped);
+        guardarListaEnJSON(); // persistencia automática
+    }
+
+    private void guardarListaEnJSON() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT); // para que quede legible
+
+        try {
+            mapper.writeValue(new File("listaHuespedes.json"), huespedes);
+        } catch (IOException e) {
+            throw new RuntimeException("Error al guardar la lista de huéspedes en JSON", e);
+        }
+    }
+
+
 
     @Override
     public HuespedDTO consultarDocumento(String tipoDocumento, String numeroDocumento) {
@@ -58,11 +101,12 @@ public class HuespedDAOImpl implements HuespedDAO {
                 return builder.build();
             }
         }
-        return null;
+        throw new HuespedNoEncontradoException(tipoDocumento, numeroDocumento);
     }
 
     @Override
     public void modificarHuesped(HuespedDTO huespedModificado, Huesped huespedAntiguo){
+        //huespedAntiguo siempre debería estar, por lo que no hay excepción
          huespedes.stream()
         .filter(h -> equals(h, huespedAntiguo))
         .findFirst()
@@ -71,6 +115,7 @@ public class HuespedDAOImpl implements HuespedDAO {
 
     @Override
     public void modificarHuesped(HuespedDTO huespedModificado, Huesped huespedAntiguo, Direccion direccionNueva){
+        //huespedAntiguo siempre debería estar, por lo que no hay excepción 
          huespedes.stream()
         .filter(h -> equals(h, huespedAntiguo))
         .findFirst()
