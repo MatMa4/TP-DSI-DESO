@@ -1,3 +1,4 @@
-dominio\Huesped.class
-deso\tp\TP.class
 dominio\Direccion.class
+deso\tp\TP.class
+repositorio\UsuarioDTO.class
+dominio\Huesped.class
