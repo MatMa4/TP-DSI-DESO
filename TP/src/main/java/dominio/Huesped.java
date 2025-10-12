@@ -5,6 +5,8 @@
 package dominio;
 import java.time.LocalDate;
 
+import Excepcion.CampoObligatorioException;
+
 
 
 public class Huesped {
@@ -151,49 +153,109 @@ public class Huesped {
             this.posicionIVA = posicionIVA;
             return this;
         }
-        public Huesped build(){
+        public Huesped build() {
+            if (apellido == null || apellido.trim().isEmpty()) {
+                throw new CampoObligatorioException("apellido");
+            }
+            if (nombre == null || nombre.trim().isEmpty()) {
+                throw new CampoObligatorioException("nombre");
+            }
+            if (tipoDocumento == null || tipoDocumento.trim().isEmpty()) {
+                throw new CampoObligatorioException("tipoDocumento");
+            }
+            if (numeroDocumento == null || numeroDocumento.trim().isEmpty()) {
+                throw new CampoObligatorioException("numeroDocumento");
+            }
+            if (fechaNacimiento == null) {
+                throw new CampoObligatorioException("fechaNacimiento");
+            }
+            if (direccionHuesped == null) {
+                throw new CampoObligatorioException("direccionHuesped");
+            }
+            if (telefono == null || telefono.trim().isEmpty()) {
+                throw new CampoObligatorioException("telefono");
+            }
+            if (ocupacion == null || ocupacion.trim().isEmpty()) {
+                throw new CampoObligatorioException("ocupacion");
+            }
+            if (nacionalidad == null || nacionalidad.trim().isEmpty()) {
+                throw new CampoObligatorioException("nacionalidad");
+            }
+
+            // Valor por omisión si no se especifica
+            if (posicionIVA == null) {
+                posicionIVA = "Consumidor Final";
+            }
+
             return new Huesped(this);
         }
-
-
-
     }
     
     //Modificadores
     public void setApellido(String apellido) {
+        if (apellido == null || apellido.trim().isEmpty()) {
+            throw new CampoObligatorioException("apellido");
+        }
         this.apellido = apellido;
     }
     public void setNombre(String nombre) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new CampoObligatorioException("apellido");
+        }
         this.nombre = nombre;
     }
     public void setTipoDocumento(String tipoDocumento) {
+        if (tipoDocumento == null || tipoDocumento.trim().isEmpty()) {
+            throw new CampoObligatorioException("apellido");
+        }
         this.tipoDocumento = tipoDocumento;
     }
     public void setNumeroDocumento(String numeroDocumento) {
+        if (numeroDocumento == null || numeroDocumento.trim().isEmpty()) {
+            throw new CampoObligatorioException("apellido");
+        }
         this.numeroDocumento = numeroDocumento;
     }
     public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        if (fechaNacimiento == null) {
+            throw new CampoObligatorioException("apellido");
+        }
         this.fechaNacimiento = fechaNacimiento;
     }
     public void setDireccionHuesped(Direccion direccionHuesped) {
+        if (direccionHuesped == null) {
+            throw new CampoObligatorioException("apellido");
+        }
         this.direccionHuesped = direccionHuesped;
     }
     public void setTelefono(String telefono) {
+        if (telefono == null || telefono.trim().isEmpty()) {
+            throw new CampoObligatorioException("apellido");
+        }
         this.telefono = telefono;
     }
     public void setEmail(String email) {
         this.email = email;
     }
     public void setOcupacion(String ocupacion) {
+        if (ocupacion == null || ocupacion.trim().isEmpty()) {
+            throw new CampoObligatorioException("apellido");
+        }
         this.ocupacion = ocupacion;
     }
     public void setNacionalidad(String nacionalidad) {
+        if (nacionalidad == null || nacionalidad.trim().isEmpty()) {
+            throw new CampoObligatorioException("apellido");
+        }
         this.nacionalidad = nacionalidad;
     }
     public void setCuit(String cuit) {
         this.cuit = cuit;
     }
     public void setPosicionIVA(String posicionIVA) {
+        if (apellido == null || apellido.trim().isEmpty()) {
+            this.posicionIVA = "Consumidor Final";
+        }
         this.posicionIVA = posicionIVA;
     }
 
