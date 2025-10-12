@@ -5,9 +5,11 @@ participant "UI- Dar de Alta de Huesped" as UIH
 participant "Gestor De Huesped" as GDH
 participant "HuespedDAO" as HuesDAO
 participant "HuespedDTO" as HuesDTO
+participant "DireccionDAO" as DirecDAO
+
 Conserje -> UIH: Solicita crear Huesped
 activate UIH
-loop Mientras el Conserje quiera dar de alta huÃ©spedes
+loop mientras los datos sean incorrectos o el usuario decida cargar otro huésped
 
     UIH -> Conserje: Mostrar pantalla vacia para ingresar datos
     deactivate UIH
@@ -22,19 +24,13 @@ loop Mientras el Conserje quiera dar de alta huÃ©spedes
      alt campos obligarorios incompletos
       UIH -> Conserje: Muestra mensajes sobre campos incompletos
      else campos obligarorios completos
-      UIH -> GDH: consultarDocumento(NroDocumento)
+      UIH -> GDH: consultarDocumento(tipoDocumento, NroDocumento)
       deactivate UIH
       activate GDH
-      GDH -> HuesDAO: consultarDocumento(NroDocumento)
+      GDH -> HuesDAO: consultarDocumento(tipoDocumento, NroDocumento)
       deactivate GDH
       activate HuesDAO
       alt Husped ya existe
-        HuesDAO -> HuesDTO: buscarDatos()
-        deactivate HuesDAO
-        activate HuesDTO
-        HuesDTO -> HuesDAO: HuespedDTO
-        deactivate HuesDTO
-        activate HuesDAO
         HuesDAO -> GDH: HuespedDTO
         deactivate HuesDAO
         activate GDH
@@ -86,13 +82,40 @@ loop Mientras el Conserje quiera dar de alta huÃ©spedes
         UIH -> GDH: RegistrarHuesped(HuespedDTO)
         deactivate UIH
         activate GDH
-        GDH -> Huesped: crearHuesped(HuespedDTO)
+        create Direccion
+        GDH -> Direccion: Direccion()
+        Direccion -> GDH: Direccion
+        GDH -> Direccion: setCalle(DireccionDTO.calle)
+        GDH -> Direccion: setNumero(DireccionDTO.numero)
+        GDH -> Direccion: setDepartamento(DireccionDTO.departamento)
+        GDH -> Direccion: setPiso(DireccionDTO.piso)
+        GDH -> Direccion: setCodigo(DireccionDTO.codigo)
+        GDH -> Direccion: setLocalidad(DireccionDTO.localidad)
+        GDH -> Direccion: setProvincia(DireccionDTO.provincia)
+        GDH -> Direccion: setPais(DireccionDTO.pais)
+        GDH -> DirecDAO: GuardarDireccion(Direccion)
         deactivate GDH
-        activate Huesped
-        Huesped -> GDH
-        deactivate Huesped
+        activate DirecDAO
+        DirecDAO -> GDH
+        deactivate DirecDAO
         activate GDH
-        GDH -> HuesDAO: GuardarHuesped(HuespedDTO)
+        
+        create Huesped
+        GDH -> Huesped: Huesped()
+        Huesped -> GDH : Huesped
+        GDH -> Huesped: setApellido(HuespedDTO.apellido)
+        GDH -> Huesped: setNombre(HuespedDTO.nombre)
+        GDH -> Huesped: setTipoDocumento(HuespedDTO.tipoDocumento)
+        GDH -> Huesped: setNumeroDocumento(HuespedDTO.numeroDocumento)
+        GDH -> Huesped: setFechaNacimiento(HuespedDTO.fechaNacimiento)
+        GDH -> Huesped: setDireccionHuesped(HuespedDTO.direccionHuesped)
+        GDH -> Huesped: setTelefono(HuespedDTO.telefono)
+        GDH -> Huesped: setEmail(HuespedDTO.email)
+        GDH -> Huesped: setOcupacion(HuespedDTO.ocupacion)
+        GDH -> Huesped: setNacionalidad(HuespedDTO.nacionalidad)
+        GDH -> Huesped: setCuit(HuespedDTO.cuit)
+        GDH -> Huesped: setPosicionIVA(HuespedDTO.posicionIVA)
+        GDH -> HuesDAO: GuardarHuesped(Huesped)
         deactivate GDH
         activate HuesDAO
         HuesDAO -> GDH
