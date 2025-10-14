@@ -26,7 +26,7 @@ participant "HuespedDTO" as HuesDTO
         GDH -> UIH: HuespedDTO
         deactivate GDH
         activate UIH
-        UIH -> Conserje: Mensaje de: Este huesped será eliminado
+        UIH -> Conserje: Mensaje: Este huesped será eliminado
         deactivate UIH
     else huesped alojado anteriormente
         activate HuesDTO
@@ -39,7 +39,7 @@ participant "HuespedDTO" as HuesDTO
         GDH -> UIH: HuespedDTO
         deactivate GDH
         activate UIH
-        UIH -> Conserje: Mensaje de: Este huesped no se puede borrar
+        UIH -> Conserje: Mensaje: Este huesped no se puede borrar
         deactivate UIH
     end
     alt conserje desea eliminar
