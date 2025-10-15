@@ -16,6 +16,7 @@ import java.util.List;
 import dominio.Huesped;
 import dominio.Direccion;
 import Excepcion.HuespedNoEncontradoException;
+import java.util.Iterator;
 
 /**
  *
@@ -26,7 +27,7 @@ public class HuespedDAOImpl implements HuespedDAO {
     private static HuespedDAOImpl instancia;
 
     //Patrón Singleton
-    private HuespedDAOImpl() {
+    public HuespedDAOImpl() {
         huespedes = cargarListaDesdeJSON();
     }
 
@@ -156,4 +157,29 @@ public class HuespedDAOImpl implements HuespedDAO {
         h.setCuit(dto.getCuit()); //Ver si es null
         h.setPosicionIVA(dto.getPosicionIVA()); //Ver si es null
     }
+    
+    @Override
+    public void eliminar(HuespedDTO huespedDTO) {
+        Iterator<Huesped> it = huespedes.iterator();
+        boolean eliminado = false;
+
+        while (it.hasNext()) {
+            Huesped h = it.next();
+            if (h.getTipoDocumento().equals(huespedDTO.getTipoDocumento()) &&
+                h.getNumeroDocumento().equals(huespedDTO.getNumeroDocumento())) {
+
+                it.remove(); 
+                eliminado = true;
+                break;
+            }
+        }
+
+        if (!eliminado) {
+            throw new HuespedNoEncontradoException(
+                huespedDTO.getTipoDocumento(),
+                huespedDTO.getNumeroDocumento()
+            );
+        }
+    }
+
 }
