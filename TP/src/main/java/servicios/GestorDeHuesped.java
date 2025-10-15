@@ -16,6 +16,11 @@ import DAOs.DireccionDAOImpl;
  * @author mateo
  */
 public class GestorDeHuesped {
+    private HuespedDAO huespedDAO;
+    
+    public GestorDeHuesped() {
+        this.huespedDAO = new HuespedDAOImpl(); // inicialización directa
+    }
 
     public static HuespedDTO consultarDocumento(String tipoDocumento, String numeroDocumento){
         HuespedDAO huespedDAO= HuespedDAOImpl.getHuespedDAO();
@@ -71,6 +76,13 @@ public class GestorDeHuesped {
 
         direccionDAO.agregarDireccion(direccionNueva);
         huespedDAO.guardarHuesped(huespedNuevo);
+    }
+    public boolean eliminarHuesped(HuespedDTO huespedDTO) {
+        if (!huespedDTO.estaAlojado()) {
+            huespedDAO.eliminar(huespedDTO);
+            return true;
+        }
+        return false;
     }
 
     
