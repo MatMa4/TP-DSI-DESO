@@ -9,6 +9,7 @@ import DAOs.HuespedDAO;
 import DAOs.HuespedDAOImpl;
 import DAOs.DireccionDAO;
 import DAOs.DireccionDAOImpl;
+import Excepcion.HuespedNoEliminableException;
 
 
 /**
@@ -77,12 +78,14 @@ public class GestorDeHuesped {
         direccionDAO.agregarDireccion(direccionNueva);
         huespedDAO.guardarHuesped(huespedNuevo);
     }
-    public boolean eliminarHuesped(HuespedDTO huespedDTO) {
+    public void eliminarHuesped(HuespedDTO huespedDTO) throws HuespedNoEliminableException {
+        
         if (!huespedDTO.estaAlojado()) {
             huespedDAO.eliminar(huespedDTO);
-            return true;
+            
+        }else{
+            throw new HuespedNoEliminableException();
         }
-        return false;
     }
 
     
