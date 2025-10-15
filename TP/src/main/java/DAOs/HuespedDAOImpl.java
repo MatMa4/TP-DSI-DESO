@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package DAOs;
+import Excepcion.HuespedEliminadoCorrectamenteException;
 import repositorio.HuespedDTO;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,7 @@ import dominio.Huesped;
 import dominio.Direccion;
 import Excepcion.HuespedNoEncontradoException;
 import java.util.Iterator;
+import java.util.Scanner;
 
 /**
  *
@@ -168,17 +170,16 @@ public class HuespedDAOImpl implements HuespedDAO {
             if (h.getTipoDocumento().equals(huespedDTO.getTipoDocumento()) &&
                 h.getNumeroDocumento().equals(huespedDTO.getNumeroDocumento())) {
 
-                it.remove(); 
+                Scanner in = new Scanner(System.in);
+                System.out.print("Los datos del huésped "+ huespedDTO.getNombre()+ ", " +huespedDTO.getApellido()+" cuyo tipo de documento es " + huespedDTO.getTipoDocumento() + " numero "+ huespedDTO.getNumeroDocumento()+ "serán eliminados del sistema");
+                String respuesta = in.nextLine();
+                if("ELIMINAR".equals(respuesta)){
+                 it.remove(); 
                 eliminado = true;
-                break;
+                throw new HuespedEliminadoCorrectamenteException(huespedDTO.getNombre(),
+                        huespedDTO.getApellido(),huespedDTO.getTipoDocumento(),huespedDTO.getNumeroDocumento());
+                }
             }
-        }
-
-        if (!eliminado) {
-            throw new HuespedNoEncontradoException(
-                huespedDTO.getTipoDocumento(),
-                huespedDTO.getNumeroDocumento()
-            );
         }
     }
 
