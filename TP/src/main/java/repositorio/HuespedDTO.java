@@ -24,6 +24,7 @@ public class HuespedDTO {
     private String nacionalidad;
     private String cuit;
     private String posicionIVA;
+    private boolean alojado;
     
     private HuespedDTO(Builder builder){
         this.apellido = builder.apellido;
@@ -38,6 +39,7 @@ public class HuespedDTO {
         this.nacionalidad = builder.nacionalidad;
         this.cuit = builder.cuit; //No obligatorio
         this.posicionIVA = builder.posicionIVA; //Consumidor final por omisión
+        this.alojado = builder.alojado;
     }
     
     public static class Builder{
@@ -53,6 +55,7 @@ public class HuespedDTO {
         private String nacionalidad;
         private String cuit;
         private String posicionIVA;
+        private boolean alojado;
         
         //Hay que poner una validación de si es null y crear una excepción para cada campo obligatorio
         //Lo mismo para los setters
@@ -112,6 +115,12 @@ public class HuespedDTO {
             this.posicionIVA = posicionIVA;
             return this;
         }
+        
+        public Builder alojado(boolean alojado){
+            this.alojado = alojado;
+            return this;
+        }
+        
         public HuespedDTO build(){
             return new HuespedDTO(this);
         }
@@ -167,5 +176,8 @@ public class HuespedDTO {
 
     public String getPosicionIVA() {
         return posicionIVA;
+    }
+     public boolean estaAlojado() {
+        return alojado;
     }
 }
