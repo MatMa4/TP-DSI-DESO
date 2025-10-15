@@ -6,8 +6,8 @@ package DAOs;
 
 import Excepcion.UsuarioNoEncontradoException;
 import dominio.Usuario;
-import java.io.BufferedReader;
-import java.io.FileReader;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -16,24 +16,31 @@ import java.io.IOException;
  */
 public class UsuarioDAOImpl implements UsuarioDAO {
     private String archivo;
+    private ObjectMapper objectMapper;
 
     public UsuarioDAOImpl(String archivo) {
         this.archivo = archivo;
+        this.objectMapper = new ObjectMapper();
     }
 
     @Override
     public Usuario obtenerUsuario(String username) throws UsuarioNoEncontradoException {
-        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
-            String linea;
-            while ((linea = br.readLine()) != null) {
-                String[] datos = linea.split(",");
-                if (datos[0].equals(username)) {
-                    return new Usuario(datos[0], datos[1], datos[2]);
+        try {
+            // Leer el archivo JSON como un array de Usuario
+            Usuario[] usuarios = objectMapper.readValue(new File(archivo), Usuario[].class);
+            
+            // Buscar el usuario por username
+            for (Usuario usuario : usuarios) {
+                if (usuario.getUsuario().equals(username)) {
+                    return usuario;
                 }
             }
+            
+            // Si no encuentra el usuario, lanza excepción
+            throw new UsuarioNoEncontradoException("Usuario " + username + " no encontrado.");
         } catch (IOException e) {
             e.printStackTrace();
+            throw new UsuarioNoEncontradoException("Error al leer el archivo: " + e.getMessage());
         }
-        throw new UsuarioNoEncontradoException("Usuario " + username + " no encontrado.");
     }
 }
