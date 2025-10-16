@@ -10,7 +10,9 @@ C:\UTN\Desarrollo\RepoCodigoTP\TP-DSI-DESO\TP\src\main\java\dominio\Huesped.java
 C:\UTN\Desarrollo\RepoCodigoTP\TP-DSI-DESO\TP\src\main\java\dominio\Usuario.java
 C:\UTN\Desarrollo\RepoCodigoTP\TP-DSI-DESO\TP\src\main\java\Excepcion\CampoObligatorioException.java
 C:\UTN\Desarrollo\RepoCodigoTP\TP-DSI-DESO\TP\src\main\java\Excepcion\ContrasenaInvalidaException.java
+C:\UTN\Desarrollo\RepoCodigoTP\TP-DSI-DESO\TP\src\main\java\Excepcion\HuespedEliminadoCorrectamenteException.java
 C:\UTN\Desarrollo\RepoCodigoTP\TP-DSI-DESO\TP\src\main\java\Excepcion\HuespedExistente.java
+C:\UTN\Desarrollo\RepoCodigoTP\TP-DSI-DESO\TP\src\main\java\Excepcion\HuespedNoEliminableException.java
 C:\UTN\Desarrollo\RepoCodigoTP\TP-DSI-DESO\TP\src\main\java\Excepcion\HuespedNoEncontradoException.java
 C:\UTN\Desarrollo\RepoCodigoTP\TP-DSI-DESO\TP\src\main\java\Excepcion\UsuarioNoEncontradoException.java
 C:\UTN\Desarrollo\RepoCodigoTP\TP-DSI-DESO\TP\src\main\java\repositorio\DireccionDTO.java

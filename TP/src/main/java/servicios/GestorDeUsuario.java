@@ -21,13 +21,12 @@ public class GestorDeUsuario {
         this.usuarioDAO = usuarioDAO;
     }
 
-    public Usuario autenticarUsuario(UsuarioDTO user)
+    public void autenticarUsuario(UsuarioDTO user)
             throws UsuarioNoEncontradoException, ContrasenaInvalidaException {
         Usuario usuario = usuarioDAO.obtenerUsuario(user.getUsername());
 
         if (!usuario.getContrasena().equals(user.getPassw())) {
             throw new ContrasenaInvalidaException("La contraseña no es válida.");
         }
-        return usuario;
     }
 }
