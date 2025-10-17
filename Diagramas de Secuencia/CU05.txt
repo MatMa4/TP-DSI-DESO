@@ -38,8 +38,15 @@ end
     activate GDHab
       loop Una vez por habitacion en servicio
       GDHab -> Habitaciones: createHabitacionDTO()
-      deactivate GDHab
       activate Habitaciones
+      GDHab -> Habitaciones: setNumero(habitacionDTO.numero)
+      GDHab -> Habitaciones: setCostoPorNoche(habitacionDTO.costoPorNoche)
+      GDHab -> Habitaciones: setCapacidad(habitacionDTO.capacidad)
+      GDHab -> Habitaciones: setEstado(habitacionDTO.Estado)
+      GDHab -> Habitaciones: setDescripcion(habitacionDTO.descripcion)
+      GDHab -> Habitaciones: setCama(habitacionDTO.cama)
+      deactivate GDHab
+      
       Habitaciones -> GDHab: HabitacionDTO
       deactivate Habitaciones
       activate GDHab
