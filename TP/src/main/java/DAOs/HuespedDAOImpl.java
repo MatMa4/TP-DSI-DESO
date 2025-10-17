@@ -45,7 +45,7 @@ public class HuespedDAOImpl implements HuespedDAO {
 
     private List<Huesped> cargarListaDesdeJSON() {
         ObjectMapper mapper = new ObjectMapper();
-        File archivo = new File("listaHuespedes.json");
+        File archivo = new File("src/main/java/BDD/listaHuespedes.json");
 
         if (!archivo.exists()) return new ArrayList<>();
 
@@ -71,7 +71,7 @@ public class HuespedDAOImpl implements HuespedDAO {
         mapper.enable(SerializationFeature.INDENT_OUTPUT); // para que quede legible
 
         try {
-            mapper.writeValue(new File("listaHuespedes.json"), huespedes);
+            mapper.writeValue(new File("src/main/java/BDD/listaHuespedes.json"), huespedes);
         } catch (IOException e) {
             throw new RuntimeException("Error al guardar la lista de huéspedes en JSON", e);
         }
