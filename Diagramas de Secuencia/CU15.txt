@@ -1,0 +1,107 @@
+@startuml
+actor Conserje
+participant "UI - Ocupar Habitacion" as UIOcuparHab
+participant "Gestor De Huesped" as GDeHues
+participant "HuespedDAO" as HuesDAO
+participant "Gestor De Ocupaciones" as GDeOcu
+participant "OcupacionesDAO" as OcuDAO
+loop Mientras quiera cargar habitacion
+  UIOcuparHab -> Conserje: Navega a CU-05
+  activate UIOcuparHab
+  alt No existen habitaciones disponibles
+  UIOcuparHab -> Conserje: Navega a otro CU
+  deactivate UIOcuparHab
+  else Existen habitaciones disponibles
+    loop Mientras seleccione una habitacion ocupada o desee volver y no haya seleccionado una habitacion  
+    Conserje -> UIOcuparHab: Selecciona dias
+    activate UIOcuparHab
+    UIOcuparHab -> UIOcuparHab: verificarestadoHabitaciones(listaHabitaciones[])
+      opt La habitacion esta ocupada 
+        UIOcuparHab -> Conserje: Muestra un mensaje con los botones "OCUPAR" y "VOLVER"
+        deactivate UIOcuparHab
+        alt Ocupar Igual 
+        Conserje -> UIOcuparHab: Ocupar Igual
+        activate UIOcuparHab
+          UIOcuparHab -> UIOcuparHab: pinta las habitaciones entre el día inicial y el final con el color de “Ocupada” 
+        else Volver 
+                Conserje -> UIOcuparHab: Volver
+ 
+          UIOcuparHab -> Conserje
+        end 
+      end
+         UIOcuparHab -> UIOcuparHab: pinta las habitaciones entre el día inicial y el final con el color de “Ocupada”
+    end
+      UIOcuparHab -> Conserje: Muestra grilla pintada y mensaje de confirmacion
+      deactivate UIOcuparHab
+      Conserje -> UIOcuparHab: Presiona cualquier tecla
+      activate UIOcuparHab
+      loop Mientras siga cargando huespedes
+        UIOcuparHab -> Conserje: Muestra pantalla a rellenar
+        deactivate UIOcuparHab
+      loop hasta que ingrese al menos un filtro 
+        Conserje -> UIOcuparHab: Rellena datos
+        activate UIOcuparHab
+        UIOcuparHab -> UIOcuparHab: validarDatos()
+        opt no completo ningun filtro 
+        UIOcuparHab -> Conserje: mostrarMensaje("Debe completar al menos un filtro")
+        end
+        end 
+        UIOcuparHab -> GDeHues: buscarHuesped(huespedDTO)
+        deactivate UIOcuparHab
+        activate GDeHues
+        GDeHues -> HuesDAO: buscarHuesped(huespedDTO)
+        deactivate GDeHues
+        activate HuesDAO
+        HuesDAO -> GDeHues : Lista<huespedDTO>
+        deactivate HuesDAO
+        activate GDeHues
+        GDeHues -> UIOcuparHab: Lista<huespedDTO>
+        deactivate GDeHues
+        activate UIOcuparHab
+        UIOcuparHab -> Conserje: Muestra huespedes segun los criterios
+        deactivate UIOcuparHab
+        loop Mientras no especifique huesped
+          Conserje -> UIOcuparHab: Selecciona huesped y acompañante
+          activate UIOcuparHab
+          Conserje -> UIOcuparHab: Presiona "ACEPTAR"
+        end
+        UIOcuparHab -> Conserje: Muestra botones de carga
+        deactivate UIOcuparHab
+        alt Presiona seguir Cargando 
+        Conserje -> UIOcuparHab: SeguirCargando()
+        activate UIOcuparHab
+        UIOcuparHab -> Conserje
+        else No presiona seguir cargando
+        deactivate UIOcuparHab
+        Conserje -> UIOcuparHab: presiona Cargar otra Habitacion o Salir 
+        activate UIOcuparHab
+        UIOcuparHab -> GDeOcu: crearOcupacion(ListaHues<HuespedDTO>,F_inicio,F_fin, HabitacionDTO)
+        deactivate UIOcuparHab
+        activate GDeOcu
+        create Ocupacion
+        GDeOcu -> Ocupacion: <<create>>
+        
+        GDeOcu -> Ocupacion: setFechaInicio(OcupacionDTO.fechaInicio)
+        GDeOcu -> Ocupacion: setFechaFin(OcupacionDTO.FechaFin)
+        GDeOcu -> Ocupacion: setID(OcupacionDTO.ID)
+        GDeOcu -> Ocupacion: setCheckIn(OcupacionDTO.CheckIn)
+        GDeOcu -> Ocupacion: setCheckOut(OcupacionDTO.CheckOut)
+        
+        Ocupacion -> GDeOcu: Ocupacion
+        GDeOcu -> OcuDAO: guardarOcupacion(Ocupacion)
+        deactivate GDeOcu
+        activate OcuDAO
+        OcuDAO --> GDeOcu
+        deactivate OcuDAO
+        activate GDeOcu
+        GDeOcu -> UIOcuparHab: Ocupacion Creada
+        deactivate GDeOcu
+        activate UIOcuparHab
+        UIOcuparHab -> Conserje: Ocupacion Creada
+        deactivate UIOcuparHab
+      end
+    end
+  end
+end
+
+@enduml
