@@ -10,6 +10,8 @@ import DAOs.HuespedDAOImpl;
 import DAOs.DireccionDAO;
 import DAOs.DireccionDAOImpl;
 import Excepcion.HuespedNoEliminableException;
+import Excepcion.HuespedNoEncontradoException;
+import java.util.List;
 
 
 /**
@@ -87,6 +89,15 @@ public class GestorDeHuesped {
             throw new HuespedNoEliminableException();
         }
     }
+     public List<Huesped> buscarHuesped(String apellido, String nombre, String tipoDoc, String nroDoc)
+            throws HuespedNoEncontradoException {
+        List<Huesped> encontrados = huespedDAO.buscarHuesped(apellido, nombre, tipoDoc, nroDoc);
+        if (encontrados.isEmpty()) {
+            throw new HuespedNoEncontradoException("No se encontraron huéspedes con esos criterios.");
+        }
+        return encontrados;
+    }
+    
 
     
 }

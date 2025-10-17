@@ -19,6 +19,9 @@ import dominio.Direccion;
 import Excepcion.HuespedNoEncontradoException;
 import java.util.Iterator;
 import java.util.Scanner;
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -181,6 +184,28 @@ public class HuespedDAOImpl implements HuespedDAO {
                 }
             }
         }
+    }
+    @Override
+    public List<Huesped> buscarHuesped(String apellido, String nombre, String tipoDoc, String nroDoc){
+        if (huespedes == null || huespedes.isEmpty()) {
+            return new ArrayList<>();
+        }
+         List<Huesped> resultado = huespedes.stream()
+        .filter(h -> (apellido == null || apellido.isEmpty() || 
+                      h.getApellido().toUpperCase().startsWith(apellido.toUpperCase())))
+        .filter(h -> (nombre == null || nombre.isEmpty() || 
+                      h.getNombre().toUpperCase().startsWith(nombre.toUpperCase())))
+        .filter(h -> (tipoDoc == null || tipoDoc.isEmpty() || 
+                      h.getTipoDocumento().equalsIgnoreCase(tipoDoc)))
+        .filter(h -> (nroDoc == null || nroDoc.isEmpty() || 
+                      h.getNumeroDocumento().equalsIgnoreCase(nroDoc)))
+        .collect(Collectors.toList());
+         
+         if (resultado.isEmpty()) {
+        throw new HuespedNoEncontradoException();
+    }
+
+    return resultado;
     }
 
 }

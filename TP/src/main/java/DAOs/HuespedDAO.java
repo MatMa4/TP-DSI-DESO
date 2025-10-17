@@ -5,6 +5,7 @@
 package DAOs;
 import dominio.Direccion;
 import dominio.Huesped;
+import java.util.List;
 import repositorio.HuespedDTO;
 
 /**
@@ -19,4 +20,5 @@ public interface HuespedDAO {
     public boolean equals(Huesped h, Huesped huespedAntiguo);
     public void clonarDesdeDTO(HuespedDTO dto, Huesped h);
     public void eliminar(HuespedDTO huespedDTO);
+    public List<Huesped> buscarHuesped(String apellido, String nombre, String tipoDoc, String nroDoc);
 }

@@ -13,5 +13,9 @@ public class HuespedNoEncontradoException extends RuntimeException {
         super("No se encontró ningún huésped con " +
               "tipo de documento '" + tipoDocumento + "' y número '" + numeroDocumento + "'.");
     }
+    
+    public HuespedNoEncontradoException() {
+         super("No se han encontrado huéspedes con sus filtros de búsqueda.");
+    }
 }
 
