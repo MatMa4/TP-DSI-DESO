@@ -67,6 +67,13 @@ activate UIR
     GDR -> Reserva: f:=crearReservas(reservaDTO)
     deactivate GDR
     activate Reserva
+    GDR -> Reserva: setIdReserva(reservaDTO.idReserva)
+    GDR -> Reserva: setFechaInicio(reservaDTO.fechaInicio)
+    GDR -> Reserva: setFechaFin(reservaDTO.fechaFin)
+    GDR -> Reserva: setEstado(reservaDTO.estado)
+    GDR -> Reserva: setNombre(reservaDTO.nombre)
+    GDR -> Reserva: setApellido(reservaDTO.apellido)
+    GDR -> Reserva: setTelefono(reservaDTO.telefono)
     Reserva -> GDR: reservaCreada
     deactivate Reserva
     activate GDR
