@@ -1,0 +1,44 @@
+@startuml
+ 
+actor Conserje
+participant "UI- Buscar Huesped" as UIBuscarHues
+participant "Gestor De Huesped" as GDeHues
+participant "HuespedDAO" as HuesDAO
+
+
+Conserje-> UIBuscarHues: Se quiere buscar un huesped
+activate UIBuscarHues
+UIBuscarHues -> Conserje: Mostrar pantalla con datos a cargar
+deactivate UIBuscarHues
+Conserje -> UIBuscarHues: Carga ninguno,uno o mas datos y presiona buscar
+activate UIBuscarHues
+UIBuscarHues -> GDeHues: buscarHuesped(huespedDTO)
+deactivate UIBuscarHues
+activate GDeHues
+GDeHues -> HuesDAO: buscarHuesped(huespedDTO)
+deactivate GDeHues
+activate HuesDAO
+HuesDAO -> GDeHues: listaHuespedDTO[]
+deactivate HuesDAO
+activate GDeHues
+GDeHues -> UIBuscarHues: listaHuespedDTO[]
+deactivate GDeHues
+activate UIBuscarHues
+alt Encuentra huespedes
+UIBuscarHues -> Conserje: Muestra Lista por pantalla
+deactivate UIBuscarHues
+  alt Selecciona Huesped y presiona "SIGUIENTE"
+  Conserje -> UIBuscarHues: Selecciona un huesped y presiona "SIGUIENTE"
+  activate UIBuscarHues
+  UIBuscarHues -> Conserje: Navegar a CU10: "Modificar Huesped"
+  deactivate UIBuscarHues
+  else No Selecciona Huesped y presiona "SIGUIENTE"
+  Conserje -> UIBuscarHues: Presiona "SIGUIENTE"
+  activate UIBuscarHues
+  UIBuscarHues -> Conserje: Navegar a CU11: "Dar alta de Huesped"
+  deactivate UIBuscarHues
+  end
+else No encuentra Huespedes
+UIBuscarHues -> Conserje: Navegar a CU11: "Dar alta de Huesped"
+end
+@enduml 
