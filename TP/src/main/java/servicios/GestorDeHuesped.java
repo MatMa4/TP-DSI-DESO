@@ -30,14 +30,13 @@ public class GestorDeHuesped {
         return huespedDAO.consultarDocumento(tipoDocumento, numeroDocumento);
     }
 
-    public static void modificarHuesped(HuespedDTO huespedModificado, Huesped huespedAntiguo){
+    public static void modificarHuesped(HuespedDTO huespedModificado, HuespedDTO huespedAntiguo){
         //Se fija si las direcciones son iguales, si no lo son, le asigna la nueva direccion
         DireccionDAO direccionDAO = DireccionDAOImpl.getDireccionDAO();
-        HuespedDAO huespedDAO= HuespedDAOImpl.getHuespedDAO();
-        Direccion direccionNueva = convertirADireccion(huespedModificado.getDireccionHuesped());    
-        if(!(direccionDAO.equals(huespedAntiguo.getDireccionHuesped(), direccionNueva))){
-           huespedDAO.modificarHuesped(huespedModificado, huespedAntiguo, direccionNueva);
-           direccionDAO.agregarDireccion(direccionNueva);
+        HuespedDAO huespedDAO= HuespedDAOImpl.getHuespedDAO();    
+        if(!(equals(huespedAntiguo.getDireccionHuesped(), huespedModificado.getDireccionHuesped()))){
+           huespedDAO.modificarHuesped(huespedModificado, huespedAntiguo, convertirADireccion(huespedModificado.getDireccionHuesped()));
+           direccionDAO.agregarDireccion(convertirADireccion(huespedModificado.getDireccionHuesped()));
         }else{
             huespedDAO.modificarHuesped(huespedModificado, huespedAntiguo);
         } 
@@ -80,7 +79,8 @@ public class GestorDeHuesped {
         direccionDAO.agregarDireccion(direccionNueva);
         huespedDAO.guardarHuesped(huespedNuevo);
     }
-    public void eliminarHuesped(HuespedDTO huespedDTO) throws HuespedNoEliminableException {
+    
+    public static void eliminarHuesped(HuespedDTO huespedDTO) throws HuespedNoEliminableException {
         
         if (!huespedDTO.estaAlojado()) {
             huespedDAO.eliminar(huespedDTO);
@@ -89,15 +89,26 @@ public class GestorDeHuesped {
             throw new HuespedNoEliminableException();
         }
     }
-     public List<Huesped> buscarHuesped(String apellido, String nombre, String tipoDoc, String nroDoc)
+    
+    public List<Huesped> buscarHuesped(String apellido, String nombre, String tipoDoc, String nroDoc)
             throws HuespedNoEncontradoException {
         List<Huesped> encontrados = huespedDAO.buscarHuesped(apellido, nombre, tipoDoc, nroDoc);
         if (encontrados.isEmpty()) {
-            throw new HuespedNoEncontradoException("No se encontraron huéspedes con esos criterios.");
+            throw new HuespedNoEncontradoException();
         }
         return encontrados;
     }
     
+    public static boolean equals(DireccionDTO direc1, DireccionDTO direc2){
+        return direc1.getCalle().equals(direc2.getCalle()) &&
+               direc1.getNumero().equals(direc2.getNumero()) &&
+               direc1.getDepartamento().equals(direc2.getDepartamento()) &&
+               direc1.getPiso().equals(direc2.getPiso()) &&
+               direc1.getCodigo().equals(direc2.getCodigo()) &&
+               direc1.getLocalidad().equals(direc2.getLocalidad()) &&
+               direc1.getProvincia().equals(direc2.getProvincia()) &&
+               direc1.getPais().equals(direc2.getPais());
+    }
 
     
 }

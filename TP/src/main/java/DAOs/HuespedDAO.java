@@ -15,9 +15,9 @@ import repositorio.HuespedDTO;
 public interface HuespedDAO {
     public void guardarHuesped(Huesped huesped);
     public HuespedDTO consultarDocumento(String tipoDocumento, String numeroDocumento);
-    public void modificarHuesped(HuespedDTO huespedModificado, Huesped huespedAntiguo);
-    public void modificarHuesped(HuespedDTO huespedModificado, Huesped huespedAntiguo, Direccion direccionNueva);
-    public boolean equals(Huesped h, Huesped huespedAntiguo);
+    public void modificarHuesped(HuespedDTO huespedModificado, HuespedDTO huespedAntiguo);
+    public void modificarHuesped(HuespedDTO huespedModificado, HuespedDTO huespedAntiguo, Direccion direccionNueva);
+    public boolean equalsDTO(Huesped h, HuespedDTO huespedAntiguo);
     public void clonarDesdeDTO(HuespedDTO dto, Huesped h);
     public void eliminar(HuespedDTO huespedDTO);
     public List<Huesped> buscarHuesped(String apellido, String nombre, String tipoDoc, String nroDoc);

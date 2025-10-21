@@ -19,8 +19,6 @@ import dominio.Direccion;
 import Excepcion.HuespedNoEncontradoException;
 import java.util.Iterator;
 import java.util.Scanner;
-import java.io.*;
-import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -111,26 +109,26 @@ public class HuespedDAOImpl implements HuespedDAO {
     }
 
     @Override
-    public void modificarHuesped(HuespedDTO huespedModificado, Huesped huespedAntiguo){
+    public void modificarHuesped(HuespedDTO huespedModificado, HuespedDTO huespedAntiguo){
         //huespedAntiguo siempre debería estar, por lo que no hay excepción
          huespedes.stream()
-        .filter(h -> equals(h, huespedAntiguo))
+        .filter(h -> equalsDTO(h, huespedAntiguo))
         .findFirst()
         .ifPresent(h -> clonarDesdeDTO(huespedModificado, h));
     }
 
     @Override
-    public void modificarHuesped(HuespedDTO huespedModificado, Huesped huespedAntiguo, Direccion direccionNueva){
+    public void modificarHuesped(HuespedDTO huespedModificado, HuespedDTO huespedAntiguo, Direccion direccionNueva){
         //huespedAntiguo siempre debería estar, por lo que no hay excepción 
          huespedes.stream()
-        .filter(h -> equals(h, huespedAntiguo))
+        .filter(h -> equalsDTO(h, huespedAntiguo))
         .findFirst()
         .ifPresent(h -> {clonarDesdeDTO(huespedModificado, h);
                          h.setDireccionHuesped(direccionNueva);});
     }
 
     @Override
-    public boolean equals(Huesped h, Huesped huespedAntiguo) {
+    public boolean equalsDTO(Huesped h, HuespedDTO huespedAntiguo) {
         return h.getApellido().equals(huespedAntiguo.getApellido()) && 
                 h.getNombre().equals(huespedAntiguo.getNombre()) &&
                 h.getTipoDocumento().equals(huespedAntiguo.getTipoDocumento()) &&
