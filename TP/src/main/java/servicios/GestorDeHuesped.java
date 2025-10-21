@@ -80,7 +80,7 @@ public class GestorDeHuesped {
         huespedDAO.guardarHuesped(huespedNuevo);
     }
     
-    public static void eliminarHuesped(HuespedDTO huespedDTO) throws HuespedNoEliminableException {
+    public void eliminarHuesped(HuespedDTO huespedDTO) throws HuespedNoEliminableException {
         
         if (!huespedDTO.estaAlojado()) {
             huespedDAO.eliminar(huespedDTO);
