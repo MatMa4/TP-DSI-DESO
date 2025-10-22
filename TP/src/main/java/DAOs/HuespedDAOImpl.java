@@ -69,13 +69,11 @@ public class HuespedDAOImpl implements HuespedDAO {
         mapper.enable(SerializationFeature.INDENT_OUTPUT); // para que quede legible
 
         try {
-            mapper.writeValue(new File("src/main/java/BDD/listaHuespedes.json"), huespedes);
+            mapper.writeValue(new File("listaHuespedes.json"), huespedes);
         } catch (IOException e) {
             throw new RuntimeException("Error al guardar la lista de huéspedes en JSON", e);
         }
     }
-
-
 
     @Override
     public HuespedDTO consultarDocumento(String tipoDocumento, String numeroDocumento) {
@@ -105,7 +103,7 @@ public class HuespedDAOImpl implements HuespedDAO {
                 return builder.build();
             }
         }
-        throw new HuespedNoEncontradoException(tipoDocumento, numeroDocumento);
+        return null;
     }
 
     @Override

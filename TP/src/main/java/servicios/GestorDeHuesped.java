@@ -52,7 +52,8 @@ public class GestorDeHuesped {
     public static void registrarHuesped(HuespedDTO huespedDTO){
         HuespedDAO huespedDAO= HuespedDAOImpl.getHuespedDAO();
         DireccionDAO direccionDAO = DireccionDAOImpl.getDireccionDAO();
-        Direccion direccionNueva = convertirADireccion(huespedDTO.getDireccionHuesped()); 
+        Direccion direccionNueva = convertirADireccion(huespedDTO.getDireccionHuesped());
+        
         Huesped.Builder builder = new Huesped.Builder()
                     .apellido(huespedDTO.getApellido())
                     .nombre(huespedDTO.getNombre())
@@ -75,7 +76,6 @@ public class GestorDeHuesped {
                 }
 
         Huesped huespedNuevo = builder.build();
-
         direccionDAO.agregarDireccion(direccionNueva);
         huespedDAO.guardarHuesped(huespedNuevo);
     }

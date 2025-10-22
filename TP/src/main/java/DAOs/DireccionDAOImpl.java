@@ -13,7 +13,7 @@ import dominio.Direccion;
  * @author mateo
  */
 public class DireccionDAOImpl implements DireccionDAO {
-    private List<Direccion> direcciones;
+    private static List<Direccion> direcciones = new java.util.ArrayList<>();
     private static DireccionDAOImpl instancia;
 
     //Patrón Singleton
@@ -23,6 +23,7 @@ public class DireccionDAOImpl implements DireccionDAO {
     public static DireccionDAOImpl getDireccionDAO() {
         if (instancia == null) {
             instancia = new DireccionDAOImpl();
+            direcciones = new java.util.ArrayList<>();
         }
         return instancia;
     }

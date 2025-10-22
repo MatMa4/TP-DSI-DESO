@@ -30,8 +30,8 @@ public class CU10 {
         Scanner in = new Scanner(System.in);
 
         // Recolectar datos en un método reutilizable
-        HuespedDTO huespedNuevo = recolectarHuesped(in);
-
+        //HuespedDTO huespedNuevo = recolectarHuesped(in);
+        HuespedDTO huespedNuevo = huespedPrueba(in);
         System.out.println("\nDatos cargados correctamente.");
 
         HuespedDTO huespedAntiguo = GestorDeHuesped.consultarDocumento(huespedNuevo.getTipoDocumento(), huespedNuevo.getNumeroDocumento());
@@ -49,8 +49,8 @@ public class CU10 {
                     System.out.println("Huésped modificado exitosamente.");
                     break;
                 } else if (opcion.equalsIgnoreCase("Modificar") || opcion.equalsIgnoreCase("Corregir")) {
-                    // Volver a pedir todos los datos reutilizando el mismo Scanner
-                    huespedNuevo = recolectarHuesped(in);
+                    // Volver a pedir todos los datos
+                    huespedNuevo = editarHuesped(in, huespedNuevo);
                     // Revalidar si hay conflicto con el documento nuevo
                     huespedAntiguo = GestorDeHuesped.consultarDocumento(huespedNuevo.getTipoDocumento(), huespedNuevo.getNumeroDocumento());
                     if (huespedAntiguo == null) {
@@ -116,6 +116,51 @@ public class CU10 {
         return builder.build();
     }
 
+    private static HuespedDTO editarHuesped(Scanner in, HuespedDTO original) {
+        String apellido = leerTexto(in, "Apellido [" + original.getApellido() + "] : ", true);
+        String nombre = leerTexto(in, "Nombre [" + original.getNombre() + "]: ", true);
+        String tipoDocumento = modificarTipoDocumento(in, original.getTipoDocumento());
+        String numeroDocumento = modificarNumeroDocumento(in, tipoDocumento, original.getNumeroDocumento());
+        String cuit = leerSoloNumeros(in, "CUIT (no obligatorio) ["+ original.getCuit() +"]: ", false);
+        String posicionIVA = modificarPosicionIVA(in, original.getPosicionIVA());
+        LocalDate fechaNacimiento = leerFecha(in, "Fecha de nacimiento (YYYY-MM-DD) ["+ original.getFechaNacimiento() +"]: ");
+        String telefono = leerTexto(in, "Teléfono ["+ original.getTelefono() +"]: ", true, "[0-9+ ]+");
+        String email = leerEmail(in, "Email (no obligatorio) ["+ original.getEmail() +"]: ", false);
+        String ocupacion = leerTexto(in, "Ocupación ["+ original.getOcupacion() +"]: ", true);
+        String nacionalidad = leerTexto(in, "Nacionalidad ["+ original.getNacionalidad() +"]: ", true);
+        String calle = leerTexto(in, "Dirección - Calle ["+ original.getDireccionHuesped().getCalle() +"]: ", true);
+        String numero = leerSoloNumeros(in, "Dirección - Número ["+ original.getDireccionHuesped().getNumero() +"]: ", true);
+        String departamento = leerTexto(in, "Dirección - Departamento ["+ original.getDireccionHuesped().getDepartamento() +"]: ", false);
+        int piso = leerEntero(in, "Dirección - Piso ["+ original.getDireccionHuesped().getPiso() +"]: ");
+        int codigoPostal = leerEntero(in, "Dirección - Código postal ["+ original.getDireccionHuesped().getCodigo() +"]: ");
+        String localidad = leerTexto(in, "Dirección - Localidad ["+ original.getDireccionHuesped().getLocalidad() +"]: ", true);
+        String provincia = leerTexto(in, "Dirección - Provincia ["+ original.getDireccionHuesped().getProvincia() +"]: ", true);
+        String pais = leerTexto(in, "Dirección - País ["+ original.getDireccionHuesped().getPais() +"]: ", true);
+
+        DireccionDTO direccion = new DireccionDTO(calle, numero, departamento, piso, codigoPostal, localidad, provincia, pais);
+        HuespedDTO.Builder builder = new HuespedDTO.Builder()
+            .apellido(apellido)
+            .nombre(nombre)
+            .tipoDocumento(tipoDocumento)
+            .numeroDocumento(numeroDocumento)
+            .fechaNacimiento(fechaNacimiento)
+            .direccionHuesped(direccion)
+            .telefono(telefono)
+            .ocupacion(ocupacion)
+            .nacionalidad(nacionalidad);
+
+        if (email != null) {
+            builder.email(email);
+        }
+        if (cuit != null) {
+            builder.cuit(cuit);
+        }
+        if (posicionIVA != null) {
+            builder.posicionIVA(posicionIVA);
+        }
+        return builder.build();
+    }
+
     public static int stringAInt(String texto) throws NumberFormatException {
         if (texto == null || texto.trim().isEmpty()) {
             throw new NumberFormatException("El texto está vacío o es nulo.");
@@ -150,14 +195,14 @@ public class CU10 {
             String valor = in.nextLine().trim();
             if (valor.isEmpty()) {
                 if (obligatorio) {
-                    System.out.println("⚠️ Campo obligatorio, vuelva a ingresarlo.");
+                    System.out.println("Campo obligatorio, vuelva a ingresarlo.");
                     continue;
                 } else {
                     return null;
                 }
             }
             if (!valor.matches(regex)) {
-                System.out.println("⚠️ Formato inválido, solo se permiten letras/espacios.");
+                System.out.println("Formato inválido, solo se permiten letras/espacios.");
                 continue;
             }
             return valor;
@@ -170,14 +215,14 @@ public class CU10 {
             String valor = in.nextLine().trim();
             if (valor.isEmpty()) {
                 if (obligatorio) {
-                    System.out.println("⚠️ Campo obligatorio, vuelva a ingresarlo.");
+                    System.out.println("Campo obligatorio, vuelva a ingresarlo.");
                     continue;
                 } else {
                     return null;
                 }
             }
             if (!valor.matches("[0-9]+")) {
-                System.out.println("⚠️ Solo se permiten números.");
+                System.out.println("Solo se permiten números.");
                 continue;
             }
             return valor;
@@ -191,7 +236,7 @@ public class CU10 {
             try {
                 return Integer.parseInt(valor);
             } catch (NumberFormatException e) {
-                System.out.println("⚠️ Debe ingresar un número entero.");
+                System.out.println("Debe ingresar un número entero.");
             }
         }
     }
@@ -203,7 +248,7 @@ public class CU10 {
             try {
                 return LocalDate.parse(valor);
             } catch (DateTimeParseException e) {
-                System.out.println("⚠️ Formato inválido, use YYYY-MM-DD.");
+                System.out.println("Formato inválido, use YYYY-MM-DD.");
             }
         }
     }
@@ -213,7 +258,7 @@ public class CU10 {
             System.out.print("Tipo de documento [DNI, LE, LC, Pasaporte, Otro]: ");
             String valor = in.nextLine().trim();
             if (TIPOS_DOC.contains(valor)) return valor;
-            System.out.println("⚠️ Tipo inválido. Opciones: " + TIPOS_DOC);
+            System.out.println("Tipo inválido. Opciones: " + TIPOS_DOC);
         }
     }
 
@@ -222,15 +267,15 @@ public class CU10 {
             System.out.print("Número de documento: ");
             String valor = in.nextLine().trim();
             if (valor.isEmpty()) {
-                System.out.println("⚠️ Campo obligatorio.");
+                System.out.println("Campo obligatorio.");
                 continue;
             }
             if (tipoDoc.equals("LE") || tipoDoc.equals("LC") || tipoDoc.equals("Otro")) {
                 if (valor.matches("[a-zA-Z]{1}[0-9]+")) return valor;
-                System.out.println("⚠️ Debe comenzar con una letra seguida de números.");
+                System.out.println("Debe comenzar con una letra seguida de números.");
             } else {
                 if (valor.matches("[0-9]+")) return valor;
-                System.out.println("⚠️ Solo se permiten números.");
+                System.out.println("Solo se permiten números.");
             }
         }
     }
@@ -241,7 +286,7 @@ public class CU10 {
             String valor = in.nextLine().trim();
             if (valor.isEmpty()) return "Consumidor final";
             if (POS_IVA.contains(valor)) return valor;
-            System.out.println("⚠️ Valor inválido. Opciones: " + POS_IVA + " o vacío (Consumidor final).");
+            System.out.println("Valor inválido. Opciones: " + POS_IVA + " o vacío (Consumidor final).");
         }
     }
 
@@ -252,7 +297,7 @@ public class CU10 {
 
             if (valor.isEmpty()) {
                 if (obligatorio) {
-                    System.out.println("⚠️ Campo obligatorio, vuelva a ingresarlo.");
+                    System.out.println("Campo obligatorio, vuelva a ingresarlo.");
                     continue;
                 } else {
                     return null; // permitido vacío
@@ -263,9 +308,90 @@ public class CU10 {
             if (valor.matches("^[^@\\s]+@[^@\\s]+$")) {
                 return valor;
             } else {
-                System.out.println("⚠️ El email debe contener exactamente un '@' y no puede estar vacío antes o después de él.");
+                System.out.println("El email debe contener exactamente un '@' y no puede estar vacío antes o después de él.");
             }
         }
     }
 
+    private static String modificarTipoDocumento(Scanner in, String tipoActual) {
+        while (true) {
+            System.out.print("Tipo de documento [DNI, LE, LC, Pasaporte, Otro]: \n [Actual: " + tipoActual + "] : ");
+            String valor = in.nextLine().trim();
+            if (TIPOS_DOC.contains(valor)) return valor;
+            System.out.println("Tipo inválido. Opciones: " + TIPOS_DOC);
+        }
+    }
+
+    private static String modificarNumeroDocumento(Scanner in, String tipoDoc, String numeroActual) {
+        while (true) {
+            System.out.print("Número de documento ["+numeroActual+"]: ");
+            String valor = in.nextLine().trim();
+            if (valor.isEmpty()) {
+                System.out.println("Campo obligatorio.");
+                continue;
+            }
+            if (tipoDoc.equals("LE") || tipoDoc.equals("LC") || tipoDoc.equals("Otro")) {
+                if (valor.matches("[a-zA-Z]{1}[0-9]+")) return valor;
+                System.out.println("Debe comenzar con una letra seguida de números.");
+            } else {
+                if (valor.matches("[0-9]+")) return valor;
+                System.out.println("Solo se permiten números.");
+            }
+        }
+    }
+
+    private static String modificarPosicionIVA(Scanner in, String posicionActual) {
+        while (true) {
+            System.out.print("Posición frente al IVA (Consumidor final por omisión) ["+ posicionActual +"]: ");
+            String valor = in.nextLine().trim();
+            if (valor.isEmpty()) return "Consumidor final";
+            if (POS_IVA.contains(valor)) return valor;
+            System.out.println("Valor inválido. Opciones: " + POS_IVA + " o vacío (Consumidor final).");
+        }
+    }
+
+    private static HuespedDTO huespedPrueba(Scanner in) {
+        String apellido = "apellidoPrueba";
+        String nombre = "nombrePrueba";
+        String tipoDocumento = "DNI";
+        String numeroDocumento = "12345678";
+        String cuit = "2012312443";
+        String posicionIVA = "Responsable Inscripto";
+        LocalDate fechaNacimiento = LocalDate.parse("2004-05-20");
+        String telefono = "3421234567";
+        String email = "e@mail.com";
+        String ocupacion = "estudiante";
+        String nacionalidad = "argentino";
+        String calle = "callePrueba";
+        String numero = "1234";
+        String departamento = "A";
+        int piso = 2;
+        int codigoPostal = 3000;
+        String localidad = "Santa Fe";
+        String provincia = "Santa Fe";
+        String pais = "Argentina";
+
+        DireccionDTO direccion = new DireccionDTO(calle, numero, departamento, piso, codigoPostal, localidad, provincia, pais);
+        HuespedDTO.Builder builder = new HuespedDTO.Builder()
+            .apellido(apellido)
+            .nombre(nombre)
+            .tipoDocumento(tipoDocumento)
+            .numeroDocumento(numeroDocumento)
+            .fechaNacimiento(fechaNacimiento)
+            .direccionHuesped(direccion)
+            .telefono(telefono)
+            .ocupacion(ocupacion)
+            .nacionalidad(nacionalidad);
+
+        if (email != null) {
+            builder.email(email);
+        }
+        if (cuit != null) {
+            builder.cuit(cuit);
+        }
+        if (posicionIVA != null) {
+            builder.posicionIVA(posicionIVA);
+        }
+        return builder.build();
+    }
 }
