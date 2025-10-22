@@ -66,6 +66,9 @@ public class HuespedDAOImpl implements HuespedDAO {
 
     private void guardarListaEnJSON() {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule()); // soporte para LocalDate, LocalDateTime, etc.
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // opcional: para que escriba como "2025-10-22" en lugar de epoch
+
         mapper.enable(SerializationFeature.INDENT_OUTPUT); // para que quede legible
 
         try {
