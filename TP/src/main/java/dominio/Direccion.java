@@ -4,6 +4,8 @@
  */
 package dominio;
 
+import repositorio.DireccionDTO;
+
 /**
  *
  * @author mateo
@@ -65,5 +67,9 @@ public class Direccion {
     public String getPais() {
         return pais;
     }
-
+    public boolean equalsDTO(DireccionDTO dirDTO){
+        return calle==dirDTO.getCalle() && numero==dirDTO.getNumero() && departamento==dirDTO.getDepartamento() &&
+               piso==dirDTO.getPiso() && codigo==dirDTO.getCodigo() && localidad==dirDTO.getLocalidad() &&
+               provincia==dirDTO.getProvincia() && pais==dirDTO.getPais();
+    }
 }

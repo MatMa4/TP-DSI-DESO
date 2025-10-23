@@ -35,7 +35,7 @@ public class GestorDeHuesped {
         DireccionDAO direccionDAO = DireccionDAOImpl.getDireccionDAO();
         HuespedDAO huespedDAO= HuespedDAOImpl.getHuespedDAO();    
         if(!(equals(huespedAntiguo.getDireccionHuesped(), huespedModificado.getDireccionHuesped()))){
-           huespedDAO.modificarHuesped(huespedModificado, huespedAntiguo, convertirADireccion(huespedModificado.getDireccionHuesped()));
+            huespedDAO.modificarHuesped(huespedModificado, huespedAntiguo, convertirADireccion(huespedModificado.getDireccionHuesped()));
            direccionDAO.agregarDireccion(convertirADireccion(huespedModificado.getDireccionHuesped()));
         }else{
             huespedDAO.modificarHuesped(huespedModificado, huespedAntiguo);

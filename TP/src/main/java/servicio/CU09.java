@@ -25,7 +25,7 @@ import servicios.GestorDeHuesped;
  */
 public class CU09 {
     private static final List<String> TIPOS_DOC = Arrays.asList("DNI", "LC", "LE", "Pasaporte", "Otro");
-    private static final List<String> POS_IVA = Arrays.asList("Responsable Inscripto", "Monotributista", "Excento");
+    private static final List<String> POS_IVA = Arrays.asList("RESPONSABLE INSCRIPTO", "MONOTRIBUTISTA", "EXCENTO, CONSUMIDOR FINAL");
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -35,43 +35,43 @@ public class CU09 {
         HuespedDTO huespedNuevo = huespedPrueba(in); // método de pruba
         while (true){ //Se repite mientras se quieran cargar huéspedes
             boolean repetir = false;
-            System.out.println("\nSIGUIENTE / CANCELAR");//Paso 1
 
             String opcionInicial;
             while (true) {//Se repite hasta que ingrese una opción válida
-                opcionInicial = in.nextLine().trim();
+                opcionInicial = leerTexto(in, "\nSIGUIENTE / CANCELAR\n", true);
                 //Paso 2
                 if (opcionInicial.equalsIgnoreCase("SIGUIENTE")){
                     break;//Si selecciona SIGIENTE, continúa el flujo principal
                 } else if (opcionInicial.equalsIgnoreCase("CANCELAR")){
                     //Paso 2.C
-                    System.out.println("¿Desea cancelar el alta del huésped? [S/N].");
                     String respuesta;
                     while(true) { //Repite hasta recibir una respuesta válida
-                        respuesta = in.nextLine().trim(); //Lee la respuesta
+                        respuesta = leerTexto(in, "¿Desea cancelar el alta del huésped? [S/N]\n", true); //Lee la respuesta
                         if(respuesta.equalsIgnoreCase("S")){
-                            repetir = true;//Activa una bandera para saltar el resto de la iteración y comienza otra vez
-                            break;
+                            //Paso 2.C.1
+                            System.out.println("Operación cancelada. Gracias.");
+                            //Paso 6 (terminar CU)
+                            in.close(); //cerrar entrada antes de terminar
+                            return; 
                         } else if(respuesta.equalsIgnoreCase("N")){
-                            break;//Sale del bucle y vuelve a preguntar SIGUIENTE/CANCELAR
+                            //Paso 2.C.2
+                            break;//Sale del bucle y vuelve a preguntar SIGUIENTE / CANCELAR
                         } else {//Si no seleccionó bien la respuesta se debe volver a pedir
                             System.out.println("Respuesta inválida. Ingrese 'S' para sí o 'N' para no.");
                         }
                     }
-                    if (repetir){//Si desea cancelar sale del bucle
-                        break;
-                    }
+
                 } else {
                     //No es un paso, pero se repite hasta que seleccione una opción válida
                     System.out.println("Opción inválida. Escriba: SIGUIENTE / CANCELAR");
                 }
             }
-
+            //Si presiona SIGUIENTE, continúa el flujo principal
             HuespedDTO huespedAntiguo = GestorDeHuesped.consultarDocumento(huespedNuevo.getTipoDocumento(), huespedNuevo.getNumeroDocumento());
-            if (huespedAntiguo == null){
+            if (huespedAntiguo == null){//Si no existe un huesped con ese documento
                 //Paso 3
                 GestorDeHuesped.registrarHuesped(huespedNuevo);
-                System.out.println("El huésped "+ huespedNuevo.getNombre() +" "+ huespedNuevo.getApellido() +" ha sido satisfactoriamente cargado al sistema. ¿Desea cargar otro? [S/N]");
+                System.out.println("El huésped "+ huespedNuevo.getNombre() +" "+ huespedNuevo.getApellido() +" ha sido satisfactoriamente cargado al sistema.");
             } else {
                 //Paso 2.B
                 //Se repite hasta que ingrese una opción válida
@@ -79,14 +79,13 @@ public class CU09 {
                     //Paso 2.B.1
                     System.out.println("\n“¡CUIDADO! El tipo y número de documento ya existen en el sistema");
                     //Paso 2,B,2
-                    System.out.println("Aceptar Igualmente / Corregir");
-                    String opcion = in.nextLine().trim();
+                    String opcion = leerTexto(in, "Aceptar Igualmente / Corregir\n", true);
 
                     if (opcion.equalsIgnoreCase("Aceptar Igualmente")) {
                         //Paso 2.B.2.1
                         //Paso 3
                         GestorDeHuesped.modificarHuesped(huespedNuevo, huespedAntiguo);
-                        System.out.println("El huésped "+ huespedNuevo.getNombre() +" "+ huespedNuevo.getApellido() +" ha sido satisfactoriamente cargado al sistema. ¿Desea cargar otro? [S/N]");
+                        System.out.println("El huésped "+ huespedNuevo.getNombre() +" "+ huespedNuevo.getApellido() +" ha sido satisfactoriamente cargado al sistema.");
                         break;
                     } else if (opcion.equalsIgnoreCase("Corregir")) {
                         //Paso 2.B.2.2
@@ -100,15 +99,21 @@ public class CU09 {
                     }
                 }
             }
-            if (!repetir){
+            if (!repetir){//Si repetir es true es porque se seleccionó corregir, se debe volver al paso 2
                 String respuestaFinal;
-                while(true) {
-                    respuestaFinal = in.nextLine().trim();
+                while(true) {//Paso 4
+                    respuestaFinal = leerTexto(in, "¿Desea cargar otro? [S/N]\n", true);
                     if(respuestaFinal.equalsIgnoreCase("S")){
+                        //Paso 4.1
+                        //Se quieren seguir cargando huéspedes, así que se ingresan los datos del siguiente
                         huespedNuevo = huespedPrueba(in);
                         break;
                     } else if(respuestaFinal.equalsIgnoreCase("N")){
+                        //Paso 5
+                        //No se quieren seguir cargando huespedes
                         System.out.println("Operación finalizada. Gracias.");
+                        //Paso 6 (terminar CU)
+                        in.close(); //cerrar entrada antes de terminar
                         return;
                     } else {
                         System.out.println("Respuesta inválida. Ingrese 'S' para sí o 'N' para no.");
@@ -255,7 +260,7 @@ public class CU09 {
                 System.out.println("Formato inválido, solo se permiten letras/espacios.");
                 continue;
             }
-            return valor;
+            return valor.toUpperCase();
         }
     }
 
@@ -307,7 +312,7 @@ public class CU09 {
         while (true) {
             System.out.print("Tipo de documento [DNI, LE, LC, Pasaporte, Otro]: ");
             String valor = in.nextLine().trim();
-            if (TIPOS_DOC.contains(valor)) return valor;
+            if (TIPOS_DOC.contains(valor.toUpperCase())) return valor.toUpperCase();
             System.out.println("Tipo inválido. Opciones: " + TIPOS_DOC);
         }
     }
@@ -321,7 +326,7 @@ public class CU09 {
                 continue;
             }
             if (tipoDoc.equals("LE") || tipoDoc.equals("LC") || tipoDoc.equals("Otro")) {
-                if (valor.matches("[a-zA-Z]{1}[0-9]+")) return valor;
+                if (valor.matches("[a-zA-Z]{1}[0-9]+")) return valor.toUpperCase();
                 System.out.println("Debe comenzar con una letra seguida de números.");
             } else {
                 if (valor.matches("[0-9]+")) return valor;
@@ -334,8 +339,8 @@ public class CU09 {
         while (true) {
             System.out.print("Posición frente al IVA (Consumidor final por omisión): ");
             String valor = in.nextLine().trim();
-            if (valor.isEmpty()) return "Consumidor final";
-            if (POS_IVA.contains(valor)) return valor;
+            if (valor.isEmpty()) return "CONSUMIDOR FINAL";
+            if (POS_IVA.contains(valor.toUpperCase())) return valor.toUpperCase();
             System.out.println("Valor inválido. Opciones: " + POS_IVA + " o vacío (Consumidor final).");
         }
     }
@@ -356,7 +361,7 @@ public class CU09 {
 
             // Validación: exactamente un @ y no al inicio ni al final
             if (valor.matches("^[^@\\s]+@[^@\\s]+$")) {
-                return valor;
+                return valor.toUpperCase();
             } else {
                 System.out.println("El email debe contener exactamente un '@' y no puede estar vacío antes o después de él.");
             }
@@ -367,7 +372,7 @@ public class CU09 {
         while (true) {
             System.out.print("Tipo de documento [DNI, LE, LC, Pasaporte, Otro]: \n [Actual: " + tipoActual + "] : ");
             String valor = in.nextLine().trim();
-            if (TIPOS_DOC.contains(valor)) return valor;
+            if (TIPOS_DOC.contains(valor.toUpperCase())) return valor.toUpperCase();
             System.out.println("Tipo inválido. Opciones: " + TIPOS_DOC);
         }
     }
@@ -381,7 +386,7 @@ public class CU09 {
                 continue;
             }
             if (tipoDoc.equals("LE") || tipoDoc.equals("LC") || tipoDoc.equals("Otro")) {
-                if (valor.matches("[a-zA-Z]{1}[0-9]+")) return valor;
+                if (valor.matches("[a-zA-Z]{1}[0-9]+")) return valor.toUpperCase();
                 System.out.println("Debe comenzar con una letra seguida de números.");
             } else {
                 if (valor.matches("[0-9]+")) return valor;
@@ -394,32 +399,32 @@ public class CU09 {
         while (true) {
             System.out.print("Posición frente al IVA (Consumidor final por omisión) ["+ posicionActual +"]: ");
             String valor = in.nextLine().trim();
-            if (valor.isEmpty()) return "Consumidor final";
-            if (POS_IVA.contains(valor)) return valor;
+            if (valor.isEmpty()) return "CONSUMIDOR FINAL";
+            if (POS_IVA.contains(valor.toUpperCase())) return valor.toUpperCase();
             System.out.println("Valor inválido. Opciones: " + POS_IVA + " o vacío (Consumidor final).");
         }
     }
 
     private static HuespedDTO huespedPrueba(Scanner in) {
-        String apellido = "apellidoPrueba";
-        String nombre = "nombrePrueba";
-        String tipoDocumento = "DNI";
-        String numeroDocumento = "12345678";
-        String cuit = "2012312443";
-        String posicionIVA = "Responsable Inscripto";
+        String apellido = "apellido".toUpperCase();
+        String nombre = "nombrePrueba".toUpperCase();
+        String tipoDocumento = "DNI".toUpperCase();
+        String numeroDocumento = "12345679".toUpperCase();
+        String cuit = "2012312443".toUpperCase();
+        String posicionIVA = "Responsable Inscripto".toUpperCase();
         LocalDate fechaNacimiento = LocalDate.parse("2004-05-20");
         String telefono = "3421234567";
-        String email = "e@mail.com";
-        String ocupacion = "estudiante";
-        String nacionalidad = "argentino";
-        String calle = "callePrueba";
+        String email = "e@mail.com".toUpperCase();
+        String ocupacion = "estudiante".toUpperCase();
+        String nacionalidad = "argentino".toUpperCase();
+        String calle = "callePrueba".toUpperCase();
         String numero = "1234";
-        String departamento = "A";
+        String departamento = "A".toUpperCase();
         int piso = 2;
         int codigoPostal = 3000;
-        String localidad = "Santa Fe";
-        String provincia = "Santa Fe";
-        String pais = "Argentina";
+        String localidad = "Santa Fe".toUpperCase();
+        String provincia = "Santa Fe".toUpperCase();
+        String pais = "Argentina".toUpperCase();
 
         DireccionDTO direccion = new DireccionDTO(calle, numero, departamento, piso, codigoPostal, localidad, provincia, pais);
         HuespedDTO.Builder builder = new HuespedDTO.Builder()

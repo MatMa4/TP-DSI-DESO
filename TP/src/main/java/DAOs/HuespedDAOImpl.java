@@ -122,20 +122,29 @@ public class HuespedDAOImpl implements HuespedDAO {
     @Override
     public void modificarHuesped(HuespedDTO huespedModificado, HuespedDTO huespedAntiguo){
         //huespedAntiguo siempre debería estar, por lo que no hay excepción
-         huespedes.stream()
-        .filter(h -> equalsDTO(h, huespedAntiguo))
-        .findFirst()
-        .ifPresent(h -> clonarDesdeDTO(huespedModificado, h));
+        java.util.Optional<Huesped> opt = huespedes.stream()
+            .filter(h -> equalsDTO(h, huespedAntiguo))
+            .findFirst();
+
+        if (opt.isPresent()) {
+            clonarDesdeDTO(huespedModificado, opt.get());
+            guardarListaEnJSON(); // persistir cambios
+        }
     }
 
     @Override
     public void modificarHuesped(HuespedDTO huespedModificado, HuespedDTO huespedAntiguo, Direccion direccionNueva){
         //huespedAntiguo siempre debería estar, por lo que no hay excepción 
-         huespedes.stream()
-        .filter(h -> equalsDTO(h, huespedAntiguo))
-        .findFirst()
-        .ifPresent(h -> {clonarDesdeDTO(huespedModificado, h);
-                         h.setDireccionHuesped(direccionNueva);});
+        java.util.Optional<Huesped> opt = huespedes.stream()
+            .filter(h -> equalsDTO(h, huespedAntiguo))
+            .findFirst();
+
+        if (opt.isPresent()) {
+            Huesped h = opt.get();
+            clonarDesdeDTO(huespedModificado, h);
+            h.setDireccionHuesped(direccionNueva);
+            guardarListaEnJSON(); // persistir cambios
+        }
     }
 
     @Override
@@ -145,7 +154,7 @@ public class HuespedDAOImpl implements HuespedDAO {
                 h.getTipoDocumento().equals(huespedAntiguo.getTipoDocumento()) &&
                 h.getNumeroDocumento().equals(huespedAntiguo.getNumeroDocumento()) &&
                 h.getFechaNacimiento().equals(huespedAntiguo.getFechaNacimiento()) &&
-                h.getDireccionHuesped().equals(huespedAntiguo.getDireccionHuesped()) &&
+                h.getDireccionHuesped().equalsDTO(huespedAntiguo.getDireccionHuesped()) &&
                 h.getTelefono().equals(huespedAntiguo.getTelefono()) &&
                 ((h.getEmail() == null && huespedAntiguo.getEmail() == null) || 
                  (h.getEmail() != null && h.getEmail().equals(huespedAntiguo.getEmail()))) &&
