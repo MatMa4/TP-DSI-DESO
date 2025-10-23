@@ -38,8 +38,11 @@ public class Huesped {
         this.cuit = builder.cuit; //No obligatorio
         this.posicionIVA = builder.posicionIVA; //Consumidor final por omisión
     }
-    
-    //Getters
+ 
+    public Huesped(){
+
+    }
+        //Getters
     public String getApellido() {
     return apellido;
     }

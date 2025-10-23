@@ -1,3 +1,4 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -22,61 +23,55 @@ import servicios.GestorDeHuesped;
  *
  * @author mateo
  */
-public class CU10 {
+public class CU09 {
     private static final List<String> TIPOS_DOC = Arrays.asList("DNI", "LC", "LE", "Pasaporte", "Otro");
     private static final List<String> POS_IVA = Arrays.asList("Responsable Inscripto", "Monotributista", "Excento");
 
-        public static void main(HuespedDTO huespedExistente) {
+    public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         // Recolectar datos 
-        //HuespedDTO huespedNuevo = recolectarHuesped(in);
         //Paso 1
-        //HuespedDTO huespedNuevo = editarHuesped(in, huespedExistente);
+        //HuespedDTO huespedNuevo = recolectarHuesped(in);
         HuespedDTO huespedNuevo = huespedPrueba(in); // método de pruba
-        while (true){
+        while (true){ //Se repite mientras se quieran cargar huéspedes
             boolean repetir = false;
-            System.out.println("\nSIGUIENTE / CANCELAR / BORRAR");
+            System.out.println("\nSIGUIENTE / CANCELAR");//Paso 1
 
             String opcionInicial;
-            while (true) {
+            while (true) {//Se repite hasta que ingrese una opción válida
                 opcionInicial = in.nextLine().trim();
                 //Paso 2
                 if (opcionInicial.equalsIgnoreCase("SIGUIENTE")){
-                    break;
+                    break;//Si selecciona SIGIENTE, continúa el flujo principal
                 } else if (opcionInicial.equalsIgnoreCase("CANCELAR")){
                     //Paso 2.C
-                    System.out.println("¿Desea cancelar la modificación del huésped? [S/N]");
+                    System.out.println("¿Desea cancelar el alta del huésped? [S/N].");
                     String respuesta;
-                    while(true) {
-                        respuesta = in.nextLine().trim();
+                    while(true) { //Repite hasta recibir una respuesta válida
+                        respuesta = in.nextLine().trim(); //Lee la respuesta
                         if(respuesta.equalsIgnoreCase("S")){
-                            repetir = true;
+                            repetir = true;//Activa una bandera para saltar el resto de la iteración y comienza otra vez
                             break;
                         } else if(respuesta.equalsIgnoreCase("N")){
-                            break;
-                        } else {
+                            break;//Sale del bucle y vuelve a preguntar SIGUIENTE/CANCELAR
+                        } else {//Si no seleccionó bien la respuesta se debe volver a pedir
                             System.out.println("Respuesta inválida. Ingrese 'S' para sí o 'N' para no.");
                         }
                     }
-                    if (repetir){
+                    if (repetir){//Si desea cancelar sale del bucle
                         break;
                     }
-                }else if(opcionInicial.equalsIgnoreCase("Borrar")){
-                    // ir a CU11
-                    return;
                 } else {
                     //No es un paso, pero se repite hasta que seleccione una opción válida
-                    System.out.println("Opción inválida. Escriba: SIGUIENTE / CANCELAR / BORRAR");
+                    System.out.println("Opción inválida. Escriba: SIGUIENTE / CANCELAR");
                 }
             }
-            if (repetir){
-                continue;
-            }
+
             HuespedDTO huespedAntiguo = GestorDeHuesped.consultarDocumento(huespedNuevo.getTipoDocumento(), huespedNuevo.getNumeroDocumento());
             if (huespedAntiguo == null){
                 //Paso 3
                 GestorDeHuesped.registrarHuesped(huespedNuevo);
-                System.out.println("La operacion ha culminado con éxito");
+                System.out.println("El huésped "+ huespedNuevo.getNombre() +" "+ huespedNuevo.getApellido() +" ha sido satisfactoriamente cargado al sistema. ¿Desea cargar otro? [S/N]");
             } else {
                 //Paso 2.B
                 //Se repite hasta que ingrese una opción válida
@@ -91,7 +86,7 @@ public class CU10 {
                         //Paso 2.B.2.1
                         //Paso 3
                         GestorDeHuesped.modificarHuesped(huespedNuevo, huespedAntiguo);
-                        System.out.println("La operacion ha culminado con éxito");
+                        System.out.println("El huésped "+ huespedNuevo.getNombre() +" "+ huespedNuevo.getApellido() +" ha sido satisfactoriamente cargado al sistema. ¿Desea cargar otro? [S/N]");
                         break;
                     } else if (opcion.equalsIgnoreCase("Corregir")) {
                         //Paso 2.B.2.2
@@ -105,11 +100,25 @@ public class CU10 {
                     }
                 }
             }
+            if (!repetir){
+                String respuestaFinal;
+                while(true) {
+                    respuestaFinal = in.nextLine().trim();
+                    if(respuestaFinal.equalsIgnoreCase("S")){
+                        huespedNuevo = huespedPrueba(in);
+                        break;
+                    } else if(respuestaFinal.equalsIgnoreCase("N")){
+                        System.out.println("Operación finalizada. Gracias.");
+                        return;
+                    } else {
+                        System.out.println("Respuesta inválida. Ingrese 'S' para sí o 'N' para no.");
+                    }
+                }
+            }
 
         // No cerramos 'in' para no cerrar System.in si otras partes lo usan
         }
     } 
-
 
     // Nuevo método que agrupa toda la recolección y construcción del DTO
     private static HuespedDTO recolectarHuesped(Scanner in) {

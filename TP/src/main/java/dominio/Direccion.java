@@ -30,6 +30,9 @@ public class Direccion {
         this.pais = pais;
     }
 
+    public Direccion(){
+        
+    }
     //Getters
     public String getCalle() {
         return calle;

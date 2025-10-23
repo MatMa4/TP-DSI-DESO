@@ -8,11 +8,14 @@ import repositorio.HuespedDTO;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import java.io.File;
 import java.io.IOException;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import dominio.Huesped;
 import dominio.Direccion;
@@ -43,12 +46,19 @@ public class HuespedDAOImpl implements HuespedDAO {
 
     private List<Huesped> cargarListaDesdeJSON() {
         ObjectMapper mapper = new ObjectMapper();
-        File archivo = new File("src/main/java/BDD/listaHuespedes.json");
+        mapper.registerModule(new JavaTimeModule()); // soporte para LocalDate
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        if (!archivo.exists()) return new ArrayList<>();
+        File archivo = new File("listaHuespedes.json");
+
+        if (!archivo.exists()) {
+            return new ArrayList<>(); // si no existe, devolvemos lista vacía
+        }
 
         try {
-            return List.of(mapper.readValue(archivo, Huesped[].class));
+            // Usamos Arrays.asList(...) y luego new ArrayList<>(...) para que sea modificable
+            Huesped[] array = mapper.readValue(archivo, Huesped[].class);
+            return new ArrayList<>(Arrays.asList(array));
         } catch (IOException e) {
             throw new RuntimeException("Error al cargar la lista de huéspedes desde JSON", e);
         }
