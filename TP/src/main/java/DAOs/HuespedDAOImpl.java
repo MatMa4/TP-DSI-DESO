@@ -204,11 +204,11 @@ public class HuespedDAOImpl implements HuespedDAO {
         }
     }
     @Override
-    public List<Huesped> buscarHuesped(String apellido, String nombre, String tipoDoc, String nroDoc){
+    public List<HuespedDTO> buscarHuesped(String apellido, String nombre, String tipoDoc, String nroDoc){
         if (huespedes == null || huespedes.isEmpty()) {
             return new ArrayList<>();
         }
-         List<Huesped> resultado = huespedes.stream()
+         List<HuespedDTO> resultado = huespedes.stream()
         .filter(h -> (apellido == null || apellido.isEmpty() || 
                       h.getApellido().toUpperCase().startsWith(apellido.toUpperCase())))
         .filter(h -> (nombre == null || nombre.isEmpty() || 
@@ -217,6 +217,20 @@ public class HuespedDAOImpl implements HuespedDAO {
                       h.getTipoDocumento().equalsIgnoreCase(tipoDoc)))
         .filter(h -> (nroDoc == null || nroDoc.isEmpty() || 
                       h.getNumeroDocumento().equalsIgnoreCase(nroDoc)))
+        .map(h -> new HuespedDTO.Builder()
+                .apellido(h.getApellido())
+                .nombre(h.getNombre())
+                .tipoDocumento(h.getTipoDocumento())
+                .numeroDocumento(h.getNumeroDocumento())
+                .fechaNacimiento(h.getFechaNacimiento())
+                .direccionHuesped(h.getDireccionHuesped())
+                .telefono(h.getTelefono())
+                .email(h.getEmail())
+                .ocupacion(h.getOcupacion())
+                .nacionalidad(h.getNacionalidad())
+                .cuit(h.getCuit())
+                .posicionIVA(h.getPosicionIVA())
+                .build())
         .collect(Collectors.toList());
          
          if (resultado.isEmpty()) {

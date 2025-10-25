@@ -1,9 +1,9 @@
-package servicio;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
+package servicio;
 
 /**
  *
@@ -12,13 +12,14 @@ package servicio;
 import java.util.List;
 import java.util.Scanner;
 import dominio.Huesped;
+import repositorio.HuespedDTO;
 import DAOs.HuespedDAO;
 import DAOs.HuespedDAOImpl;
 import Excepcion.HuespedNoEncontradoException;
 
 public class CU02 {
 
-    public void ejecutar() {
+    public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         HuespedDAO huespedDAO = HuespedDAOImpl.getHuespedDAO();
 
@@ -36,8 +37,8 @@ public class CU02 {
         String nroDoc = in.nextLine();
 
         try {
-            // 🔍 Buscar huéspedes según los filtros
-            List<Huesped> resultado = huespedDAO.buscarHuesped(apellido, nombre, tipoDoc, nroDoc);
+            // Buscar huéspedes según los filtros
+            List<HuespedDTO> resultado = huespedDAO.buscarHuesped(apellido, nombre, tipoDoc, nroDoc);
 
             if (!resultado.isEmpty()) {
                 System.out.println("\n=== RESULTADOS ENCONTRADOS ===");
@@ -45,13 +46,13 @@ public class CU02 {
                 System.out.println("-------------------------------------------------------------");
 
                 int i = 1;
-                for (Huesped h : resultado) {
+                for (HuespedDTO h : resultado) {
                     System.out.printf("%-5d %-15s %-15s %-12s %-12s%n",
                             i++, h.getApellido(), h.getNombre(),
                             h.getTipoDocumento(), h.getNumeroDocumento());
                 }
 
-                // 🧾 Selección del huésped
+                //  Selección del huésped
                 System.out.print("\nSeleccione el número del huésped que desea (o presione Enter para ninguno): ");
                 String seleccion = in.nextLine();
 
@@ -75,11 +76,11 @@ public class CU02 {
                     return;
                 }
 
-                Huesped huespedSeleccionado = resultado.get(indiceSeleccionado - 1);
+                HuespedDTO huespedSeleccionado = resultado.get(indiceSeleccionado - 1);
                 System.out.println("\nHa seleccionado a:");
                 System.out.println(huespedSeleccionado.getNombre() + " " + huespedSeleccionado.getApellido());
 
-                // 🟢 Esperar confirmación con "SIGUIENTE"
+                // Esperar confirmación con "SIGUIENTE"
                 System.out.print("\nEscriba 'SIGUIENTE' para continuar: ");
                 String siguiente = in.nextLine();
 

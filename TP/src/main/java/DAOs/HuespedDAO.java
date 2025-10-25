@@ -20,5 +20,5 @@ public interface HuespedDAO {
     public boolean equalsDTO(Huesped h, HuespedDTO huespedAntiguo);
     public void clonarDesdeDTO(HuespedDTO dto, Huesped h);
     public void eliminar(HuespedDTO huespedDTO);
-    public List<Huesped> buscarHuesped(String apellido, String nombre, String tipoDoc, String nroDoc);
+    public List<HuespedDTO> buscarHuesped(String apellido, String nombre, String tipoDoc, String nroDoc);
 }

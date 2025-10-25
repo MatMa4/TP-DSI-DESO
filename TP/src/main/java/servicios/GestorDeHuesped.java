@@ -90,9 +90,9 @@ public class GestorDeHuesped {
         }
     }
     
-    public List<Huesped> buscarHuesped(String apellido, String nombre, String tipoDoc, String nroDoc)
+    public List<HuespedDTO> buscarHuesped(String apellido, String nombre, String tipoDoc, String nroDoc)
             throws HuespedNoEncontradoException {
-        List<Huesped> encontrados = huespedDAO.buscarHuesped(apellido, nombre, tipoDoc, nroDoc);
+        List<HuespedDTO> encontrados = huespedDAO.buscarHuesped(apellido, nombre, tipoDoc, nroDoc);
         if (encontrados.isEmpty()) {
             throw new HuespedNoEncontradoException();
         }
