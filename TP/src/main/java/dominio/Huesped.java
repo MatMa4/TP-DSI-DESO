@@ -22,6 +22,7 @@ public class Huesped {
     private String nacionalidad;
     private String cuit;
     private String posicionIVA;
+    private boolean alojado;
     
     //============Creacion=============
     private Huesped(Builder builder){
@@ -37,6 +38,7 @@ public class Huesped {
         this.nacionalidad = builder.nacionalidad;
         this.cuit = builder.cuit; //No obligatorio
         this.posicionIVA = builder.posicionIVA; //Consumidor final por omisión
+        this.alojado= builder.alojado;
     }
  
     public Huesped(){
@@ -90,6 +92,9 @@ public class Huesped {
     public String getPosicionIVA() {
         return posicionIVA;
     }
+    public boolean getAlojado(){
+        return alojado;
+    }
     
     //===============Builder==============
     public static class Builder{
@@ -105,6 +110,7 @@ public class Huesped {
         private String nacionalidad;
         private String cuit;
         private String posicionIVA;
+        private boolean alojado;
         
         //Hay que poner una validación de si es null y crear una excepción para cada campo obligatorio
         //Lo mismo para los setters
@@ -155,6 +161,10 @@ public class Huesped {
         public Builder posicionIVA(String posicionIVA){
             this.posicionIVA = posicionIVA;
             return this;
+        }
+        public Builder alojado(boolean alojado){
+            this.alojado = alojado;
+            return this;    
         }
         public Huesped build() {
             if (apellido == null || apellido.trim().isEmpty()) {
@@ -260,6 +270,9 @@ public class Huesped {
             this.posicionIVA = "Consumidor Final";
         }
         this.posicionIVA = posicionIVA;
+    }
+    public void setAlojado(boolean alojado){
+        this.alojado=alojado;
     }
 
 }
