@@ -177,7 +177,7 @@ public class HuespedDTO {
     public String getPosicionIVA() {
         return posicionIVA;
     }
-     public boolean estaAlojado() {
+     public boolean getAlojado() {
         return alojado;
     }
 }
