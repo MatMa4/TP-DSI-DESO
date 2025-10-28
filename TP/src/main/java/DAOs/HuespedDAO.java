@@ -19,6 +19,6 @@ public interface HuespedDAO {
     public void modificarHuesped(HuespedDTO huespedModificado, HuespedDTO huespedAntiguo, Direccion direccionNueva);
     public boolean equalsDTO(Huesped h, HuespedDTO huespedAntiguo);
     public void clonarDesdeDTO(HuespedDTO dto, Huesped h);
-    public void eliminar(HuespedDTO huespedDTO);
+    public void eliminarHuesped(HuespedDTO huespedDTO);
     public List<HuespedDTO> buscarHuesped(String apellido, String nombre, String tipoDoc, String nroDoc);
 }
