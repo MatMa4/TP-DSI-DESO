@@ -82,8 +82,8 @@ public class GestorDeHuesped {
     
     public void eliminarHuesped(HuespedDTO huespedDTO) throws HuespedNoEliminableException {
         
-        if (!huespedDTO.estaAlojado()) {
-            huespedDAO.eliminar(huespedDTO);
+        if (!huespedDTO.getAlojado()) {
+            huespedDAO.eliminarHuesped(huespedDTO);
             
         }else{
             throw new HuespedNoEliminableException();
