@@ -66,6 +66,6 @@
   "nacionalidad" : "ARGENTINO",
   "cuit" : "2012312443",
   "posicionIVA" : "RESPONSABLE INSCRIPTO",
-    "alojado": true
+    "alojado": false
    
 } ]
