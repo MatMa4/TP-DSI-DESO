@@ -35,6 +35,7 @@ public class HuespedDAOImpl implements HuespedDAO {
     //Patrón Singleton
     public HuespedDAOImpl() {
         huespedes = cargarListaDesdeJSON();
+        System.out.println("✅ HuespedDAO cargó " + huespedes.size() + " huéspedes.");
     }
 
     public static HuespedDAOImpl getHuespedDAO() {
@@ -49,7 +50,7 @@ public class HuespedDAOImpl implements HuespedDAO {
         mapper.registerModule(new JavaTimeModule()); // soporte para LocalDate
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        File archivo = new File("listaHuespedes.json");
+        File archivo = new File("C:/Users/PC Gamer/Documents/NetBeansProjects/TP-DSI-DESO/listaHuespedes.json");
 
         if (!archivo.exists()) {
             return new ArrayList<>(); // si no existe, devolvemos lista vacía
@@ -179,10 +180,11 @@ public class HuespedDAOImpl implements HuespedDAO {
         h.setNacionalidad(dto.getNacionalidad());
         h.setCuit(dto.getCuit()); //Ver si es null
         h.setPosicionIVA(dto.getPosicionIVA()); //Ver si es null
+        h.setAlojado(dto.getAlojado());
     }
     
     @Override
-    public void eliminar(HuespedDTO huespedDTO) {
+    public void eliminarHuesped(HuespedDTO huespedDTO) {
         Iterator<Huesped> it = huespedes.iterator();
         boolean eliminado = false;
 
@@ -190,15 +192,19 @@ public class HuespedDAOImpl implements HuespedDAO {
             Huesped h = it.next();
             if (h.getTipoDocumento().equals(huespedDTO.getTipoDocumento()) &&
                 h.getNumeroDocumento().equals(huespedDTO.getNumeroDocumento())) {
-
                 Scanner in = new Scanner(System.in);
-                System.out.print("Los datos del huésped "+ huespedDTO.getNombre()+ ", " +huespedDTO.getApellido()+" cuyo tipo de documento es " + huespedDTO.getTipoDocumento() + " numero "+ huespedDTO.getNumeroDocumento()+ "serán eliminados del sistema");
+                System.out.print("Los datos del huésped "+ huespedDTO.getNombre()+ ", " +huespedDTO.getApellido()+" cuyo tipo de documento es " + huespedDTO.getTipoDocumento() 
+                + " numero "+ huespedDTO.getNumeroDocumento()+ "serán eliminados del sistema\n");
                 String respuesta = in.nextLine();
                 if("ELIMINAR".equals(respuesta)){
-                 it.remove(); 
-                eliminado = true;
-                throw new HuespedEliminadoCorrectamenteException(huespedDTO.getNombre(),
-                        huespedDTO.getApellido(),huespedDTO.getTipoDocumento(),huespedDTO.getNumeroDocumento());
+                    it.remove(); 
+                    eliminado = true; 
+                }
+                if(eliminado){
+                    guardarListaEnJSON();
+                    System.out.println("?Lista de huéspedes actualizada en el archivo JSON.");
+                    throw new HuespedEliminadoCorrectamenteException(huespedDTO.getNombre(),
+                            huespedDTO.getApellido(),huespedDTO.getTipoDocumento(),huespedDTO.getNumeroDocumento());
                 }
             }
         }
