@@ -50,7 +50,7 @@ public class HuespedDAOImpl implements HuespedDAO {
         mapper.registerModule(new JavaTimeModule()); // soporte para LocalDate
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        File archivo = new File("C:/Users/PC Gamer/Documents/NetBeansProjects/TP-DSI-DESO/listaHuespedes.json");
+        File archivo = new File("/TP/src/main/java/BDD/listaHuespedes.json");
 
         if (!archivo.exists()) {
             return new ArrayList<>(); // si no existe, devolvemos lista vacía
