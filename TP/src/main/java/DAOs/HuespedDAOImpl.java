@@ -49,7 +49,7 @@ public class HuespedDAOImpl implements HuespedDAO {
         mapper.registerModule(new JavaTimeModule()); // soporte para LocalDate
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        File archivo = new File("TP/src/main/java/BDD/listaHuespedes.json");
+        File archivo = new File("src/main/java/BDD/listaHuespedes.json");
 
         if (!archivo.exists()) {
             return new ArrayList<>(); // si no existe, devolvemos lista vacía
@@ -82,7 +82,7 @@ public class HuespedDAOImpl implements HuespedDAO {
         mapper.enable(SerializationFeature.INDENT_OUTPUT); // para que quede legible
 
         try {
-            mapper.writeValue(new File("TP/src/main/java/BDD/listaHuespedes.json"), huespedes);
+            mapper.writeValue(new File("src/main/java/BDD/listaHuespedes.json"), huespedes);
         } catch (IOException e) {
             throw new RuntimeException("Error al guardar la lista de huéspedes en JSON", e);
         }
