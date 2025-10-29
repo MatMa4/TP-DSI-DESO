@@ -19,7 +19,9 @@
   "ocupacion" : "ESTUDIANTE",
   "nacionalidad" : "ARGENTINO",
   "cuit" : "2012312443",
-  "posicionIVA" : "RESPONSABLE INSCRIPTO"
+  "posicionIVA" : "RESPONSABLE INSCRIPTO",
+  "alojado": true
+        
 }, {
   "apellido" : "APELLIDO",
   "nombre" : "NOMBREPRUEBA",
@@ -41,7 +43,8 @@
   "ocupacion" : "ESTUDIANTE",
   "nacionalidad" : "ARGENTINO",
   "cuit" : "2012312443",
-  "posicionIVA" : "RESPONSABLE INSCRIPTO"
+  "posicionIVA" : "RESPONSABLE INSCRIPTO",
+  "alojado": true
 }, {
   "apellido" : "APELLIDO",
   "nombre" : "NOMBRE",
@@ -63,5 +66,7 @@
   "ocupacion" : "ESTUDIANTE",
   "nacionalidad" : "ARGENTINO",
   "cuit" : "2012312443",
-  "posicionIVA" : "RESPONSABLE INSCRIPTO"
+  "posicionIVA" : "RESPONSABLE INSCRIPTO",
+  "alojado": false
+   
 } ]
