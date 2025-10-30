@@ -5,6 +5,7 @@
 package deso.tp;
 
 import servicio.CU01;
+import servicio.CU02;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -38,10 +39,10 @@ public class TP {
             
             switch (opcion) {
                 case 1:
-                    buscarHuesped();
+                     CU02.correr();
                     break;
                 case 2:
-                    modificarHuesped();
+                  modificarHuesped();
                     break;
                 case 3:
                     eliminarHuesped();

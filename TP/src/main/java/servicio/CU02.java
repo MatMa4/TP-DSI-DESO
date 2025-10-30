@@ -19,7 +19,7 @@ import Excepcion.HuespedNoEncontradoException;
 
 public class CU02 {
 
-    public static void main(String[] args) {
+    public static void correr() {
         Scanner in = new Scanner(System.in);
         HuespedDAO huespedDAO = HuespedDAOImpl.getHuespedDAO();
 
