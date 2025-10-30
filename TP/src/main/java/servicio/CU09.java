@@ -31,8 +31,8 @@ public class CU09 {
         Scanner in = new Scanner(System.in);
         // Recolectar datos 
         //Paso 1
-        //HuespedDTO huespedNuevo = recolectarHuesped(in);
-        HuespedDTO huespedNuevo = huespedPrueba(in); // método de pruba
+        HuespedDTO huespedNuevo = recolectarHuesped(in);
+        //HuespedDTO huespedNuevo = huespedPrueba(in); // método de pruba
         while (true){ //Se repite mientras se quieran cargar huéspedes
             boolean repetir = false;
 

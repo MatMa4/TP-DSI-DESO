@@ -1,25 +1,26 @@
 [ {
-  "apellido" : "APELLIDOPRUEBA",
-  "nombre" : "NOMBREPRUEBA",
+  "apellido" : "PEREZ",
+  "nombre" : "CANDELA",
   "tipoDocumento" : "DNI",
-  "numeroDocumento" : "12345678",
-  "fechaNacimiento" : "2004-05-20",
+  "numeroDocumento" : "67676161",
+  "fechaNacimiento" : "2010-02-15",
   "direccionHuesped" : {
-    "calle" : "CALLEPRUEBA",
-    "numero" : "1234",
+    "calle" : "SKIBIDI",
+    "numero" : "1989",
     "departamento" : "A",
-    "piso" : 2,
-    "codigo" : 3000,
-    "localidad" : "SANTA FE",
-    "provincia" : "SANTA FE",
-    "pais" : "ARGENTINA"
+    "piso" : 1,
+    "codigo" : 3400,
+    "localidad" : "CUZCO",
+    "provincia" : "PERU",
+    "pais" : "PERUPAIS"
   },
-  "telefono" : "3421234567",
-  "email" : "E@MAIL.COM",
-  "ocupacion" : "ESTUDIANTE",
-  "nacionalidad" : "ARGENTINO",
-  "cuit" : "2012312443",
-  "posicionIVA" : "RESPONSABLE INSCRIPTO"
+  "telefono" : "3424687278",
+  "email" : "GOY@GMAIL.COM",
+  "ocupacion" : "PROFESOR",
+  "nacionalidad" : "PERUANO",
+  "cuit" : null,
+  "posicionIVA" : "CONSUMIDOR FINAL",
+  "alojado" : false
 }, {
   "apellido" : "APELLIDO",
   "nombre" : "NOMBREPRUEBA",
@@ -41,7 +42,8 @@
   "ocupacion" : "ESTUDIANTE",
   "nacionalidad" : "ARGENTINO",
   "cuit" : "2012312443",
-  "posicionIVA" : "RESPONSABLE INSCRIPTO"
+  "posicionIVA" : "RESPONSABLE INSCRIPTO",
+  "alojado" : false
 }, {
   "apellido" : "APELLIDO",
   "nombre" : "NOMBRE",
@@ -63,5 +65,6 @@
   "ocupacion" : "ESTUDIANTE",
   "nacionalidad" : "ARGENTINO",
   "cuit" : "2012312443",
-  "posicionIVA" : "RESPONSABLE INSCRIPTO"
+  "posicionIVA" : "RESPONSABLE INSCRIPTO",
+  "alojado" : false
 } ]

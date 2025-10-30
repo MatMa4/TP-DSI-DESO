@@ -9,6 +9,8 @@ package servicio;
  *
  * @author Lucas
  */
+import servicio.CU10;
+import servicio.CU09;
 import java.util.List;
 import java.util.Scanner;
 import dominio.Huesped;
@@ -49,7 +51,8 @@ public class CU02 {
             } catch (HuespedNoEncontradoException e) {
                 // el DAO comunica directamente que no hubo coincidencias
                 System.out.println(e.getMessage());
-                System.out.println("→ Redirigiendo al CU11: Dar alta de huésped...");
+                System.out.println("→ Redirigiendo al CU09: Dar alta de huésped...");
+                CU09.main(null);
                 return;
             } catch (RuntimeException e) {
                 // evitar corte silencioso: mostrar causa y stacktrace
@@ -83,8 +86,8 @@ public class CU02 {
 
             if (seleccion.isEmpty()) {
                 System.out.println("\nNo se seleccionó ningún huésped.");
-                System.out.println("→ Redirigiendo al CU11: Dar alta de huésped...");
-                // new CU11().ejecutar();
+                System.out.println("→ Redirigiendo al CU09: Dar alta de huésped...");
+                CU09.main(null);
                 return;
             }
 
@@ -111,7 +114,7 @@ public class CU02 {
 
             if ("SIGUIENTE".equalsIgnoreCase(siguiente)) {
                 System.out.println("→ Pasando al CU10: Modificar Huésped...");
-                // new CU10().ejecutar(huespedSeleccionado);
+                CU10.modificarHuesped(huespedSeleccionado);
             } else {
                 System.out.println("Operación cancelada.");
             }
