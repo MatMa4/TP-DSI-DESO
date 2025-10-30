@@ -30,8 +30,17 @@ public class GestorDeHuesped {
         return huespedDAO.consultarDocumento(tipoDocumento, numeroDocumento);
     }
 
+    public static HuespedDTO consultarDocumento(String tipoDocumentoNuevo, String numeroDocumentoNuevo, String tipoDocumentoAntiguo, String numeroDocumentoAntiguo){
+        System.out.println(numeroDocumentoNuevo + " : " + numeroDocumentoAntiguo);
+        if((tipoDocumentoAntiguo==tipoDocumentoNuevo) && (numeroDocumentoAntiguo==numeroDocumentoNuevo)){
+            return null;
+        }
+        return consultarDocumento(tipoDocumentoNuevo, numeroDocumentoNuevo);
+    }
+
     public static void modificarHuesped(HuespedDTO huespedModificado, HuespedDTO huespedAntiguo){
         //Se fija si las direcciones son iguales, si no lo son, le asigna la nueva direccion
+
         DireccionDAO direccionDAO = DireccionDAOImpl.getDireccionDAO();
         HuespedDAO huespedDAO= HuespedDAOImpl.getHuespedDAO();    
         if(!(equals(huespedAntiguo.getDireccionHuesped(), huespedModificado.getDireccionHuesped()))){

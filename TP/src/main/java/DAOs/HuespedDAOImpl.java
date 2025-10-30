@@ -50,7 +50,7 @@ public class HuespedDAOImpl implements HuespedDAO {
         mapper.registerModule(new JavaTimeModule()); // soporte para LocalDate
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        File archivo = new File("/TP/src/main/java/BDD/listaHuespedes.json");
+        File archivo = new File("TP/src/main/java/BDD/listaHuespedes.json");
 
         if (!archivo.exists()) {
             return new ArrayList<>(); // si no existe, devolvemos lista vacía
@@ -81,9 +81,8 @@ public class HuespedDAOImpl implements HuespedDAO {
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // opcional: para que escriba como "2025-10-22" en lugar de epoch
 
         mapper.enable(SerializationFeature.INDENT_OUTPUT); // para que quede legible
-
         try {
-            mapper.writeValue(new File("listaHuespedes.json"), huespedes);
+            mapper.writeValue(new File("TP/src/main/java/BDD/listaHuespedes.json"), huespedes);
         } catch (IOException e) {
             throw new RuntimeException("Error al guardar la lista de huéspedes en JSON", e);
         }
@@ -124,7 +123,7 @@ public class HuespedDAOImpl implements HuespedDAO {
     public void modificarHuesped(HuespedDTO huespedModificado, HuespedDTO huespedAntiguo){
         //huespedAntiguo siempre debería estar, por lo que no hay excepción
         java.util.Optional<Huesped> opt = huespedes.stream()
-            .filter(h -> equalsDTO(h, huespedAntiguo))
+            .filter(h -> equalsDNI(h, huespedAntiguo))
             .findFirst();
 
         if (opt.isPresent()) {
@@ -137,7 +136,7 @@ public class HuespedDAOImpl implements HuespedDAO {
     public void modificarHuesped(HuespedDTO huespedModificado, HuespedDTO huespedAntiguo, Direccion direccionNueva){
         //huespedAntiguo siempre debería estar, por lo que no hay excepción 
         java.util.Optional<Huesped> opt = huespedes.stream()
-            .filter(h -> equalsDTO(h, huespedAntiguo))
+            .filter(h -> equalsDNI(h, huespedAntiguo))
             .findFirst();
 
         if (opt.isPresent()) {
@@ -146,6 +145,11 @@ public class HuespedDAOImpl implements HuespedDAO {
             h.setDireccionHuesped(direccionNueva);
             guardarListaEnJSON(); // persistir cambios
         }
+    }
+
+    public boolean equalsDNI(Huesped h, HuespedDTO huespedAntiguo){
+        return h.getTipoDocumento().equals(huespedAntiguo.getTipoDocumento()) &&
+         h.getNumeroDocumento().equals(huespedAntiguo.getNumeroDocumento());
     }
 
     @Override

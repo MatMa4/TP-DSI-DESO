@@ -24,15 +24,16 @@ import servicios.GestorDeHuesped;
  */
 public class CU10 {
     private static final List<String> TIPOS_DOC = Arrays.asList("DNI", "LC", "LE", "Pasaporte", "Otro");
-    private static final List<String> POS_IVA = Arrays.asList("Responsable Inscripto", "Monotributista", "Excento");
+    private static final List<String> POS_IVA = Arrays.asList("RESPONSABLE INSCRIPTO", "MONOTRIBUTISTA", "EXCENTO, CONSUMIDOR FINAL");
 
-        public static void main(HuespedDTO huespedExistente) {
+        public static void modificarHuesped(HuespedDTO huespedExistente) {
         Scanner in = new Scanner(System.in);
         // Recolectar datos 
         //HuespedDTO huespedNuevo = recolectarHuesped(in);
         //Paso 1
-        //HuespedDTO huespedNuevo = editarHuesped(in, huespedExistente);
-        HuespedDTO huespedNuevo = huespedPrueba(in); // método de pruba
+        HuespedDTO huespedNuevo = editarHuesped(in, huespedExistente);
+
+        System.out.println(huespedExistente.getNumeroDocumento() + " el otro " + huespedNuevo.getNumeroDocumento());
         while (true){
             System.out.println("\nSIGUIENTE / CANCELAR / BORRAR");
 
@@ -65,17 +66,20 @@ public class CU10 {
                 } else if(opcionInicial.equalsIgnoreCase("Borrar")){
                     // ir a CU11
                     in.close(); //cerrar entrada antes de terminar
+                    CU11.main(null);
                     return;//Paso 4 (Termina el CU)
                 } else {
                     //No es un paso, pero se repite hasta que seleccione una opción válida
                     System.out.println("Opción inválida. Escriba: SIGUIENTE / CANCELAR / BORRAR");
                 }
             }
+
             //Si presiona SIGUIENTE, continúa el flujo principal
-            HuespedDTO huespedAntiguo = GestorDeHuesped.consultarDocumento(huespedNuevo.getTipoDocumento(), huespedNuevo.getNumeroDocumento());
+            HuespedDTO huespedAntiguo = GestorDeHuesped.consultarDocumento(huespedNuevo.getTipoDocumento(), huespedNuevo.getNumeroDocumento(), huespedExistente.getTipoDocumento(), huespedExistente.getNumeroDocumento());
+            System.out.println(huespedAntiguo==null);
             if (huespedAntiguo == null){//Si no existe un huesped con ese documento
                 //Paso 3
-                GestorDeHuesped.registrarHuesped(huespedNuevo);
+                GestorDeHuesped.modificarHuesped(huespedNuevo, huespedExistente);
                 System.out.println("La operación ha culminado con éxito");
                 in.close(); //cerrar entrada antes de terminar
                 return;
@@ -324,6 +328,7 @@ public class CU10 {
     }
 
     private static String leerPosicionIVA(Scanner in) {
+
         while (true) {
             System.out.print("Posición frente al IVA (Consumidor final por omisión): ");
             String valor = in.nextLine().trim();
@@ -391,50 +396,5 @@ public class CU10 {
             if (POS_IVA.contains(valor.toUpperCase())) return valor.toUpperCase();
             System.out.println("Valor inválido. Opciones: " + POS_IVA + " o vacío (Consumidor final).");
         }
-    }
-
-        private static HuespedDTO huespedPrueba(Scanner in) {
-        String apellido = "apellido".toUpperCase();
-        String nombre = "nombrePrueba".toUpperCase();
-        String tipoDocumento = "DNI".toUpperCase();
-        String numeroDocumento = "12345679".toUpperCase();
-        String cuit = "2012312443".toUpperCase();
-        String posicionIVA = "Responsable Inscripto".toUpperCase();
-        LocalDate fechaNacimiento = LocalDate.parse("2004-05-20");
-        String telefono = "3421234567";
-        String email = "e@mail.com".toUpperCase();
-        String ocupacion = "estudiante".toUpperCase();
-        String nacionalidad = "argentino".toUpperCase();
-        String calle = "callePrueba".toUpperCase();
-        String numero = "1234";
-        String departamento = "A".toUpperCase();
-        int piso = 2;
-        int codigoPostal = 3000;
-        String localidad = "Santa Fe".toUpperCase();
-        String provincia = "Santa Fe".toUpperCase();
-        String pais = "Argentina".toUpperCase();
-
-        DireccionDTO direccion = new DireccionDTO(calle, numero, departamento, piso, codigoPostal, localidad, provincia, pais);
-        HuespedDTO.Builder builder = new HuespedDTO.Builder()
-            .apellido(apellido)
-            .nombre(nombre)
-            .tipoDocumento(tipoDocumento)
-            .numeroDocumento(numeroDocumento)
-            .fechaNacimiento(fechaNacimiento)
-            .direccionHuesped(direccion)
-            .telefono(telefono)
-            .ocupacion(ocupacion)
-            .nacionalidad(nacionalidad);
-
-        if (email != null) {
-            builder.email(email);
-        }
-        if (cuit != null) {
-            builder.cuit(cuit);
-        }
-        if (posicionIVA != null) {
-            builder.posicionIVA(posicionIVA);
-        }
-        return builder.build();
     }
 }
