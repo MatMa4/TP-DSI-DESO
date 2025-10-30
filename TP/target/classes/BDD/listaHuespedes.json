@@ -14,13 +14,14 @@
     "provincia" : "PERU",
     "pais" : "PERUPAIS"
   },
-  "telefono" : "3424687278",
-  "email" : "GOY@GMAIL.COM",
-  "ocupacion" : "PROFESOR",
-  "nacionalidad" : "PERUANO",
-  "cuit" : null,
-  "posicionIVA" : "CONSUMIDOR FINAL",
-  "alojado" : false
+  "telefono" : "3421234567",
+  "email" : "E@MAIL.COM",
+  "ocupacion" : "ESTUDIANTE",
+  "nacionalidad" : "ARGENTINO",
+  "cuit" : "2012312443",
+  "posicionIVA" : "RESPONSABLE INSCRIPTO",
+  "alojado": true
+        
 }, {
   "apellido" : "APELLIDO",
   "nombre" : "NOMBREPRUEBA",

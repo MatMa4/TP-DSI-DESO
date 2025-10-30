@@ -6,6 +6,7 @@ package dominio;
 import java.time.LocalDate;
 
 import Excepcion.CampoObligatorioException;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 
@@ -22,6 +23,7 @@ public class Huesped {
     private String nacionalidad;
     private String cuit;
     private String posicionIVA;
+    @JsonProperty("alojado")
     private boolean alojado;
     
     //============Creacion=============

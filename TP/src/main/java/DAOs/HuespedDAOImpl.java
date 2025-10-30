@@ -35,7 +35,6 @@ public class HuespedDAOImpl implements HuespedDAO {
     //Patrón Singleton
     public HuespedDAOImpl() {
         huespedes = cargarListaDesdeJSON();
-        System.out.println("✅ HuespedDAO cargó " + huespedes.size() + " huéspedes.");
     }
 
     public static HuespedDAOImpl getHuespedDAO() {
@@ -101,7 +100,8 @@ public class HuespedDAOImpl implements HuespedDAO {
                     .direccionHuesped(huesped.getDireccionHuesped())
                     .telefono(huesped.getTelefono())
                     .ocupacion(huesped.getOcupacion())
-                    .nacionalidad(huesped.getNacionalidad());
+                    .nacionalidad(huesped.getNacionalidad())
+                    .alojado(huesped.getAlojado())    ;
 
                 if (huesped.getEmail() != null) {
                     builder.email(huesped.getEmail());
@@ -112,7 +112,7 @@ public class HuespedDAOImpl implements HuespedDAO {
                 if (huesped.getPosicionIVA() != null) {
                     builder.posicionIVA(huesped.getPosicionIVA());
                 }
-
+                
                 return builder.build();
             }
         }
@@ -196,21 +196,14 @@ public class HuespedDAOImpl implements HuespedDAO {
             Huesped h = it.next();
             if (h.getTipoDocumento().equals(huespedDTO.getTipoDocumento()) &&
                 h.getNumeroDocumento().equals(huespedDTO.getNumeroDocumento())) {
-                Scanner in = new Scanner(System.in);
-                System.out.print("Los datos del huésped "+ huespedDTO.getNombre()+ ", " +huespedDTO.getApellido()+" cuyo tipo de documento es " + huespedDTO.getTipoDocumento() 
-                + " numero "+ huespedDTO.getNumeroDocumento()+ "serán eliminados del sistema\n");
-                String respuesta = in.nextLine();
-                if("ELIMINAR".equals(respuesta)){
                     it.remove(); 
                     eliminado = true; 
                 }
                 if(eliminado){
                     guardarListaEnJSON();
-                    System.out.println("?Lista de huéspedes actualizada en el archivo JSON.");
                     throw new HuespedEliminadoCorrectamenteException(huespedDTO.getNombre(),
                             huespedDTO.getApellido(),huespedDTO.getTipoDocumento(),huespedDTO.getNumeroDocumento());
                 }
-            }
         }
     }
     @Override
