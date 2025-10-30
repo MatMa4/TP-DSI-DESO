@@ -27,7 +27,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     public Usuario obtenerUsuario(String username) throws UsuarioNoEncontradoException {
         try {
             // Leer el archivo JSON como un array de Usuario
-            Usuario[] usuarios = objectMapper.readValue(new File("src/main/java/BDD/infoUsers.json"), Usuario[].class);
+            Usuario[] usuarios = objectMapper.readValue(new File(archivo), Usuario[].class);
             
             // Buscar el usuario por username
             for (Usuario usuario : usuarios) {
