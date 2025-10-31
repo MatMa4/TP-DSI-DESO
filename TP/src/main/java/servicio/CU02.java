@@ -9,11 +9,8 @@ package servicio;
  *
  * @author Lucas
  */
-import servicio.CU10;
-import servicio.CU09;
 import java.util.List;
 import java.util.Scanner;
-import dominio.Huesped;
 import repositorio.HuespedDTO;
 import DAOs.HuespedDAO;
 import DAOs.HuespedDAOImpl;
@@ -21,8 +18,7 @@ import Excepcion.HuespedNoEncontradoException;
 
 public class CU02 {
 
-    public static void correr() {
-        Scanner in = new Scanner(System.in);
+    public static void correr(Scanner in) {
         HuespedDAO huespedDAO = HuespedDAOImpl.getHuespedDAO();
 
         System.out.println("=== BÚSQUEDA DE HUÉSPED ===");
@@ -47,12 +43,13 @@ public class CU02 {
 
             List<HuespedDTO> resultado = null;
             try {
+                System.out.println(apellido);
                 resultado = huespedDAO.buscarHuesped(apellido, nombre, tipoDoc, nroDoc);
             } catch (HuespedNoEncontradoException e) {
                 // el DAO comunica directamente que no hubo coincidencias
                 System.out.println(e.getMessage());
                 System.out.println("→ Redirigiendo al CU09: Dar alta de huésped...");
-                CU09.main(null);
+                CU09.run(in);
                 return;
             } catch (RuntimeException e) {
                 // evitar corte silencioso: mostrar causa y stacktrace
@@ -61,11 +58,12 @@ public class CU02 {
                 System.out.println("→ Revise la configuración / el archivo JSON y vuelva a intentarlo.");
                 return;
             }
-
+            
             if (resultado == null || resultado.isEmpty()) {
                 // por seguridad, manejar resultado vacío o nulo aunque el DAO debiera tirar excepción
                 System.out.println("No se encontraron huéspedes con los filtros indicados.");
-                System.out.println("→ Redirigiendo al CU11: Dar alta de huésped...");
+                System.out.println("→ Redirigiendo al CU09: Dar alta de huésped...");
+                CU09.run(in);
                 return;
             }
 
@@ -79,6 +77,7 @@ public class CU02 {
                         i++, h.getApellido(), h.getNombre(),
                         h.getTipoDocumento(), h.getNumeroDocumento());
             }
+            
 
             //  Selección del huésped
             System.out.print("\nSeleccione el número del huésped que desea (o presione Enter para ninguno): ");
@@ -87,7 +86,7 @@ public class CU02 {
             if (seleccion.isEmpty()) {
                 System.out.println("\nNo se seleccionó ningún huésped.");
                 System.out.println("→ Redirigiendo al CU09: Dar alta de huésped...");
-                CU09.main(null);
+                CU09.run(in);
                 return;
             }
 
@@ -114,7 +113,7 @@ public class CU02 {
 
             if ("SIGUIENTE".equalsIgnoreCase(siguiente)) {
                 System.out.println("→ Pasando al CU10: Modificar Huésped...");
-                CU10.modificarHuesped(huespedSeleccionado);
+                CU10.modificarHuesped(huespedSeleccionado, in);
             } else {
                 System.out.println("Operación cancelada.");
             }

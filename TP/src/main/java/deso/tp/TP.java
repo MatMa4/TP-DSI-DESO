@@ -21,7 +21,7 @@ public class TP {
        if(CU01.ejecutar(scanner)){
               menuPrincipal();
          } else {
-              System.out.println("\n❌ Autenticacion fallida. Saliendo del sistema.");
+              System.out.println("\n Autenticacion fallida. Saliendo del sistema.");
        }
        scanner.close();
     }
@@ -34,22 +34,14 @@ public class TP {
         boolean salir = false;
         
         while (!salir) {
-            
-            int opcion = leerOpcionMenu(1, 4);
-            
+            int opcion = leerOpcionMenu(1, 2);
             switch (opcion) {
                 case 1:
-                     CU02.correr();
+                     CU02.correr(scanner);
                     break;
                 case 2:
-                  modificarHuesped();
-                    break;
-                case 3:
-                    eliminarHuesped();
-                    break;
-                case 4:
                     salir = true;
-                    System.out.println("\n👋 Cerrando sesion... Hasta pronto!");
+                  System.out.println("\n Cerrando sesion... Hasta pronto!");
                     break;
             }
         }
@@ -66,34 +58,8 @@ public class TP {
         
         System.out.println("\n=== MENU PRINCIPAL ===");
             System.out.println("1. Buscar huesped");
-            System.out.println("2. Modificar huesped");
-            System.out.println("3. Eliminar huesped");
-            System.out.println("4. Salir");
+            System.out.println("2. Salir");
             System.out.print("Seleccione una opcion: ");
-    }
-    
-    /**
-     * Funcionalidad en desarrollo: Buscar huésped
-     */
-    private static void buscarHuesped() {
-        System.out.println("\n🔍 [BUSCAR HUESPED] - Funcionalidad en desarrollo");
-        esperarEnter();
-    }
-    
-    /**
-     * Funcionalidad en desarrollo: Modificar huésped
-     */
-    private static void modificarHuesped() {
-        System.out.println("\n✏️ [MODIFICAR HUESPED] - Funcionalidad en desarrollo");
-        esperarEnter();
-    }
-    
-    /**
-     * Funcionalidad en desarrollo: Eliminar huésped
-     */
-    private static void eliminarHuesped() {
-        System.out.println("\n🗑️ [ELIMINAR HUESPED] - Funcionalidad en desarrollo");
-        esperarEnter();
     }
     
     private static int leerOpcionMenu(int min, int max) {
@@ -109,12 +75,12 @@ public class TP {
                 if (opcion >= min && opcion <= max) {
                     entradaValida = true;
                 } else {
-                    System.out.print("❌ Opcio4n invalida. Ingrese un numero entre " + min + " y " + max + ": ");
+                    System.out.print(" Opcion invalida. Ingrese un numero entre " + min + " y " + max + ": ");
                     esperarEnter();
                 }
             } catch (InputMismatchException e) {
                 scanner.nextLine(); // Limpiar el buffer
-                System.out.print("❌ Debe ingresar un numero. Intente nuevamente: ");
+                System.out.print(" Debe ingresar un numero. Intente nuevamente: ");
                 esperarEnter();
             }
         }

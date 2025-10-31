@@ -26,8 +26,7 @@ public class CU10 {
     private static final List<String> TIPOS_DOC = Arrays.asList("DNI", "LC", "LE", "Pasaporte", "Otro");
     private static final List<String> POS_IVA = Arrays.asList("RESPONSABLE INSCRIPTO", "MONOTRIBUTISTA", "EXCENTO, CONSUMIDOR FINAL");
 
-        public static void modificarHuesped(HuespedDTO huespedExistente) {
-        Scanner in = new Scanner(System.in);
+        public static void modificarHuesped(HuespedDTO huespedExistente, Scanner in) {
         // Recolectar datos 
         //HuespedDTO huespedNuevo = recolectarHuesped(in);
         //Paso 1
@@ -65,8 +64,7 @@ public class CU10 {
 
                 } else if(opcionInicial.equalsIgnoreCase("Borrar")){
                     // ir a CU11
-                    in.close(); //cerrar entrada antes de terminar
-                    CU11.main(null);
+                    CU11.run(huespedExistente, in);
                     return;//Paso 4 (Termina el CU)
                 } else {
                     //No es un paso, pero se repite hasta que seleccione una opción válida
@@ -98,7 +96,6 @@ public class CU10 {
                         //Paso 3
                         GestorDeHuesped.modificarHuesped(huespedNuevo, huespedAntiguo);
                         System.out.println("La operación ha culminado con éxito");
-                        in.close(); //cerrar entrada antes de terminar
                         return;//Paso 4
                     } else if (opcion.equalsIgnoreCase("Corregir")) {
                         //Paso 2.B.2.2

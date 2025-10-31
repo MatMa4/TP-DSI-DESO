@@ -20,8 +20,7 @@
   "nacionalidad" : "ARGENTINO",
   "cuit" : "2012312443",
   "posicionIVA" : "RESPONSABLE INSCRIPTO",
-  "alojado": true
-        
+  "alojado" : true
 }, {
   "apellido" : "APELLIDO",
   "nombre" : "NOMBREPRUEBA",
@@ -67,5 +66,28 @@
   "nacionalidad" : "ARGENTINO",
   "cuit" : "2012312443",
   "posicionIVA" : "RESPONSABLE INSCRIPTO",
+  "alojado" : false
+}, {
+  "apellido" : "PERON",
+  "nombre" : "JOSE",
+  "tipoDocumento" : "DNI",
+  "numeroDocumento" : "12131445",
+  "fechaNacimiento" : "2004-05-03",
+  "direccionHuesped" : {
+    "calle" : "PERON",
+    "numero" : "1234",
+    "departamento" : "A",
+    "piso" : 3,
+    "codigo" : 3000,
+    "localidad" : "SANTA FE",
+    "provincia" : "SANTA FE",
+    "pais" : "ARGENTINA"
+  },
+  "telefono" : "3425666777",
+  "email" : null,
+  "ocupacion" : "PROGRAMADOR",
+  "nacionalidad" : "BOLIVIANO",
+  "cuit" : null,
+  "posicionIVA" : "CONSUMIDOR FINAL",
   "alojado" : false
 } ]

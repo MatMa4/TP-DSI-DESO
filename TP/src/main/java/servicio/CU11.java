@@ -7,8 +7,7 @@ import repositorio.HuespedDTO;
 import servicios.GestorDeHuesped;
 
 public class CU11 {
-    public static void main(HuespedDTO huespedExistente) {
-        Scanner in = new Scanner(System.in);
+    public static void run(HuespedDTO huespedExistente, Scanner in) {
         System.out.println("=== Dar Baja de Huésped ===");
 
         try {

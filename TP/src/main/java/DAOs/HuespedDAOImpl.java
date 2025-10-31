@@ -21,7 +21,6 @@ import dominio.Huesped;
 import dominio.Direccion;
 import Excepcion.HuespedNoEncontradoException;
 import java.util.Iterator;
-import java.util.Scanner;
 import java.util.stream.Collectors;
 
 /**

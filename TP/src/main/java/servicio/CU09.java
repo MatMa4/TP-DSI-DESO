@@ -27,8 +27,7 @@ public class CU09 {
     private static final List<String> TIPOS_DOC = Arrays.asList("DNI", "LC", "LE", "Pasaporte", "Otro");
     private static final List<String> POS_IVA = Arrays.asList("RESPONSABLE INSCRIPTO", "MONOTRIBUTISTA", "EXCENTO, CONSUMIDOR FINAL");
 
-    public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
+    public static void run(Scanner in) {
         // Recolectar datos 
         //Paso 1
         HuespedDTO huespedNuevo = recolectarHuesped(in);
@@ -51,7 +50,6 @@ public class CU09 {
                             //Paso 2.C.1
                             System.out.println("Operación cancelada. Gracias.");
                             //Paso 6 (terminar CU)
-                            in.close(); //cerrar entrada antes de terminar
                             return; 
                         } else if(respuesta.equalsIgnoreCase("N")){
                             //Paso 2.C.2
