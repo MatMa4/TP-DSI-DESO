@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dar de alta huesped</title>
+    <link rel="stylesheet"  href="styles.css"></link>
+</head>
+<body>
+    <h1 class="main_title">Completar los datos</h1>
+    <form class="main_box">
+        <div class='container'>
+            <div class="box1">
+                <div class="box1_simplebox">
+                    <label for="Nombre">Nombre* </label>
+                    <input class="input_box" type="text"required>
+                </div>
+
+                <div class="box1_simplebox">
+                    <label for="CUIT">CUIT </label>
+                    <input class="input_box" type="text">
+                </div>
+
+                <div class="box1_simplebox">
+                    <label for="Fecha de Nacimiento">Fecha de Nacimiento: </label>
+                    <input type="date"required>
+                </div>
+                
+            </div>
+            <div class="box1">
+                <div class="box1_simplebox">
+                    <label for="Apellido">Apellido </label>
+                    <input class="input_box" type="text">
+                </div>
+
+                <div class="box1_simplebox">
+                    <label for="IVA">IVA: </label>
+                    <input class="input_box" type="text" required>
+                </div>
+
+                <div class="box1_simplebox">
+                    <label>Teléfono *</label>
+                    <input class="input_box" type="tel" name="telefono" required>
+                </div>
+            </div>
+
+            <div class="box1 boxDocumento">
+                    <label>Documento *</label>
+                    <select class="input_box" name="tipoDocumento" required>
+                        <option value="dni">DNI</option>
+                        <option value="pasaporte">Pasaporte</option>
+                        <option value="cuit">CUIT</option>
+                    </select>
+                    <input class="input_box" type="documento" name="numeroDocumento" required>
+            </div>
+        </div>
+        <div class='container'>
+            <div class="box1">
+                <div class="box1_simplebox">
+                    <label>Calle *</label>
+                    <input class="input_box" type="text" name="calle" required>
+                </div>
+
+                <div class="box1_simplebox">
+                    <label>Codigo Postal</label>
+                    <input class="input_box" type="text" name="Codigo_Postal" required>
+                </div>
+
+                
+            </div>  
+
+            <div class="box1">
+                    
+                    <div class="box1_simplebox">
+                        <label>Número *</label>
+                        <input  class="input_box" type="text" name="numero" required>
+                    </div>
+                    <div class="box1_simplebox">
+                        <label>Localidad *</label>
+                        <input  class="input_box" type="text" name="localidad" required>    
+                    </div>
+            </div>
+            <div class="box1">
+                <div class="box1_simplebox">
+                    <label>Piso *</label>
+                    <input class="input_box" type="text" name="piso" required>
+                </div>
+                <div class="box1_simplebox">
+                    <label>Provincia *</label>
+                    <input class="input_box" type="text" name="provincia" required>
+                </div>
+
+                
+            </div>
+            <div class="box1">
+                <div class="box1_simplebox">
+                    <label>Departamento *</label>
+                    <input class="input_box" type="text" name="departamento" required>
+                </div>
+                <div class="box1_simplebox">
+                    <label>País *</label>
+                    <input class="input_box" type="text" name="pais" required>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="box1">
+                <label>Email</label>
+                <input class="input_box" type="email" name="email">    
+            </div>
+
+            <div class="box1">
+                <label>Ocupación *</label>
+                <input  class="input_box" type="text" name="ocupacion" required>    
+            </div>
+
+            <div class="box1">
+                <label>Nacionalidad *</label>
+                <input class="input_box" type="text" name="nacionalidad" required>
+            </div>         
+        </div>    
+        
+        
+        
+        
+        
+        <div class="container">
+            <div class="box1">
+                <button class="button2" type="reset">CANCELAR</button>
+            </div>
+            <div class="box1">
+                <p><small><span style="color:red;">*</span> Campos obligatorios</small></p>
+            </div>
+            <div class="box1">
+                <button class="button2" type="submit">SIGUIENTE</button>    
+            </div>
+        </div> 
+    </form>
+</body>
+</html>
