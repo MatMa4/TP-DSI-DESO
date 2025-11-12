@@ -73,7 +73,7 @@ input:focus,select:focus{
     display:flex;
     flex-direction: column;
     margin: 0 3vh 0 1vh;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
 }
 .boxDocumento{
     flex-direction: row;
@@ -95,18 +95,28 @@ input:focus,select:focus{
     padding-left: 10px;
     padding-right: 10px;
     z-index: 1;
+    left: 10px;
 }
 .input_box_documento{
     position: relative;
     background-color: #C2C3C5;
     width: 15vw;
-    left: 9px;
-    top: -32px;
     padding-left: 95px;
     padding-right: 10px;
+    left: -85px;
 
 
 }
-
-
-
+.error {
+    color: red;
+    font-size: 0.85rem;
+    height: 20px;
+    margin-bottom: -20px;
+    text-align: left;
+}
+.documento_inputs {
+    position: relative;
+    display: flex;
+    gap: 8px;
+    align-items: center;  
+}

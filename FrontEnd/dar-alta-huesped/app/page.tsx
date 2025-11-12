@@ -1,8 +1,8 @@
 'use client';
 import { useState } from 'react';
 import '../styles.css';
-export default function Home() {
 
+export default function Home() {
   const [formData, setFormData] = useState({
     numeroDocumento: '',
     tipoDocumento: 'DNI',
@@ -27,6 +27,9 @@ export default function Home() {
       pais: '',
     },
   });
+
+   const [errors, setErrors] = useState<Record<string, string>>({});
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type, checked } = e.target;
 
@@ -40,19 +43,48 @@ export default function Home() {
           [field]: value,
         },
       }));
+      setErrors((prev) => ({ ...prev, [name]: '' })); // borra el error si el usuario escribe
     } else {
       setFormData({
         ...formData,
         [name]: type === 'checkbox' ? checked : value,
       });
+      setErrors((prev) => ({ ...prev, [name]: '' }));
     }
   };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.nombre.trim().length < 2) {
-    alert("El nombre debe tener al menos 2 caracteres.");
-    return;
-  }
+
+    const newErrors: any = {};
+    if (!formData.nombre.trim()) newErrors.nombre = 'Campo obligatorio';
+    else if (formData.nombre.trim().length < 2) newErrors.nombre = 'Debe tener al menos 2 caracteres';
+
+    if (!formData.apellido.trim()) newErrors.apellido = 'Campo obligatorio';
+    if (!formData.fechaNacimiento) newErrors.fechaNacimiento = 'Campo obligatorio';
+    if (!formData.telefono.trim()) newErrors.telefono = 'Campo obligatorio';
+    if (!formData.ocupacion.trim()) newErrors.ocupacion = 'Campo obligatorio';
+    if (!formData.posicionIVA.trim()) newErrors.posicionIVA = 'Campo obligatorio';
+    if (!formData.nacionalidad.trim()) newErrors.nacionalidad = 'Campo obligatorio';
+    if (!formData.numeroDocumento.trim()) newErrors.numeroDocumento = 'Campo obligatorio';
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Formato de email inválido';
+    }
+    if (formData.cuit && !/^\d{11}$/.test(formData.cuit)) {
+      newErrors.cuit = 'El CUIT debe tener 11 dígitos numéricos';
+    }
+    for (const field in formData.direccionHuesped) {
+    const value = formData.direccionHuesped[field as keyof typeof formData.direccionHuesped];
+      if (typeof value !== 'string' || !value.trim()) {
+        newErrors[`direccionHuesped.${field}`] = 'Campo obligatorio';
+      }
+    }
+
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length === 0) {
+      console.log('✅ Formulario válido:', formData);
+    }
+
     console.log(formData); // Por ahora solo muestra los datos en consola
   };
 
@@ -62,19 +94,20 @@ export default function Home() {
           <h1 className="main_title">Completar los datos</h1>
         </div>
 
-      <form className="main_box" onSubmit={handleSubmit}>
+      <form className="main_box" onSubmit={handleSubmit} noValidate>
         <div className="container">
           <div className="box1">
             <div className="box1_simplebox">
-              <label htmlFor="Nombre">Nombre *</label>
+              <label htmlFor="Nombre">Nombre <span style={{color: 'red'}}>*</span></label>
               <input 
                 className="input_box" 
                 type="text" 
                 name="nombre"
                 value ={formData.nombre}
                 onChange={handleChange}
-                required
+                
               />
+              {errors.nombre && <p className="error">{errors.nombre}</p>}
             </div>
 
             <div className="box1_simplebox">
@@ -86,6 +119,7 @@ export default function Home() {
                 value={formData.cuit}
                 onChange={handleChange}
               />
+              {errors.cuit && <p className="error">{errors.cuit}</p>}
             </div>
 
             <div className="box1_simplebox">
@@ -96,86 +130,90 @@ export default function Home() {
                 name="fechaNacimiento"
                 value={formData.fechaNacimiento}
                 onChange={handleChange}
-                required
               />
+              {errors.fechaNacimiento && <p className="error">{errors.fechaNacimiento}</p>}
             </div>
           </div>
 
           <div className="box1">
             <div className="box1_simplebox">
-              <label htmlFor="Apellido">Apellido *</label>
+              <label htmlFor="Apellido">Apellido <span style={{color: 'red'}}>*</span></label>
               <input 
                 className="input_box" 
                 type="text" 
                 name="apellido"
                 value={formData.apellido}
                 onChange={handleChange}
-                required
+                 
               />
+              {errors.apellido && <p className="error">{errors.apellido}</p>}
             </div>
 
             <div className="box1_simplebox">
-              <label htmlFor="posicionIVA">posicionIVA *</label>
+              <label htmlFor="posicionIVA">posicionIVA <span style={{color: 'red'}}>*</span></label>
               <input 
                 className="input_box" 
                 type="text" 
                 name="posicionIVA"
                 value={formData.posicionIVA}
                 onChange={handleChange}
-                required
               />
+              {errors.posicionIVA && <p className="error">{errors.posicionIVA}</p>}
             </div>
 
             <div className="box1_simplebox">
-              <label>Teléfono *</label>
+              <label>Teléfono <span style={{color: 'red'}}>*</span></label>
               <input 
                 className="input_box" 
                 type="tel" 
                 name="telefono" 
                 value={formData.telefono}
                 onChange={handleChange}
-                required
               />
+              {errors.telefono && <p className="error">{errors.telefono}</p>}
             </div>
           </div>
 
           <div className="box1 boxDocumento">
-            <label>Documento *</label>
-            <select 
-            className="input_box" 
-            name="tipoDocumento" 
-            value={formData.tipoDocumento}
-            onChange={handleChange}
-            required>
-              <option value="dni">DNI</option>
-              <option value="LE">LE</option>
-              <option value="LC">LC</option>
-              <option value="pasaporte">Pasaporte</option>
-              <option value="Otro">Otro</option>
-            </select>
-            <input 
-              className="input_box_documento" 
-              type="text" 
-              name="numeroDocumento" 
-              value={formData.numeroDocumento}
+            <label>Documento <span style={{color: 'red'}}>*</span></label>
+            <div className="documento_inputs">
+              <select 
+              className="input_box" 
+              name="tipoDocumento" 
+              value={formData.tipoDocumento}
               onChange={handleChange}
-              required
-            />
+              >
+                <option value="dni">DNI</option>
+                <option value="LE">LE</option>
+                <option value="LC">LC</option>
+                <option value="pasaporte">Pasaporte</option>
+                <option value="Otro">Otro</option>
+              </select>
+              <input 
+                className="input_box_documento" 
+                type="text" 
+                name="numeroDocumento" 
+                value={formData.numeroDocumento}
+                onChange={handleChange}
+              />
+            </div>
+            {errors.numeroDocumento && <p className="error">{errors.numeroDocumento}</p>}
           </div>
         </div>
 
          <div className='container'>
             <div className="box1">
                 <div className="box1_simplebox">
-                    <label>Calle *</label>
+                    <label>Calle <span style={{color: 'red'}}>*</span></label>
                     <input 
                       className="input_box" 
                       type="text" 
                       name="direccionHuesped.calle"
                       value={formData.direccionHuesped.calle}
                       onChange={handleChange}
-                      required 
+                        
                     />
+                    {errors['direccionHuesped.calle'] && <p className="error">{errors['direccionHuesped.calle']}</p>}
                 </div>
 
                 <div className="box1_simplebox">
@@ -186,7 +224,6 @@ export default function Home() {
                       name="direccionHuesped.codigo"
                       value={formData.direccionHuesped.codigo}
                       onChange={handleChange}
-                      required 
                     />
                 </div>
 
@@ -195,76 +232,77 @@ export default function Home() {
             <div className="box1">
                     
                     <div className="box1_simplebox">
-                        <label>Número *</label>
+                        <label>Número <span style={{color: 'red'}}>*</span></label>
                         <input  
                           className="input_box" 
                           type="text" 
                           name="direccionHuesped.numero"
                           value={formData.direccionHuesped.numero}
                           onChange={handleChange}
-                          required 
                         />
+                        {errors['direccionHuesped.numero'] && <p className="error">{errors['direccionHuesped.numero']}</p>}
                     </div>
                     <div className="box1_simplebox">
-                        <label>Localidad *</label>
+                        <label>Localidad <span style={{color: 'red'}}>*</span></label>
                         <input  
                           className="input_box" 
                           type="text" 
                           name="direccionHuesped.localidad"
                           value={formData.direccionHuesped.localidad}
                           onChange={handleChange} 
-                          required 
-                        />    
+                        />
+                        {errors['direccionHuesped.localidad'] && <p className="error">{errors['direccionHuesped.localidad']}</p>}
                     </div>
             </div>
             <div className="box1">
                 <div className="box1_simplebox">
-                    <label>Piso *</label>
+                    <label>Piso <span style={{color: 'red'}}>*</span></label>
                     <input 
                       className="input_box" 
                       type="text" 
                       name="direccionHuesped.piso"
                       value={formData.direccionHuesped.piso}
                       onChange={handleChange}
-                      required 
+
                     />
+                    {errors['direccionHuesped.piso'] && <p className="error">{errors['direccionHuesped.piso']}</p>}
                 </div>
                 <div className="box1_simplebox">
-                    <label>Provincia *</label>
+                    <label>Provincia <span style={{color: 'red'}}>*</span></label>
                     <input 
                       className="input_box" 
                       type="text" 
                       name="direccionHuesped.provincia" 
                       value={formData.direccionHuesped.provincia}
                       onChange={handleChange}
-                      required 
                     />
+                    {errors['direccionHuesped.provincia'] && <p className="error">{errors['direccionHuesped.provincia']}</p>}
                 </div>
 
                 
             </div>
             <div className="box1">
                 <div className="box1_simplebox">
-                    <label>Departamento *</label>
+                    <label>Departamento <span style={{color: 'red'}}>*</span></label>
                     <input 
                     className="input_box" 
                     type="text" 
                     name="direccionHuesped.departamento"
                     value={formData.direccionHuesped.departamento}
                     onChange={handleChange}
-                    required 
                     />
+                    {errors['direccionHuesped.departamento'] && <p className="error">{errors['direccionHuesped.departamento']}</p>}
                 </div>
                 <div className="box1_simplebox">
-                    <label>País *</label>
+                    <label>País <span style={{color: 'red'}}>*</span></label>
                     <input 
                       className="input_box" 
                       type="text" 
                       name="direccionHuesped.pais"
                       value={formData.direccionHuesped.pais}
                       onChange={handleChange} 
-                      required 
                     />
+                    {errors['direccionHuesped.pais'] && <p className="error">{errors['direccionHuesped.pais']}</p>}
                 </div>
             </div>
         </div>
@@ -277,19 +315,20 @@ export default function Home() {
                   name="email" 
                   value={formData.email}
                   onChange={handleChange}
-                />    
+                />
+                {errors.email && <p className="error">{errors.email}</p>}    
             </div>
 
             <div className="box1">
-                <label>Ocupación *</label>
+                <label>Ocupación <span style={{color: 'red'}}>*</span></label>
                 <input 
                   className="input_box" 
                   type="text" 
                   name="ocupacion" 
                   value={formData.ocupacion}
                   onChange={handleChange}
-                required 
                 />    
+                {errors.ocupacion && <p className="error">{errors.ocupacion}</p>}
             </div>
 
             <div className="box1">
@@ -300,14 +339,10 @@ export default function Home() {
                   name="nacionalidad" 
                   value={formData.nacionalidad}
                   onChange={handleChange}
-                required 
                 />
+                {errors.nacionalidad && <p className="error">{errors.nacionalidad}</p>}
             </div>         
-        </div>    
-        
-        
-        
-
+        </div>   
 
         <div className="container">
             <div className="box1">
