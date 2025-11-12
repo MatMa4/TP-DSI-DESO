@@ -44,5 +44,27 @@ public class DireccionId implements Serializable {
     public int hashCode() {
         return Objects.hash(calle, numero);
     }
+    
+        private DireccionId(Builder builder) {
+        this.calle = builder.calle;
+        this.numero = builder.numero;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+        private String calle;
+        private String numero;
+
+        public Builder calle(String calle) { this.calle = calle; return this; }
+        public Builder numero(String numero) { this.numero = numero; return this; }
+
+        public DireccionId build() {
+            return new DireccionId(this);
+        }
+    }
+
 }
 

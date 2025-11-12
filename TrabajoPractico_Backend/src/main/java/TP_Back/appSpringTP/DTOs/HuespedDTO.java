@@ -2,26 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package TP_Back.appSpringTP.modelo;
-import jakarta.persistence.CascadeType;
-import java.time.LocalDate;
+package TP_Back.appSpringTP.DTOs;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinColumns;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.lang.Thread.Builder;
+import java.time.LocalDate;
 
-
-@Entity
-@Table(name = "huesped")
-public class Huesped {
-    
-    @Id
+/**
+ *
+ * @author mateo
+ */
+public class HuespedDTO {
+  
     private String numeroDocumento;
-
     private String tipoDocumento;
     private String apellido;
     private String nombre;
@@ -33,16 +25,9 @@ public class Huesped {
     private String cuit;
     private String posicionIVA;
     private boolean alojado;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumns({
-        @JoinColumn(name = "direccion_calle", referencedColumnName = "calle"),
-        @JoinColumn(name = "direccion_numero", referencedColumnName = "numero")
-    })
-    private Direccion direccionHuesped;
+    private DireccionDTO direccionHuesped;
  
-    public Huesped(){
-
+    public HuespedDTO() {
     }
 
         //Getters
@@ -66,7 +51,7 @@ public class Huesped {
         return fechaNacimiento;
     }
 
-    public Direccion getDireccionHuesped() {
+    public DireccionDTO getDireccionHuesped() {
         return direccionHuesped;
     }
 
@@ -97,7 +82,12 @@ public class Huesped {
     public boolean getAlojado(){
         return alojado;
     }
-    private Huesped(Builder builder) {
+    
+    public void setDireccion(DireccionDTO dir){
+        this.direccionHuesped = dir;
+    }
+
+    private HuespedDTO(Builder builder) {
         this.numeroDocumento = builder.numeroDocumento;
         this.tipoDocumento = builder.tipoDocumento;
         this.apellido = builder.apellido;
@@ -113,7 +103,9 @@ public class Huesped {
         this.direccionHuesped = builder.direccion;
     }
 
-    public static Builder builder() { return new Builder(); }
+    public static Builder builder() {
+        return new Builder();
+    }
 
     public static class Builder {
         private String numeroDocumento;
@@ -128,7 +120,7 @@ public class Huesped {
         private String cuit;
         private String posicionIVA;
         private boolean alojado;
-        private Direccion direccion;
+        private DireccionDTO direccion;
 
         public Builder numeroDocumento(String numeroDocumento) { this.numeroDocumento = numeroDocumento; return this; }
         public Builder tipoDocumento(String tipoDocumento) { this.tipoDocumento = tipoDocumento; return this; }
@@ -142,9 +134,12 @@ public class Huesped {
         public Builder cuit(String cuit) { this.cuit = cuit; return this; }
         public Builder posicionIVA(String posicionIVA) { this.posicionIVA = posicionIVA; return this; }
         public Builder alojado(boolean alojado) { this.alojado = alojado; return this; }
-        public Builder direccion(Direccion direccion) { this.direccion = direccion; return this; }
+        public Builder direccion(DireccionDTO direccion) { this.direccion = direccion; return this; }
 
-        public Huesped build() { return new Huesped(this); }
+        public HuespedDTO build() {
+            return new HuespedDTO(this);
+        }
     }
-}
 
+
+}

@@ -2,21 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package TP_Back.appSpringTP.modelo;
+package TP_Back.appSpringTP.DTOs;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
 /**
  *
  * @author mateo
  */
-@Entity
-public class Direccion {
-    @EmbeddedId
-    @JsonUnwrapped
-    private DireccionId id;
+public class DireccionDTO {
 
+    private String calle;
+    private String numero;
     private String departamento;
     private Integer piso;
     private Integer codigo;
@@ -24,10 +19,10 @@ public class Direccion {
     private String provincia;
     private String pais;
 
-    public Direccion(String calle, String numero, String departamento, Integer piso,
+    public DireccionDTO(String calle, String numero, String departamento, Integer piso,
                      Integer codigo, String localidad, String provincia, String pais) {
-        this.id.setCalle(calle);
-        this.id.setNumero(numero);
+        this.calle = calle;
+        this.numero = numero;
         this.departamento = departamento;
         this.piso = piso;
         this.codigo = codigo;
@@ -36,16 +31,16 @@ public class Direccion {
         this.pais = pais;
     }
 
-    public Direccion(){
+    public DireccionDTO(){
         
     }
     //Getters
     public String getCalle() {
-        return id.getCalle();
+        return calle;
     }
 
     public String getNumero() {
-        return id.getNumero();
+        return numero;
     }
 
     public String getDepartamento() {
@@ -71,9 +66,9 @@ public class Direccion {
     public String getPais() {
         return pais;
     }
-    
-    private Direccion(Builder builder) {
-        this.id = builder.id;
+        private DireccionDTO(Builder builder) {
+        this.calle = builder.calle;
+        this.numero = builder.numero;
         this.departamento = builder.departamento;
         this.piso = builder.piso;
         this.codigo = builder.codigo;
@@ -87,7 +82,8 @@ public class Direccion {
     }
 
     public static class Builder {
-        private DireccionId id;
+        private String calle;
+        private String numero;
         private String departamento;
         private Integer piso;
         private Integer codigo;
@@ -95,7 +91,8 @@ public class Direccion {
         private String provincia;
         private String pais;
 
-        public Builder id(DireccionId id) { this.id = id; return this; }
+        public Builder calle(String calle) { this.calle = calle; return this; }
+        public Builder numero(String numero) { this.numero = numero; return this; }
         public Builder departamento(String departamento) { this.departamento = departamento; return this; }
         public Builder piso(Integer piso) { this.piso = piso; return this; }
         public Builder codigo(Integer codigo) { this.codigo = codigo; return this; }
@@ -103,8 +100,8 @@ public class Direccion {
         public Builder provincia(String provincia) { this.provincia = provincia; return this; }
         public Builder pais(String pais) { this.pais = pais; return this; }
 
-        public Direccion build() {
-            return new Direccion(this);
+        public DireccionDTO build() {
+            return new DireccionDTO(this);
         }
     }
 

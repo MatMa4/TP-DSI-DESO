@@ -4,9 +4,9 @@
  */
 package TP_Back.appSpringTP.controladores;
 
+import TP_Back.appSpringTP.DTOs.HuespedDTO;
 import TP_Back.appSpringTP.excepciones.HuespedExistenteException;
 import TP_Back.appSpringTP.gestores.GestorHuespedes;
-import TP_Back.appSpringTP.modelo.Huesped;
 import java.util.List;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -24,10 +24,10 @@ public class ControladorHuesped {
     }
     
     @PostMapping
-    public ResponseEntity<?> agregarHuesped(@RequestBody Huesped huesped,
+    public ResponseEntity<?> agregarHuesped(@RequestBody HuespedDTO huesped,
                                             @RequestParam(defaultValue = "false") Boolean forzar) {
         try {
-            Huesped guardado = gestorHuespedes.guardarHuesped(huesped, forzar);
+            HuespedDTO guardado = gestorHuespedes.guardarHuesped(huesped, forzar);
             return ResponseEntity.status(HttpStatus.CREATED).body(guardado);
         } catch (HuespedExistenteException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "CONFLICTO", "mensaje", e.getMessage()));
@@ -36,7 +36,7 @@ public class ControladorHuesped {
 
     
     @GetMapping
-    public List<Huesped> obtenerTodos() {
+    public List<HuespedDTO> obtenerTodos() {
         return gestorHuespedes.obtenerTodos();
     }
 }
