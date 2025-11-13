@@ -514,7 +514,7 @@ const INITIAL_FORM = {
                 CORREGIR
               </button>
               <button
-                className="btn-accept"
+                className="btn-accept yellow"
                 onClick={async () => {
                   setShowModal(false);
                   setHighlightDocumento(false);
@@ -558,7 +558,7 @@ const INITIAL_FORM = {
               <button className="btn-cancel" onClick={() => setShowCancelModal(false)}>
                 NO
               </button>
-              <button className="btn-accept" onClick={() => {
+              <button className="btn-accept yellow" onClick={() => {
                 resetForm();
                 setShowCancelModal(false);
                 setShowCompletionScreen(true);

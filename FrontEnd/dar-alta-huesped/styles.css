@@ -144,21 +144,20 @@ input:focus,select:focus{
   border-radius: 12px;
   padding: 30px 40px;
   text-align: center;
-  width: 340px;
+  width: 600px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
-  animation: fadeIn 0.2s ease;
   z-index: 10051;
 }
 
 .modal h2 {
   margin-top: 10px;
-  font-size: 20px;
+  font-size: 40px;
   color: #333;
 }
 
 .modal p {
   color: #555;
-  font-size: 14px;
+  font-size: 20px;
   margin: 10px 0 20px 0;
   white-space: pre-wrap;
 }
@@ -170,26 +169,40 @@ input:focus,select:focus{
 .modal-buttons {
   display: flex;
   justify-content: space-between;
+  gap: 200px;
 }
 
 .btn-cancel {
+  position: relative;
   background: #eef1f6;
   border: none;
   color: #2d4f7c;
-  padding: 8px 16px;
+  padding: 8px 20px;
   border-radius: 10px;
   font-weight: bold;
   cursor: pointer;
+  flex: 1;
+  font-size: 16px;
 }
 
 .btn-accept {
-  background: #f8b84e;
+  position: relative;
+  background: #022E66;
   border: none;
   color: white;
-  padding: 8px 16px;
+  padding: 8px 20px;
   border-radius: 10px;
   font-weight: bold;
   cursor: pointer;
+  flex: 1;
+  font-size: 16px;
+}
+.btn-accept.yellow {
+  background: #FFA500;
+}
+
+.btn-accept.yellow:hover {
+  background: #FF8C00;
 }
 
 .btn-cancel:hover {
@@ -197,13 +210,21 @@ input:focus,select:focus{
 }
 
 .btn-accept:hover {
-  background: #f6a826;
+  background: #03469e;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+.btn-accept.yellow:hover {
+  background: #FF8C00;
 }
+
+.btn-cancel:hover {
+  background: #dde4ef;
+}
+
+.btn-accept:hover {
+  background: #03469e;
+}
+
 .completion-screen {
   position: fixed;
   top: 0;
