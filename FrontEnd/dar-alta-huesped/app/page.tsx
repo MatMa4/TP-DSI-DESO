@@ -13,7 +13,7 @@ export default function Home() {
     ocupacion: '',
     nacionalidad: '',
     cuit: '',
-    posicionIVA: 'Consumidor Final',
+    posicionIVA: '',
     alojado: false,
     direccionHuesped: {
       calle: '',
@@ -26,9 +26,39 @@ export default function Home() {
       pais: '',
     },
   });
-
-   const [errors, setErrors] = useState<Record<string, string>>({});
-
+const INITIAL_FORM = {
+  numeroDocumento: '',
+  tipoDocumento: 'DNI',
+  apellido: '',
+  nombre: '',
+  fechaNacimiento: '',
+  telefono: '',
+  email: '',
+  ocupacion: '',
+  nacionalidad: '',
+  cuit: '',
+  posicionIVA: '',
+  alojado: false,
+  direccionHuesped: {
+    calle: '',
+    numero: '',
+    departamento: '',
+    piso: '',
+    codigo: '',
+    localidad: '',
+    provincia: '',
+    pais: '',
+  },
+};
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [pendingFinalData, setPendingFinalData] = useState<any | null>(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [highlightDocumento, setHighlightDocumento] = useState(false);
+  const [showCompletionScreen, setShowCompletionScreen] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type, checked } = e.target;
 
@@ -49,13 +79,22 @@ export default function Home() {
         [name]: type === 'checkbox' ? checked : value,
       });
       setErrors((prev) => ({ ...prev, [name]: '' }));
+      // Si el usuario empieza a escribir en el documento, quitar el highlight
+      if (name === 'numeroDocumento' || name === 'tipoDocumento') {
+        setHighlightDocumento(false);
+      }
     }
+  };
+    const handleCancelClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowCancelModal(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const newErrors: any = {};
+    const opcionesIVA = ["RESPONSABLE INSCRIPTO", "MONOTRIBUTISTA", "EXENTO", "CONSUMIDOR FINAL"];
     if (!formData.nombre.trim()) newErrors.nombre = 'Campo obligatorio';
     else if (formData.nombre.trim().length < 2) newErrors.nombre = 'Debe tener al menos 2 caracteres';
     else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.nombre)) newErrors.nombre = 'Solo se permiten letras';
@@ -66,22 +105,66 @@ export default function Home() {
     else if (!/^\d+$/.test(formData.telefono)) newErrors.telefono = 'Solo se permiten números';
     if (!formData.ocupacion.trim()) newErrors.ocupacion = 'Campo obligatorio';
     else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.ocupacion)) newErrors.ocupacion = 'Solo se permiten letras';
-    if (!formData.posicionIVA.trim()) newErrors.posicionIVA = 'Campo obligatorio';
+    //if (!formData.posicionIVA.trim()) newErrors.posicionIVA = 'Campo obligatorio';
+    if (!opcionesIVA.includes(formData.posicionIVA.toUpperCase())) {
+    newErrors.posicionIVA = 'Debe ser una de las siguientes opciones: RESPONSABLE INSCRIPTO, MONOTRIBUTISTA, EXENTO o CONSUMIDOR FINAL';
+    } 
     if (!formData.nacionalidad.trim()) newErrors.nacionalidad = 'Campo obligatorio';
     else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.nacionalidad)) newErrors.nacionalidad = 'Solo se permiten letras';
-    if (!formData.numeroDocumento.trim()) newErrors.numeroDocumento = 'Campo obligatorio';
+    if (!formData.numeroDocumento.trim()) {
+    newErrors.numeroDocumento = 'Campo obligatorio';
+    } else {
+      switch (formData.tipoDocumento) {
+        case 'DNI':
+          if (!/^\d+$/.test(formData.numeroDocumento)) {
+            newErrors.numeroDocumento = 'El DNI solo debe contener números';
+          }
+          break;
+        case 'LC':
+          if (!/^[Ff]\d+$/.test(formData.numeroDocumento)) {
+            newErrors.numeroDocumento = 'Debe comenzar con F seguida de números';
+          }
+          break;
+        case 'LE':
+          if (!/^[Mm]\d+$/.test(formData.numeroDocumento)) {
+            newErrors.numeroDocumento = 'Debe comenzar con M seguida de números';
+          }
+          break;
+
+        case 'pasaporte':
+          if (!/^[A-Za-z0-9]+$/.test(formData.numeroDocumento)) {
+            newErrors.numeroDocumento = 'El pasaporte solo puede contener letras y números';
+          }
+          break;
+
+        default:
+          if (formData.numeroDocumento.length < 3) {
+            newErrors.numeroDocumento = 'Documento inválido';
+          }
+          break;
+      }
+    }
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Formato de email inválido';
-}
+    }
     if (formData.cuit && !/^\d{11}$/.test(formData.cuit)) {
       newErrors.cuit = 'El CUIT debe tener 11 dígitos numéricos';
     }
-    for (const field in formData.direccionHuesped) {
-    const value = formData.direccionHuesped[field as keyof typeof formData.direccionHuesped];
-      if (typeof value !== 'string' || !value.trim()) {
-        newErrors[`direccionHuesped.${field}`] = 'Campo obligatorio';
-      }
-    }
+    if (!formData.direccionHuesped.calle.trim()) newErrors['direccionHuesped.calle'] = 'Campo obligatorio';
+    if (!formData.direccionHuesped.numero.trim()) newErrors['direccionHuesped.numero'] = 'Campo obligatorio';
+    else if (!/^\d+$/.test(formData.direccionHuesped.numero)) newErrors['direccionHuesped.numero'] = 'Solo se permiten números';
+    if (!formData.direccionHuesped.piso.trim()) newErrors['direccionHuesped.piso'] = 'Campo obligatorio';
+    else if (!/^\d+$/.test(formData.direccionHuesped.piso)) newErrors['direccionHuesped.piso'] = 'Solo se permiten números';
+    if (!formData.direccionHuesped.localidad.trim()) newErrors['direccionHuesped.localidad'] = 'Campo obligatorio';
+    else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.direccionHuesped.localidad)) newErrors['direccionHuesped.localidad'] = 'Solo se permiten letras';
+    if (!formData.direccionHuesped.provincia.trim()) newErrors['direccionHuesped.provincia'] = 'Campo obligatorio';
+    else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.direccionHuesped.provincia)) newErrors['direccionHuesped.provincia'] = 'Solo se permiten letras';
+    if (!formData.direccionHuesped.departamento.trim()) newErrors['direccionHuesped.departamento'] = 'Campo obligatorio';
+    else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.direccionHuesped.departamento)) newErrors['direccionHuesped.departamento'] = 'Solo se permiten letras';
+    if (!formData.direccionHuesped.pais.trim()) newErrors['direccionHuesped.pais'] = 'Campo obligatorio';
+    else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.direccionHuesped.pais)) newErrors['direccionHuesped.pais'] = 'Solo se permiten letras';
+    if (formData.direccionHuesped.codigo && !/^\d+$/.test(formData.direccionHuesped.codigo)) newErrors['direccionHuesped.codigo'] = 'Solo se permiten números';
+    
 
     setErrors(newErrors);
 
@@ -98,7 +181,8 @@ export default function Home() {
         ocupacion: formData.ocupacion? formData.ocupacion.toUpperCase() : formData.ocupacion,
         nacionalidad: formData.nacionalidad? formData.nacionalidad.toUpperCase() : formData.nacionalidad,
         cuit: formData.cuit,
-        posicionIVA: formData.posicionIVA? formData.posicionIVA.toUpperCase() : formData.posicionIVA,
+       // posicionIVA: formData.posicionIVA? formData.posicionIVA.toUpperCase() : formData.posicionIVA,
+        posicionIVA: formData.posicionIVA.trim()? formData.posicionIVA.toUpperCase() : "CONSUMIDOR FINAL",
         fechaNacimiento: formData.fechaNacimiento,
         alojado: formData.alojado,
         direccionHuesped: {
@@ -126,17 +210,27 @@ export default function Home() {
         if (res.ok) {
           const saved = await res.json().catch(() => null);
           console.log('✅ Huésped guardado:', saved ?? 'No body');
-          // limpiar o navegar si corresponde
-        } else {
-          const text = await res.text();
-          console.error('❌ Error al guardar huésped:', res.status, text);
+          // Mostrar modal de éxito con opción de cargar otro
+          setSuccessMessage(
+            `El huésped ${finalData.nombre ?? ''} ${finalData.apellido ?? ''} ha sido satisfactoriamente cargado al sistema\n¿Desea cargar otro?`
+          );
+          setShowSuccessModal(true);
+          // opcional: limpiar pendingFinalData si estaba
+          setPendingFinalData(null);
+        } else if (res.status === 409) {
+          setModalMessage('El tipo y número de documento ya existen en el sistema');
+          setPendingFinalData(finalData); // <-- guardar datos que queremos reenviar si el usuario acepta
+          setShowModal(true);
         }
       } catch (err) {
         console.error('❌ Error de conexión al backend:', err);
       }
     }    
   };
-
+  const resetForm = () => {
+    setFormData(INITIAL_FORM);
+    setErrors({});
+  };
   return (
     <main>
        <div className="tittle_box">
@@ -199,18 +293,6 @@ export default function Home() {
             </div>
 
             <div className="box1_simplebox">
-              <label htmlFor="posicionIVA">posicionIVA <span style={{color: 'red'}}>*</span></label>
-              <input 
-                className="input_box" 
-                type="text" 
-                name="posicionIVA"
-                value={formData.posicionIVA}
-                onChange={handleChange}
-              />
-              {errors.posicionIVA && <p className="error">{errors.posicionIVA}</p>}
-            </div>
-
-            <div className="box1_simplebox">
               <label>Teléfono <span style={{color: 'red'}}>*</span></label>
               <input 
                 className="input_box" 
@@ -219,7 +301,19 @@ export default function Home() {
                 value={formData.telefono}
                 onChange={handleChange}
               />
-              {errors.telefono && <p className="error">{errors.telefono}</p>}
+               {errors.telefono && <p className="error">{errors.telefono}</p>}
+            </div>
+
+            <div className="box1_simplebox">
+              <label htmlFor="posicionIVA">posicionIVA </label>
+              <input 
+                className="input_box" 
+                type="text" 
+                name="posicionIVA"
+                value={formData.posicionIVA}
+                onChange={handleChange}
+              />
+              {errors.posicionIVA && <p className="error">{errors.posicionIVA}</p>}
             </div>
           </div>
 
@@ -231,6 +325,7 @@ export default function Home() {
               name="tipoDocumento" 
               value={formData.tipoDocumento}
               onChange={handleChange}
+              style={highlightDocumento ? { borderColor: 'red', borderWidth: '3px' } : {}}
               >
                 <option value="dni">DNI</option>
                 <option value="LE">LE</option>
@@ -244,6 +339,7 @@ export default function Home() {
                 name="numeroDocumento" 
                 value={formData.numeroDocumento}
                 onChange={handleChange}
+                style={highlightDocumento ? { borderColor: 'red', borderWidth: '3px' } : {}}
               />
             </div>
             {errors.numeroDocumento && <p className="error">{errors.numeroDocumento}</p>}
@@ -274,10 +370,9 @@ export default function Home() {
                       value={formData.direccionHuesped.codigo}
                       onChange={handleChange}
                     />
+                    {errors['direccionHuesped.codigo'] && <p className="error">{errors['direccionHuesped.codigo']}</p>}
                 </div>
-
             </div>
-
             <div className="box1">
                     
                     <div className="box1_simplebox">
@@ -376,7 +471,7 @@ export default function Home() {
                   name="ocupacion" 
                   value={formData.ocupacion}
                   onChange={handleChange}
-                />    
+                />
                 {errors.ocupacion && <p className="error">{errors.ocupacion}</p>}
             </div>
 
@@ -395,7 +490,7 @@ export default function Home() {
 
         <div className="container">
             <div className="box1">
-                <button className="button2" type="reset">CANCELAR</button>
+                 <button className="button2" type="button" onClick={handleCancelClick}>CANCELAR</button>
             </div>
             <div className="box1">
                 <p><small><span style={{color: 'red'}}>*</span> Campos obligatorios</small></p>
@@ -403,8 +498,114 @@ export default function Home() {
             <div className="box1">
                 <button className="button2" type="submit">SIGUIENTE</button>    
             </div>
-        </div> 
+        </div>
       </form>
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-icon">⚠️</div>
+            <h2>DNI Repetido</h2>
+            <p>{modalMessage}</p>
+            <div className="modal-buttons">
+              <button className="btn-cancel" onClick={() => {
+                setHighlightDocumento(true);
+                setShowModal(false)
+                }}>
+                CORREGIR
+              </button>
+              <button
+                className="btn-accept"
+                onClick={async () => {
+                  setShowModal(false);
+                  setHighlightDocumento(false);
+                  if (!pendingFinalData) return;
+                  try {
+                    const res = await fetch('http://localhost:8080/huespedes?forzar=true', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify(pendingFinalData),
+                    });
+                    if (res.ok) {
+                      console.log('Aceptar igualmente: registrado forzado');
+                      console.log(pendingFinalData);
+                      setSuccessMessage(
+                      `El huésped ${pendingFinalData.nombre ?? ''} ${pendingFinalData.apellido ?? ''} ha sido satisfactoriamente cargado al sistema\n¿Desea cargar otro?`
+                    );
+                    setShowSuccessModal(true);
+                    } else {
+                      console.error('Error al forzar registro:', res.status);
+                    }
+                  } catch (e) {
+                    console.error('Error de conexión al forzar:', e);
+                  } finally {
+                    setPendingFinalData(null);
+                  }
+                }}
+              >
+                ACEPTAR IGUALMENTE
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showCancelModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-icon">⚠️</div>
+            <h2>CANCELAR</h2>
+            <p>¿Desea cancelar esta carga del huésped?</p>
+            <div className="modal-buttons">
+              <button className="btn-cancel" onClick={() => setShowCancelModal(false)}>
+                NO
+              </button>
+              <button className="btn-accept" onClick={() => {
+                resetForm();
+                setShowCancelModal(false);
+                setShowCompletionScreen(true);
+              }}>
+                SI
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {showSuccessModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="modal-icon">✅</div>
+            <h2>Éxito al cargar</h2>
+            <p>{successMessage}</p>
+            <div className="modal-buttons" style={{ justifyContent: 'center', gap: '20px' }}>
+              <button
+                className="btn-cancel"
+                onClick={() => {
+                  // NO -> cerrar modal (puede navegar o quedarse)
+                  setShowCompletionScreen(true);
+                  setShowSuccessModal(false);
+                }}
+              >
+                NO
+              </button>
+              <button
+                className="btn-accept"
+                onClick={() => {
+                  // SI -> limpiar todos los campos para volver a ingresar
+                  resetForm();
+                  setShowSuccessModal(false);
+                }}
+              >
+                SI
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showCompletionScreen && (
+        <div className="completion-screen">
+          Caso de Uso Terminado
+        </div>
+      )}
     </main>
   );
 };
