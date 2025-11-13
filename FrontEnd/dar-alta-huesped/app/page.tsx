@@ -1,7 +1,6 @@
 'use client';
-import { useState } from 'react';
 import '../styles.css';
-
+import React, { useState } from 'react';
 export default function Home() {
   const [formData, setFormData] = useState({
     numeroDocumento: '',
@@ -53,7 +52,7 @@ export default function Home() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const newErrors: any = {};
@@ -81,11 +80,37 @@ export default function Home() {
     }
 
     setErrors(newErrors);
-    if (Object.keys(newErrors).length === 0) {
-      console.log('✅ Formulario válido:', formData);
-    }
 
-    console.log(formData); // Por ahora solo muestra los datos en consola
+    let finalData = formData;
+    if (Object.keys(newErrors).length === 0) {
+      const transformedData = {
+        ...formData,
+        apellido: formData.apellido ? formData.apellido.toUpperCase() : formData.apellido,
+        nombre: formData.nombre ? formData.nombre.toUpperCase() : formData.nombre,
+      };
+            // actualizar el formulario para que el usuario vea el apellido en mayúsculas
+      setFormData(transformedData);
+      finalData = transformedData;
+
+      try {
+        const res = await fetch('http://localhost:8080/huespedes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(finalData),
+        });
+
+        if (res.ok) {
+          const saved = await res.json().catch(() => null);
+          console.log('✅ Huésped guardado:', saved ?? 'No body');
+          // limpiar o navegar si corresponde
+        } else {
+          const text = await res.text();
+          console.error('❌ Error al guardar huésped:', res.status, text);
+        }
+      } catch (err) {
+        console.error('❌ Error de conexión al backend:', err);
+      }
+    }    
   };
 
   return (
