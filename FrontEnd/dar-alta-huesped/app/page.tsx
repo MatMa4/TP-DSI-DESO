@@ -58,17 +58,21 @@ export default function Home() {
     const newErrors: any = {};
     if (!formData.nombre.trim()) newErrors.nombre = 'Campo obligatorio';
     else if (formData.nombre.trim().length < 2) newErrors.nombre = 'Debe tener al menos 2 caracteres';
-
+    else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.nombre)) newErrors.nombre = 'Solo se permiten letras';
     if (!formData.apellido.trim()) newErrors.apellido = 'Campo obligatorio';
+    else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.apellido)) newErrors.apellido = 'Solo se permiten letras';
     if (!formData.fechaNacimiento) newErrors.fechaNacimiento = 'Campo obligatorio';
     if (!formData.telefono.trim()) newErrors.telefono = 'Campo obligatorio';
+    else if (!/^\d+$/.test(formData.telefono)) newErrors.telefono = 'Solo se permiten números';
     if (!formData.ocupacion.trim()) newErrors.ocupacion = 'Campo obligatorio';
+    else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.ocupacion)) newErrors.ocupacion = 'Solo se permiten letras';
     if (!formData.posicionIVA.trim()) newErrors.posicionIVA = 'Campo obligatorio';
     if (!formData.nacionalidad.trim()) newErrors.nacionalidad = 'Campo obligatorio';
+    else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.nacionalidad)) newErrors.nacionalidad = 'Solo se permiten letras';
     if (!formData.numeroDocumento.trim()) newErrors.numeroDocumento = 'Campo obligatorio';
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Formato de email inválido';
-    }
+}
     if (formData.cuit && !/^\d{11}$/.test(formData.cuit)) {
       newErrors.cuit = 'El CUIT debe tener 11 dígitos numéricos';
     }
@@ -85,8 +89,28 @@ export default function Home() {
     if (Object.keys(newErrors).length === 0) {
       const transformedData = {
         ...formData,
+        numeroDocumento: formData.numeroDocumento ? formData.numeroDocumento.toUpperCase() : formData.numeroDocumento,
+        tipoDocumento: formData.tipoDocumento ? formData.tipoDocumento.toUpperCase() : formData.tipoDocumento,
         apellido: formData.apellido ? formData.apellido.toUpperCase() : formData.apellido,
         nombre: formData.nombre ? formData.nombre.toUpperCase() : formData.nombre,
+        telefono: formData.telefono? formData.telefono.toUpperCase() : formData.telefono,
+        email: formData.email? formData.email.toUpperCase() : formData.email,
+        ocupacion: formData.ocupacion? formData.ocupacion.toUpperCase() : formData.ocupacion,
+        nacionalidad: formData.nacionalidad? formData.nacionalidad.toUpperCase() : formData.nacionalidad,
+        cuit: formData.cuit,
+        posicionIVA: formData.posicionIVA? formData.posicionIVA.toUpperCase() : formData.posicionIVA,
+        fechaNacimiento: formData.fechaNacimiento,
+        alojado: formData.alojado,
+        direccionHuesped: {
+          calle: formData.direccionHuesped.calle? formData.direccionHuesped.calle.toUpperCase() : formData.direccionHuesped.calle,
+          numero: formData.direccionHuesped.numero,
+          piso: formData.direccionHuesped.piso,
+          codigo: formData.direccionHuesped.codigo,
+          departamento: formData.direccionHuesped.departamento? formData.direccionHuesped.departamento.toUpperCase() : formData.direccionHuesped.departamento,
+          localidad: formData.direccionHuesped.localidad? formData.direccionHuesped.localidad.toUpperCase() : formData.direccionHuesped.localidad,
+          provincia: formData.direccionHuesped.provincia? formData.direccionHuesped.provincia.toUpperCase() : formData.direccionHuesped.provincia,
+          pais: formData.direccionHuesped.pais? formData.direccionHuesped.pais.toUpperCase() : formData.direccionHuesped.pais
+        }
       };
             // actualizar el formulario para que el usuario vea el apellido en mayúsculas
       setFormData(transformedData);
