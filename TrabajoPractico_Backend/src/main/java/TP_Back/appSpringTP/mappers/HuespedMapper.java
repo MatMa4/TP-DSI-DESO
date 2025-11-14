@@ -9,6 +9,7 @@ import TP_Back.appSpringTP.DTOs.HuespedDTO;
 import TP_Back.appSpringTP.modelo.Direccion;
 import TP_Back.appSpringTP.modelo.DireccionId;
 import TP_Back.appSpringTP.modelo.Huesped;
+import TP_Back.appSpringTP.modelo.HuespedId;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,8 +21,11 @@ public class HuespedMapper {
         if (dto == null) return null;
 
         return Huesped.builder()
-                .numeroDocumento(dto.getNumeroDocumento())
-                .tipoDocumento(dto.getTipoDocumento())
+                .id(HuespedId.builder()
+                    .numeroDocumento(dto.getNumeroDocumento())
+                    .tipoDocumento(dto.getTipoDocumento())
+                    .build()
+                )
                 .apellido(dto.getApellido())
                 .nombre(dto.getNombre())
                 .fechaNacimiento(dto.getFechaNacimiento())
@@ -63,13 +67,13 @@ public class HuespedMapper {
                 .id(DireccionId.builder()
                         .calle(dto.getCalle())
                         .numero(dto.getNumero())
+                        .localidad(dto.getLocalidad())
+                        .provincia(dto.getProvincia())
+                        .pais(dto.getPais())
                         .build())
                 .departamento(dto.getDepartamento())
                 .piso(dto.getPiso())
                 .codigo(dto.getCodigo())
-                .localidad(dto.getLocalidad())
-                .provincia(dto.getProvincia())
-                .pais(dto.getPais())
                 .build();
     }
 

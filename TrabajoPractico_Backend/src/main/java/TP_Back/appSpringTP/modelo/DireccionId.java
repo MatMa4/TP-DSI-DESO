@@ -17,6 +17,9 @@ import java.util.Objects;
 public class DireccionId implements Serializable {
     private String calle;
     private String numero;
+    private String localidad;
+    private String provincia;
+    private String pais;
 
     public DireccionId() {}
 
@@ -30,6 +33,17 @@ public class DireccionId implements Serializable {
 
     public String getNumero() { return numero; }
     public void setNumero(String numero) { this.numero = numero; }
+    
+    public String getLocalidad() { return localidad; }
+    public void setLocalidad(String localidad) { this.localidad = localidad; }
+    
+    public String getProvincia() { return provincia; }
+    public void setProvincia(String provincia ) { this.provincia =provincia ; }
+    
+    public String getPais() { return pais; }
+    public void setPais(String pais ) { this.pais =pais ; }
+    
+    
 
     // ✅ Obligatorio para claves compuestas
     @Override
@@ -37,17 +51,20 @@ public class DireccionId implements Serializable {
         if (this == o) return true;
         if (!(o instanceof DireccionId)) return false;
         DireccionId that = (DireccionId) o;
-        return Objects.equals(calle, that.calle) && Objects.equals(numero, that.numero);
+        return Objects.equals(calle, that.calle) && Objects.equals(numero, that.numero) && Objects.equals(localidad, that.localidad) && Objects.equals(provincia, that.provincia) && Objects.equals(pais, that.pais);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(calle, numero);
+        return Objects.hash(calle, numero, localidad, provincia, pais);
     }
     
         private DireccionId(Builder builder) {
         this.calle = builder.calle;
         this.numero = builder.numero;
+        this.localidad = builder.localidad;
+        this.provincia = builder.provincia;
+        this.pais = builder.pais;
     }
 
     public static Builder builder() {
@@ -57,9 +74,15 @@ public class DireccionId implements Serializable {
     public static class Builder {
         private String calle;
         private String numero;
+        private String localidad;
+        private String provincia;
+        private String pais;
 
         public Builder calle(String calle) { this.calle = calle; return this; }
         public Builder numero(String numero) { this.numero = numero; return this; }
+        public Builder localidad(String localidad) { this.localidad = localidad; return this; }
+        public Builder provincia(String provincia) { this.provincia = provincia; return this; }
+        public Builder pais(String pais) { this.pais = pais; return this; }
 
         public DireccionId build() {
             return new DireccionId(this);

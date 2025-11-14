@@ -3,26 +3,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package TP_Back.appSpringTP.modelo;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.EmbeddedId;
 import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.lang.Thread.Builder;
 
 
 @Entity
 @Table(name = "huesped")
 public class Huesped {
     
-    @Id
-    private String numeroDocumento;
-
-    private String tipoDocumento;
+    @EmbeddedId
+    @JsonUnwrapped
+    private HuespedId id;
+    
     private String apellido;
     private String nombre;
     private LocalDate fechaNacimiento;
@@ -37,7 +37,10 @@ public class Huesped {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumns({
         @JoinColumn(name = "direccion_calle", referencedColumnName = "calle"),
-        @JoinColumn(name = "direccion_numero", referencedColumnName = "numero")
+        @JoinColumn(name = "direccion_numero", referencedColumnName = "numero"),
+        @JoinColumn(name = "direccion_localidad", referencedColumnName = "localidad"),
+        @JoinColumn(name = "direccion_provincia", referencedColumnName = "provincia"),
+        @JoinColumn(name = "direccion_pais", referencedColumnName = "pais")
     })
     private Direccion direccionHuesped;
  
@@ -55,11 +58,11 @@ public class Huesped {
     }
 
     public String getTipoDocumento() {
-        return tipoDocumento;
+        return this.id.getTipoDocumento();
     }
 
     public String getNumeroDocumento() {
-        return numeroDocumento;
+        return this.id.getNumeroDocumento();
     }
 
     public LocalDate getFechaNacimiento() {
@@ -98,8 +101,7 @@ public class Huesped {
         return alojado;
     }
     private Huesped(Builder builder) {
-        this.numeroDocumento = builder.numeroDocumento;
-        this.tipoDocumento = builder.tipoDocumento;
+        this.id = builder.id;
         this.apellido = builder.apellido;
         this.nombre = builder.nombre;
         this.fechaNacimiento = builder.fechaNacimiento;
@@ -116,8 +118,7 @@ public class Huesped {
     public static Builder builder() { return new Builder(); }
 
     public static class Builder {
-        private String numeroDocumento;
-        private String tipoDocumento;
+        private HuespedId id;
         private String apellido;
         private String nombre;
         private LocalDate fechaNacimiento;
@@ -130,8 +131,7 @@ public class Huesped {
         private boolean alojado;
         private Direccion direccion;
 
-        public Builder numeroDocumento(String numeroDocumento) { this.numeroDocumento = numeroDocumento; return this; }
-        public Builder tipoDocumento(String tipoDocumento) { this.tipoDocumento = tipoDocumento; return this; }
+        public Builder id(HuespedId id) { this.id = id; return this; }
         public Builder apellido(String apellido) { this.apellido = apellido; return this; }
         public Builder nombre(String nombre) { this.nombre = nombre; return this; }
         public Builder fechaNacimiento(LocalDate fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; return this; }
