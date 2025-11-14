@@ -112,11 +112,132 @@ input:focus,select:focus{
     font-size: 0.85rem;
     height: 20px;
     margin-bottom: -20px;
-    text-align: left;
+    text-align: left;    
+    width: 100%;
+    max-width: 370px;
 }
 .documento_inputs {
     position: relative;
     display: flex;
     gap: 8px;
-    align-items: center;  
+    align-items: center; 
+}
+/* Fondo borroso */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10050; /* subir para asegurarse que quede encima de todo */
+}
+
+/* Caja del modal */
+.modal {
+  background: white;
+  border-radius: 12px;
+  padding: 30px 40px;
+  text-align: center;
+  width: 600px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  z-index: 10051;
+}
+
+.modal h2 {
+  margin-top: 10px;
+  font-size: 40px;
+  color: #333;
+}
+
+.modal p {
+  color: #555;
+  font-size: 20px;
+  margin: 10px 0 20px 0;
+  white-space: pre-wrap;
+}
+
+.modal-icon {
+  font-size: 40px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 200px;
+}
+
+.btn-cancel {
+  position: relative;
+  background: #eef1f6;
+  border: none;
+  color: #2d4f7c;
+  padding: 8px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  flex: 1;
+  font-size: 16px;
+}
+
+.btn-accept {
+  position: relative;
+  background: #022E66;
+  border: none;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  flex: 1;
+  font-size: 16px;
+}
+.btn-accept.yellow {
+  background: #FFA500;
+}
+
+.btn-accept.yellow:hover {
+  background: #FF8C00;
+}
+
+.btn-cancel:hover {
+  background: #dde4ef;
+}
+
+.btn-accept:hover {
+  background: #03469e;
+}
+
+.btn-accept.yellow:hover {
+  background: #FF8C00;
+}
+
+.btn-cancel:hover {
+  background: #dde4ef;
+}
+
+.btn-accept:hover {
+  background: #03469e;
+}
+
+.completion-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #6B99C3;
+  font-size: 48px;
+  font-weight: bold;
+  color: #ffffff;
+  font-family: sans-serif;
+  z-index: 10060;
 }
