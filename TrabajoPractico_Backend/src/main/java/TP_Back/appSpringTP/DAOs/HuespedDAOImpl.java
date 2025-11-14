@@ -35,7 +35,7 @@ public class HuespedDAOImpl implements HuespedDAO {
     }
     @Override
     public Optional<HuespedDTO> findByTipoDocumentoAndNumeroDocumento(String tipoDocumento, String numeroDocumento){
-        return repoHuesped.findByTipoDocumentoAndNumeroDocumento(tipoDocumento, numeroDocumento).map(huespedMapper::toDTO);
+        return repoHuesped.findByIdTipoDocumentoAndIdNumeroDocumento(tipoDocumento, numeroDocumento).map(huespedMapper::toDTO);
     }
     @Override
     public List<HuespedDTO> findAll(){

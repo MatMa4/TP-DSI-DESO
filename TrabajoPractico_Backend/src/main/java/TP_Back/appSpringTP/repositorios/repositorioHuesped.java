@@ -10,10 +10,11 @@ package TP_Back.appSpringTP.repositorios;
  */
 
 import TP_Back.appSpringTP.modelo.Huesped;
+import TP_Back.appSpringTP.modelo.HuespedId;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface repositorioHuesped extends JpaRepository<Huesped, Long> {
-    Optional<Huesped> findByTipoDocumentoAndNumeroDocumento(String tipoDocumento, String numeroDocumento);
+public interface repositorioHuesped extends JpaRepository<Huesped, HuespedId> {
+    Optional<Huesped> findByIdTipoDocumentoAndIdNumeroDocumento(String tipoDocumento, String numeroDocumento);
 }
 

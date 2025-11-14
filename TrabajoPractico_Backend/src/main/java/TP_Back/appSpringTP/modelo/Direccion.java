@@ -20,9 +20,7 @@ public class Direccion {
     private String departamento;
     private Integer piso;
     private Integer codigo;
-    private String localidad;
-    private String provincia;
-    private String pais;
+
 
     public Direccion(String calle, String numero, String departamento, Integer piso,
                      Integer codigo, String localidad, String provincia, String pais) {
@@ -31,13 +29,13 @@ public class Direccion {
         this.departamento = departamento;
         this.piso = piso;
         this.codigo = codigo;
-        this.localidad = localidad;
-        this.provincia = provincia;
-        this.pais = pais;
+        this.id.setLocalidad(localidad);
+        this.id.setProvincia(provincia);
+        this.id.setPais(pais);
     }
 
     public Direccion(){
-        
+        this.id = new DireccionId();
     }
     //Getters
     public String getCalle() {
@@ -61,15 +59,15 @@ public class Direccion {
     }
 
     public String getLocalidad() {
-        return localidad;
+        return id.getLocalidad();
     }
 
     public String getProvincia() {
-        return provincia;
+        return id.getProvincia();
     }
 
     public String getPais() {
-        return pais;
+        return id.getPais();
     }
     
     private Direccion(Builder builder) {
@@ -77,9 +75,6 @@ public class Direccion {
         this.departamento = builder.departamento;
         this.piso = builder.piso;
         this.codigo = builder.codigo;
-        this.localidad = builder.localidad;
-        this.provincia = builder.provincia;
-        this.pais = builder.pais;
     }
 
     public static Builder builder() {
@@ -91,17 +86,11 @@ public class Direccion {
         private String departamento;
         private Integer piso;
         private Integer codigo;
-        private String localidad;
-        private String provincia;
-        private String pais;
 
         public Builder id(DireccionId id) { this.id = id; return this; }
         public Builder departamento(String departamento) { this.departamento = departamento; return this; }
         public Builder piso(Integer piso) { this.piso = piso; return this; }
         public Builder codigo(Integer codigo) { this.codigo = codigo; return this; }
-        public Builder localidad(String localidad) { this.localidad = localidad; return this; }
-        public Builder provincia(String provincia) { this.provincia = provincia; return this; }
-        public Builder pais(String pais) { this.pais = pais; return this; }
 
         public Direccion build() {
             return new Direccion(this);
