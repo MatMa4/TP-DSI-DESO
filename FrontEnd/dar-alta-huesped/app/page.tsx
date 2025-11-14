@@ -60,7 +60,8 @@ const INITIAL_FORM = {
   const [highlightDocumento, setHighlightDocumento] = useState(false);
   const [showCompletionScreen, setShowCompletionScreen] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
 
     // Si el input pertenece a la dirección (nombre con "direccionHuesped.")
     if (name.startsWith('direccionHuesped.')) {
