@@ -6,10 +6,10 @@ package TP_Back.appSpringTP.mappers;
 
 import TP_Back.appSpringTP.DTOs.DireccionDTO;
 import TP_Back.appSpringTP.DTOs.HuespedDTO;
-import TP_Back.appSpringTP.modelo.Direccion;
-import TP_Back.appSpringTP.modelo.DireccionId;
-import TP_Back.appSpringTP.modelo.Huesped;
-import TP_Back.appSpringTP.modelo.HuespedId;
+import TP_Back.appSpringTP.modelo.direccion.Direccion;
+import TP_Back.appSpringTP.modelo.direccion.DireccionId;
+import TP_Back.appSpringTP.modelo.huesped.Huesped;
+import TP_Back.appSpringTP.modelo.huesped.HuespedId;
 
 import java.util.List;
 import java.util.stream.Collectors;

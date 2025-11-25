@@ -6,11 +6,12 @@ package TP_Back.appSpringTP.DAOs;
 
 import TP_Back.appSpringTP.DTOs.HuespedDTO;
 import TP_Back.appSpringTP.mappers.HuespedMapper;
-import TP_Back.appSpringTP.modelo.Huesped;
+import TP_Back.appSpringTP.modelo.huesped.Huesped;
 import TP_Back.appSpringTP.repositorios.repositorioHuesped;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 /**
@@ -41,4 +42,11 @@ public class HuespedDAOImpl implements HuespedDAO {
     public List<HuespedDTO> findAll(){
         return huespedMapper.toDTOList(repoHuesped.findAll());
     }
+    @Override
+    public List<HuespedDTO> buscarHuesped(String nombre, String apellido, String tipoDoc, String numDoc){
+        return huespedMapper.toDTOList(repoHuesped.buscarHuespedes(nombre, apellido, tipoDoc, numDoc));
+    }
+    
+
+
 }

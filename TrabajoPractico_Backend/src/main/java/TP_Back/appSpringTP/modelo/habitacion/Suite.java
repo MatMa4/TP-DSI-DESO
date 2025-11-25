@@ -1,4 +1,8 @@
-package dominio;
+package TP_Back.appSpringTP.modelo.habitacion;
+
+import TP_Back.appSpringTP.modelo.habitacion.Habitacion;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -9,8 +13,9 @@ package dominio;
  *
  * @author mateo
  */
-public class Suite {
-    private Integer numero;
+@Entity
+@DiscriminatorValue("Suite")
+public class Suite extends Habitacion {
     private float costoPorNoche;
     private Integer capacidad;
     private String estado;

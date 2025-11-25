@@ -4,9 +4,10 @@
  */
 package TP_Back.appSpringTP.DAOs;
 
+import TP_Back.appSpringTP.DTOs.HabitacionDTO;
 import TP_Back.appSpringTP.DTOs.HuespedDTO;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,9 +15,6 @@ import org.springframework.stereotype.Service;
  * @author mateo
  */
 @Service
-public interface HuespedDAO {
-    public HuespedDTO save(HuespedDTO huesp);
-    public Optional<HuespedDTO> findByTipoDocumentoAndNumeroDocumento(String tipoDocumento, String numeroDocumento);
-    public List<HuespedDTO> findAll();
-    public List<HuespedDTO> buscarHuesped(String nombre, String apellido, String tipoDoc, String numDoc);
+public interface OcupacionDAO {
+    public void crearOcupacion(List<HuespedDTO> listaHuespedes, Date f_inicio, Date f_fin, HabitacionDTO habitacion);
 }

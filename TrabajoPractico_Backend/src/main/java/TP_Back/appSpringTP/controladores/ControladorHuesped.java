@@ -34,9 +34,19 @@ public class ControladorHuesped {
         }
     }
 
-    
     @GetMapping
     public List<HuespedDTO> obtenerTodos() {
         return gestorHuespedes.obtenerTodos();
     }
+    
+    @GetMapping("/buscar")
+    public ResponseEntity<List<HuespedDTO>> buscarHuespedes(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) String apellido,
+            @RequestParam(required = false) String tipoDocumento,
+            @RequestParam(required = false) String numeroDocumento) {
+
+        return ResponseEntity.ok(gestorHuespedes.buscarHuesped(nombre, apellido, tipoDocumento, numeroDocumento));
+    }
+
 }

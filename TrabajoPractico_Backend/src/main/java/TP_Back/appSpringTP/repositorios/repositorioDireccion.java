@@ -8,8 +8,8 @@ package TP_Back.appSpringTP.repositorios;
  *
  * @author JS
  */
-import TP_Back.appSpringTP.modelo.Direccion;
-import TP_Back.appSpringTP.modelo.DireccionId;
+import TP_Back.appSpringTP.modelo.direccion.Direccion;
+import TP_Back.appSpringTP.modelo.direccion.DireccionId;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
