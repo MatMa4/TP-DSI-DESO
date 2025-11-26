@@ -26,7 +26,7 @@ public class GestorHuespedes {
     @Autowired
     private final HuespedDAO huespedDAO;
     @Autowired
-    private final DireccionDAOImpl direccionDAO;
+    private final DireccionDAO direccionDAO;
 
 
     public GestorHuespedes(HuespedDAOImpl huespedDAO, DireccionDAOImpl direccionDAO) {
@@ -60,6 +60,10 @@ public class GestorHuespedes {
     }
     public List<HuespedDTO> obtenerTodos() {
         return huespedDAO.findAll();
+    }
+    
+    public List<HuespedDTO> buscarHuesped(String nombre, String apellido, String tipoDocumento, String numeroDocumento){
+        return huespedDAO.buscarHuesped(nombre, apellido, tipoDocumento, numeroDocumento);
     }
 }
 

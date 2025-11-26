@@ -6,7 +6,7 @@ package TP_Back.appSpringTP.DAOs;
 
 import TP_Back.appSpringTP.DTOs.DireccionDTO;
 import TP_Back.appSpringTP.mappers.HuespedMapper;
-import TP_Back.appSpringTP.modelo.Direccion;
+import TP_Back.appSpringTP.modelo.direccion.Direccion;
 import TP_Back.appSpringTP.repositorios.repositorioDireccion;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package TP_Back.appSpringTP.modelo;
+package TP_Back.appSpringTP.modelo.huesped;
+import TP_Back.appSpringTP.modelo.direccion.Direccion;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.EmbeddedId;
