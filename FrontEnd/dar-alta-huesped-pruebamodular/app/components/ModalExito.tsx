@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Tipos para las propss
+// Tipos para las propsss
 interface ModalExitoProps {
   show: boolean;
   message: string;
