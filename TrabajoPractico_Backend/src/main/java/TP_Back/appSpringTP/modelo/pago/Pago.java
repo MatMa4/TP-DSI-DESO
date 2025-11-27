@@ -4,13 +4,24 @@
  */
 package TP_Back.appSpringTP.modelo.pago;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.util.Date;
 
 /**
  *
  * @author mateo
  */
+@Entity
+@Table(name = "pagos")
 public class Pago {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idPago;
+    
     private Date fecha;
     private float monto;
 }
