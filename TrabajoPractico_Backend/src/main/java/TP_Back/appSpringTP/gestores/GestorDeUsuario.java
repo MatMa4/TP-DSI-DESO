@@ -3,6 +3,7 @@ package TP_Back.appSpringTP.gestores;
 import TP_Back.appSpringTP.DAOs.UsuarioDAO;
 import TP_Back.appSpringTP.DTOs.UsuarioDTO;
 import TP_Back.appSpringTP.excepciones.ContrasenaInvalidaException;
+import TP_Back.appSpringTP.excepciones.UsuarioExistenteException;
 import TP_Back.appSpringTP.excepciones.UsuarioNoEncontradoException;
 import TP_Back.appSpringTP.modelo.usuario.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +22,16 @@ public class GestorDeUsuario {
         if (!usuario.getContrasena().equals(user.getPassw())) {
             throw new ContrasenaInvalidaException("La contraseña no es válida.");
         }
+    }
+
+    public Usuario crearUsuario(UsuarioDTO userDTO) throws UsuarioExistenteException {
+        if (usuarioDAO.existsById(userDTO.getUsername())) {
+            throw new UsuarioExistenteException("El usuario " + userDTO.getUsername() + " ya existe.");
+        }
+        Usuario nuevoUsuario = new Usuario();
+        nuevoUsuario.setUsuario(userDTO.getUsername());
+        nuevoUsuario.setContrasena(userDTO.getPassw());
+        nuevoUsuario.setRol(userDTO.getRol());
+        return usuarioDAO.save(nuevoUsuario);
     }
 }
