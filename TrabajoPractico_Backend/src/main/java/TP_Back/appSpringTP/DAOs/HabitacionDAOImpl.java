@@ -11,6 +11,6 @@ import org.springframework.stereotype.Service;
  * @author mateo
  */
 @Service
-public class HabitacionDAOImpl {
+public class HabitacionDAOImpl implements HabitacionDAO {
     
 }

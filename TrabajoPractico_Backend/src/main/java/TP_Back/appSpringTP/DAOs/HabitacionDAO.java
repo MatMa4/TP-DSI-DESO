@@ -4,15 +4,13 @@
  */
 package TP_Back.appSpringTP.DAOs;
 
-import TP_Back.appSpringTP.modelo.habitacion.Habitacion;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author mateo
  */
-@Repository
-public interface HabitacionDAO extends JpaRepository<Habitacion, Integer> {
+@Service
+public interface HabitacionDAO {
     
 }
