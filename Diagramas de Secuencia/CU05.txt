@@ -50,7 +50,13 @@ end
       create Reserva
       GDHab -> Reserva:<<create>>
       activate Reserva
-      GDHab -> Reserva: setea()
+      GDHab -> Reserva: setIdReserva(reservaDTO.idReserva)
+      GDHab -> Reserva: setFechaInicio(reservaDTO.fechaInicio)
+      GDHab -> Reserva: setFechaFin(reservaDTO.fechaFin)
+      GDHab -> Reserva: setEstado(reservaDTO.estado)
+      GDHab -> Reserva: setNombre(reservaDTO.nombre)
+      GDHab -> Reserva: setApellido(reservaDTO.apellido)
+      GDHab -> Reserva: setTelefono(reservaDTO.telefono)
       Reserva -> GDHab
       deactivate Reserva
       end
@@ -58,7 +64,11 @@ end
       create Ocupacion
       GDHab -> Ocupacion:<<create>>
       activate Ocupacion
-      GDHab -> Ocupacion: setea()
+      GDHab -> Ocupacion: setIdOcupacion(ocupacionDTO.idOcupacion)
+      GDHab -> Ocupacion: setFechaInicio(ocupacionDTO.fechaInicio)
+      GDHab -> Ocupacion: setFechaFin(ocupacionDTO.fechaFin)
+      GDHab -> Ocupacion: setCheckIn(ocupacionDTO.checkIn)
+      GDHab -> Ocupacion: setCheckOut(ocupacionDTO.checkOut)
       Ocupacion -> GDHab
       deactivate Ocupacion
       end
