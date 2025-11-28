@@ -411,28 +411,28 @@ Habitacion <|.. Suite
 
 PersonaFisica "1" --> "1" Huesped
 Huesped "0..n" --> "1" Direccion
-PersonaJuridica "0..1" -- "1" Direccion
+PersonaJuridica "0..1" --> "1" Direccion
 Huesped "1..n" -- "0..n" Ocupacion
 Ocupacion "1" *-- "0..n" Consumo
-Reserva "0..n" -- "1" Habitacion
-Ocupacion "0..n" -- "1" Habitacion
-Ocupacion "1" -- "1..n" Factura
-Factura "1" -- "0..1" Pago
+Reserva "0..n" --> "1" Habitacion
+Ocupacion "0..n" --> "1" Habitacion
+Factura "1..n" --> "1" Ocupacion
+Pago "1" --> "0..1" Factura
 Factura "1..n" -- "0..1" NotaDeCredito
 Pago "0..n" -- "1..n" MetodoDePago
 Factura "0..n" o-- "1" ResponsableDePago
 
 '============================= RELACIONES DE DAO ============================='
 
-HuespedDTO "1" -- "1" PersonaFisicaDTO
-HuespedDTO "0..n" -- "1" DireccionDTO
-PersonaJuridicaDTO "0..1" -- "1" DireccionDTO
+PersonaFisicaDTO "1" --> "1" HuespedDTO
+HuespedDTO "0..n" --> "1" DireccionDTO
+PersonaJuridicaDTO "0..1" --> "1" DireccionDTO
 HuespedDTO "1..n" -- "0..n" OcupacionDTO
 OcupacionDTO "1" *-- "0..n" ConsumoDTO
-ReservaDTO "0..n" -- "1" HabitacionDTO
-OcupacionDTO "0..n" -- "1" HabitacionDTO
-OcupacionDTO "1" -- "1..n" FacturaDTO
-FacturaDTO "1" -- "0..1" PagoDTO
+ReservaDTO "0..n" --> "1" HabitacionDTO
+OcupacionDTO "0..n" --> "1" HabitacionDTO
+FacturaDTO "1" --> "1..n" OcupacionDTO
+PagoDTO "1" --> "0..1" FacturaDTO
 FacturaDTO "1..n" -- "0..1" NotaDeCreditoDTO
 FacturaDTO "0..n" o-- "1" ResponsableDePagoDTO
 PagoDTO "0..n" -- "0..1" TarjetaDebitoDTO
