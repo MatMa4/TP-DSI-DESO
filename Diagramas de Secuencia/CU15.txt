@@ -67,40 +67,39 @@ loop Mientras quiera cargar habitacion
         end
         UIOcuparHab -> Conserje: Muestra botones de carga
         deactivate UIOcuparHab
-        alt Presiona seguir Cargando 
-        Conserje -> UIOcuparHab: SeguirCargando()
-        activate UIOcuparHab
-        UIOcuparHab -> Conserje
-        else No presiona seguir cargando
-        deactivate UIOcuparHab
-        Conserje -> UIOcuparHab: presiona Cargar otra Habitacion o Salir 
-        activate UIOcuparHab
-        UIOcuparHab -> GDeOcu: crearOcupacion(ListaHues<HuespedDTO>,F_inicio,F_fin, HabitacionDTO)
-        deactivate UIOcuparHab
-        activate GDeOcu
-        create Ocupacion
-        GDeOcu -> Ocupacion: <<create>>
-        
-        GDeOcu -> Ocupacion: setFechaInicio(OcupacionDTO.fechaInicio)
-        GDeOcu -> Ocupacion: setFechaFin(OcupacionDTO.FechaFin)
-        GDeOcu -> Ocupacion: setID(OcupacionDTO.ID)
-        GDeOcu -> Ocupacion: setCheckIn(OcupacionDTO.CheckIn)
-        GDeOcu -> Ocupacion: setCheckOut(OcupacionDTO.CheckOut)
-        
-        Ocupacion -> GDeOcu: Ocupacion
-        GDeOcu -> OcuDAO: guardarOcupacion(Ocupacion)
-        deactivate GDeOcu
-        activate OcuDAO
-        OcuDAO --> GDeOcu
-        deactivate OcuDAO
-        activate GDeOcu
-        GDeOcu -> UIOcuparHab: Ocupacion Creada
-        deactivate GDeOcu
-        activate UIOcuparHab
-        UIOcuparHab -> Conserje: Ocupacion Creada
-        deactivate UIOcuparHab
+          opt Presiona seguir Cargando 
+          Conserje -> UIOcuparHab: SeguirCargando()
+          activate UIOcuparHab
+          UIOcuparHab -> Conserje
+        end
       end
-    end
+      deactivate UIOcuparHab
+      Conserje -> UIOcuparHab: presiona Cargar otra Habitacion o Salir 
+      activate UIOcuparHab
+      UIOcuparHab -> GDeOcu: crearOcupacion(ListaHues<HuespedDTO>,F_inicio,F_fin, HabitacionDTO)
+      deactivate UIOcuparHab
+      activate GDeOcu
+      create Ocupacion
+      GDeOcu -> Ocupacion: <<create>>
+      
+      GDeOcu -> Ocupacion: setFechaInicio(OcupacionDTO.fechaInicio)
+      GDeOcu -> Ocupacion: setFechaFin(OcupacionDTO.FechaFin)
+      GDeOcu -> Ocupacion: setID(OcupacionDTO.ID)
+      GDeOcu -> Ocupacion: setCheckIn(OcupacionDTO.CheckIn)
+      GDeOcu -> Ocupacion: setCheckOut(OcupacionDTO.CheckOut)
+      
+      Ocupacion -> GDeOcu: Ocupacion
+      GDeOcu -> OcuDAO: guardarOcupacion(Ocupacion)
+      deactivate GDeOcu
+      activate OcuDAO
+      OcuDAO --> GDeOcu
+      deactivate OcuDAO
+      activate GDeOcu
+      GDeOcu -> UIOcuparHab: Ocupacion Creada
+      deactivate GDeOcu
+      activate UIOcuparHab
+      UIOcuparHab -> Conserje: Ocupacion Creada
+      deactivate UIOcuparHab
   end
 end
 

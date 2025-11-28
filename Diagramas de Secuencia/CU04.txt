@@ -86,6 +86,8 @@ activate UIR
   else Rechazar
   end
 else no hay habitaciones disponibles del tipo solicitado
+  activate UIR
+  UIR -> Conserje: Mostrar mensaje de error no hay habitaciones disponibles del tipo solicitado
 end
 
 @enduml

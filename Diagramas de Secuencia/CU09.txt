@@ -46,7 +46,36 @@ loop mientras los datos sean incorrectos o el usuario decida cargar otro huéspe
           UIH -> GDH: RegistrarHuesped(HuespedDTO)
           deactivate UIH
           activate GDH
-          GDH -> HuesDAO: GuardarHuesped(HuespedDTO)
+          create Direccion
+          GDH -> Direccion: Direccion()
+          Direccion -> GDH: Direccion
+          GDH -> Direccion: setCalle(DireccionDTO.calle)
+          GDH -> Direccion: setNumero(DireccionDTO.numero)
+          GDH -> Direccion: setDepartamento(DireccionDTO.departamento)
+          GDH -> Direccion: setPiso(DireccionDTO.piso)
+          GDH -> Direccion: setCodigo(DireccionDTO.codigo)
+          GDH -> Direccion: setLocalidad(DireccionDTO.localidad)
+          GDH -> Direccion: setProvincia(DireccionDTO.provincia)
+          GDH -> Direccion: setPais(DireccionDTO.pais)
+          GDH -> DirecDAO: GuardarDireccion(Direccion)
+          deactivate GDH
+          activate DirecDAO
+          DirecDAO -> GDH
+          deactivate DirecDAO
+          activate GDH
+          GDH -> HuespedExistente: setApellido(HuespedDTO.apellido)
+          GDH -> HuespedExistente: setNombre(HuespedDTO.nombre)
+          GDH -> HuespedExistente: setTipoDocumento(HuespedDTO.tipoDocumento)
+          GDH -> HuespedExistente: setNumeroDocumento(HuespedDTO.numeroDocumento)
+          GDH -> HuespedExistente: setFechaNacimiento(HuespedDTO.fechaNacimiento)
+          GDH -> HuespedExistente: setDireccionHuesped(HuespedDTO.direccionHuesped)
+          GDH -> HuespedExistente: setTelefono(HuespedDTO.telefono)
+          GDH -> HuespedExistente: setEmail(HuespedDTO.email)
+          GDH -> HuespedExistente: setOcupacion(HuespedDTO.ocupacion)
+          GDH -> HuespedExistente: setNacionalidad(HuespedDTO.nacionalidad)
+          GDH -> HuespedExistente: setCuit(HuespedDTO.cuit)
+          GDH -> HuespedExistente: setPosicionIVA(HuespedDTO.posicionIVA)
+          GDH -> HuesDAO: GuradarHuesped(HuespedExistente)
           deactivate GDH
           activate HuesDAO
           HuesDAO -> GDH: Huesped guardado en BD
@@ -64,20 +93,8 @@ loop mientras los datos sean incorrectos o el usuario decida cargar otro huéspe
             activate UIH
             UIH -> Conserje: Muestra formulario con foco en el campo documento
             deactivate UIH
-            activate HuesDAO
         end
       else huesped no existe
-         HuesDAO -> GDH: Huesped no existe
-         deactivate HuesDAO
-         activate GDH
-         GDH -> HuesDTO: añadirHuesped()
-         deactivate GDH
-         activate HuesDTO
-         HuesDTO -> GDH: HuespedDTO
-         deactivate HuesDTO
-         activate GDH
-         GDH -> UIH: HuespedCreado
-        deactivate GDH
         activate UIH
         UIH -> GDH: RegistrarHuesped(HuespedDTO)
         deactivate UIH
