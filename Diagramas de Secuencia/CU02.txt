@@ -30,6 +30,18 @@ deactivate UIBuscarHues
   alt Selecciona Huesped y presiona "SIGUIENTE"
   Conserje -> UIBuscarHues: Selecciona un huesped y presiona "SIGUIENTE"
   activate UIBuscarHues
+  UIBuscarHues -> GDeHues: obtenerHuesped(HuespedSeleccionadoDTO)
+  deactivate UIBuscarHues
+  activate GDeHues
+  GDeHues -> HuesDAO: obtenerHuesped(HuespedDTO)
+  deactivate GDeHues
+  activate HuesDAO
+  HuesDAO -> GDeHues: Huesped
+  deactivate HuesDAO
+  activate GDeHues
+  GDeHues -> UIBuscarHues: Huesped
+  deactivate GDeHues
+  activate UIBuscarHues
   UIBuscarHues -> Conserje: Navegar a CU10: "Modificar Huesped"
   deactivate UIBuscarHues
   else No Selecciona Huesped y presiona "SIGUIENTE"
