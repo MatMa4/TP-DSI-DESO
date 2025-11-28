@@ -20,23 +20,6 @@ public class GestorDeReservas {
     @Autowired
     private HabitacionDAO habitacionDAO;
 
-    public Reserva crearReserva(ReservaDTO reservaDTO) {
-        Reserva reserva = new Reserva();
-        reserva.setFechaInicio(reservaDTO.getFechaInicio());
-        reserva.setFechaFin(reservaDTO.getFechaFin());
-        reserva.setEstado("PENDIENTE"); // Default state
-        reserva.setNombre(reservaDTO.getNombre());
-        reserva.setApellido(reservaDTO.getApellido());
-        reserva.setTelefono(reservaDTO.getTelefono());
-
-        if (reservaDTO.getHabitacionNumero() != null) {
-            Optional<Habitacion> habitacion = habitacionDAO.findById(reservaDTO.getHabitacionNumero());
-            habitacion.ifPresent(reserva::setHabitacion);
-        }
-
-        return reservaDAO.save(reserva);
-    }
-
     public void cancelarReserva(Integer idReserva) {
         reservaDAO.deleteById(idReserva);
     }
