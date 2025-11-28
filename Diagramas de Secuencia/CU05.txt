@@ -3,8 +3,6 @@
 actor Conserje
 
 participant "UI- Mostrar Estado de Habitaciones" as UIMostrarHab
-participant "Gestor de reservas" as GDRes
-participant "ReservasDAO" as ResDAO
 participant "Gestor de habitaciones" as GDHab
 participant "HabitacionDAO" as HabDAO
 
@@ -46,26 +44,27 @@ end
       GDHab -> Habitaciones: setEstado(habitacionDTO.Estado)
       GDHab -> Habitaciones: setDescripcion(habitacionDTO.descripcion)
       GDHab -> Habitaciones: setCama(habitacionDTO.cama)
-      deactivate GDHab
-      
       Habitaciones -> GDHab
       deactivate Habitaciones
-      activate GDHab
+      loop Una vez por reserva de habitacion
+      create Reserva
+      GDHab -> Reserva:<<create>>
+      activate Reserva
+      GDHab -> Reserva: setea()
+      Reserva -> GDHab
+      deactivate Reserva
+      end
+      loop Una vez por ocupacion de habitacion
+      create Ocupacion
+      GDHab -> Ocupacion:<<create>>
+      activate Ocupacion
+      GDHab -> Ocupacion: setea()
+      Ocupacion -> GDHab
+      deactivate Ocupacion
+      end
       end
   GDHab -> UIMostrarHab: HabitacionesDTO[]
   deactivate GDHab
-  activate UIMostrarHab
-
-
-  UIMostrarHab -> GDRes: obtenerEstadoHabitaciones(fechaDesde,fechaHasta,HabitacionesDTO[])
-  deactivate UIMostrarHab
-  activate GDRes
-    GDRes -> ResDAO: estadoHabitaciones(fechaDesde,fechaHasta,HabitacionesDTO[])
-    activate ResDAO
-    ResDAO -> GDRes: ReservasDTO[]
-    deactivate ResDAO
-  GDRes -> UIMostrarHab: ReservasDTO[]
-  deactivate GDRes
   activate UIMostrarHab
 UIMostrarHab -> Conserje: Mostrar grilla por pantalla
 deactivate UIMostrarHab
