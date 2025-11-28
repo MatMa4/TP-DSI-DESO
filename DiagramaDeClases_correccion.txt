@@ -263,28 +263,14 @@ interface MetodoDePagoDAO{
   +crearMetodoDePago()
   +obtenerMetodoDePago()
 }
-class TarjetaDebitoDTO{
-    -tipo: String
-    -banco: String
-}
-class TarjetaCreditoDTO{
-    -tipo: String
-    -banco: String
-    -vencimiento: Date
-}
-class EfectivoDTO{
-id_efectivo: Integer
-}
-class MonedaExtranjeraDTO{
-    -tipoMoneda: String
-    -montoExtranjero: float
-    -cotizacion: float
-}
-class ChequeDTO{
-    -numero: String
-    -banco: String
-    -plaza: String
-    -fechaCobro: Date
+class MetodoDePagoDTO{
+  +formaDePago: String
+  +identificado: String;
+  +banco: String
+  +fechaCobro: Date
+  +tipo: String
+  +montoExtranjero: float
+  +cotización: float;
 }
 class Cheque{
     -numero: String
@@ -435,11 +421,7 @@ FacturaDTO "1" --> "1..n" OcupacionDTO
 PagoDTO "1" --> "0..1" FacturaDTO
 FacturaDTO "1..n" -- "0..1" NotaDeCreditoDTO
 FacturaDTO "0..n" o-- "1" ResponsableDePagoDTO
-PagoDTO "0..n" -- "0..1" TarjetaDebitoDTO
-PagoDTO "0..n" -- "0..1" TarjetaCreditoDTO
-PagoDTO "0..n" -- "0..1" EfectivoDTO
-PagoDTO "0..n" -- "0..1" ChequeDTO
-PagoDTO "0..n" -- "0..1" MonedaExtranjeraDTO
+PagoDTO "0..n" -- "0..1" MetodoDePagoDTO
 
 
 ' ========================== RELACIONES DE GESTORES ==========================
@@ -510,11 +492,7 @@ PersonaJuridicaDAO ..> PersonaJuridicaDTO
 PersonaFisicaDAO ..> PersonaFisicaDTO
 NotaDeCreditoDAO ..> NotaDeCreditoDTO
 ResponsableDePagoDAO ..> ResponsableDePagoDTO
-MetodoDePagoDAO ..> TarjetaDebitoDTO
-MetodoDePagoDAO ..> TarjetaCreditoDTO
-MetodoDePagoDAO ..> EfectivoDTO
-MetodoDePagoDAO ..> MonedaExtranjeraDTO
-MetodoDePagoDAO ..> ChequeDTO
+MetodoDePagoDAO ..> MetodoDePagoDTO
 
 
 GestorDeHabitaciones -- GestorDeReservas
