@@ -4,11 +4,19 @@
  */
 package TP_Back.appSpringTP.DTOs;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
  *
  * @author mateo
  */
-
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class HabitacionDTO {
     private int numero;
     private float costoPorNoche;
@@ -18,4 +26,5 @@ public class HabitacionDTO {
     private int camasIndividuales;
     private int camaDoble;
     private int camaKingsize;
+    private String tipoHabitacion;
 }

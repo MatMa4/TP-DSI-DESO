@@ -10,9 +10,12 @@ import java.util.Date;
  *
  * @author mateo
  */
-public class ChequeDTO {
-    private String numero; 
+public class MetodoDePagoDTO {
+    private String formaDePago;
+    private String identificador;
     private String banco;
-    private String plaza;
     private Date fechaCobro;
+    private String tipo;
+    private float montoExtranjero;
+    private float cotización;
 }

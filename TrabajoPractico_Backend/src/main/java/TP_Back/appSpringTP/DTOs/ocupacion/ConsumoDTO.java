@@ -4,10 +4,15 @@
  */
 package TP_Back.appSpringTP.DTOs.ocupacion;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  *
  * @author mateo
  */
+@Getter
+@Setter
 public class ConsumoDTO {
     private String tipoServicio;
     private String detalle;

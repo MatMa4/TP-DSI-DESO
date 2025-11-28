@@ -13,4 +13,5 @@ import java.util.Date;
 public class PagoDTO {
     private Date fecha;
     private float monto;
+    private MetodoDePagoDTO formaDePago;
 }

@@ -10,6 +10,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  *
@@ -18,6 +22,10 @@ import jakarta.persistence.InheritanceType;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_habitacion", discriminatorType = DiscriminatorType.STRING)
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public abstract class Habitacion {
     @Id
     private Integer numero;

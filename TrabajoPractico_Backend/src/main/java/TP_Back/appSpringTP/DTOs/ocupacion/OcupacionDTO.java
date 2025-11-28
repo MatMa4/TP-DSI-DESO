@@ -4,17 +4,26 @@
  */
 package TP_Back.appSpringTP.DTOs.ocupacion;
 
+import TP_Back.appSpringTP.DTOs.HabitacionDTO;
 import TP_Back.appSpringTP.DTOs.HuespedDTO;
 import java.sql.Time;
 import java.util.Date;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  *
  * @author mateo
  */
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class OcupacionDTO {
-    private int idOcupacion;
+    private HabitacionDTO habitacion;
     private Date fechaInicio;
     private Date fechaFin;
     private Time checkIn;

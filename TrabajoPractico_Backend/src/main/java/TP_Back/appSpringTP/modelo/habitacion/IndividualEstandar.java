@@ -7,13 +7,21 @@ package TP_Back.appSpringTP.modelo.habitacion;
 import TP_Back.appSpringTP.modelo.habitacion.Habitacion;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  *
  * @author mateo
  */
 @Entity
-@DiscriminatorValue("IndividualEstándar")
+@DiscriminatorValue("IndividualEstándar")@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+
 public class IndividualEstandar extends Habitacion {
 
     private float costoPorNoche;

@@ -23,7 +23,7 @@ public class ControladorHuesped {
         this.gestorHuespedes = gestorHuespedes;
     }
     
-    @PostMapping
+    @PutMapping
     public ResponseEntity<?> agregarHuesped(@RequestBody HuespedDTO huesped,
                                             @RequestParam(defaultValue = "false") Boolean forzar) {
         try {

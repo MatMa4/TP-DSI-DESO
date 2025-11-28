@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.Date;
 
@@ -24,4 +26,7 @@ public class Pago {
     
     private Date fecha;
     private float monto;
+    @OneToOne
+    @JoinColumn(name = "id_metodo_de_pago")
+    private MetodoDePago formaDePago;
 }

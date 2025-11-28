@@ -4,12 +4,16 @@
  */
 package TP_Back.appSpringTP.modelo.pago;
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import java.util.Date;
 
 /**
  *
  * @author mateo
  */
+@Entity
+@DiscriminatorValue("TarjetaCredito")
 public class TarjetaCredito extends MetodoDePago{
     private String tipo;
     private String banco;
