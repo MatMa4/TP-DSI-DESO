@@ -63,19 +63,22 @@ loop mientras los datos sean incorrectos o el usuario decida cargar otro huéspe
           DirecDAO -> GDH
           deactivate DirecDAO
           activate GDH
-          GDH -> HuespedExistente: setApellido(HuespedDTO.apellido)
-          GDH -> HuespedExistente: setNombre(HuespedDTO.nombre)
-          GDH -> HuespedExistente: setTipoDocumento(HuespedDTO.tipoDocumento)
-          GDH -> HuespedExistente: setNumeroDocumento(HuespedDTO.numeroDocumento)
-          GDH -> HuespedExistente: setFechaNacimiento(HuespedDTO.fechaNacimiento)
-          GDH -> HuespedExistente: setDireccionHuesped(HuespedDTO.direccionHuesped)
-          GDH -> HuespedExistente: setTelefono(HuespedDTO.telefono)
-          GDH -> HuespedExistente: setEmail(HuespedDTO.email)
-          GDH -> HuespedExistente: setOcupacion(HuespedDTO.ocupacion)
-          GDH -> HuespedExistente: setNacionalidad(HuespedDTO.nacionalidad)
-          GDH -> HuespedExistente: setCuit(HuespedDTO.cuit)
-          GDH -> HuespedExistente: setPosicionIVA(HuespedDTO.posicionIVA)
-          GDH -> HuesDAO: GuradarHuesped(HuespedExistente)
+          create Huesped
+          GDH -> Huesped: Huesped()
+          Huesped -> GDH : Huesped
+          GDH -> Huesped: setApellido(HuespedDTO.apellido)
+          GDH -> Huesped: setNombre(HuespedDTO.nombre)
+          GDH -> Huesped: setTipoDocumento(HuespedDTO.tipoDocumento)
+          GDH -> Huesped: setNumeroDocumento(HuespedDTO.numeroDocumento)
+          GDH -> Huesped: setFechaNacimiento(HuespedDTO.fechaNacimiento)
+          GDH -> Huesped: setDireccionHuesped(HuespedDTO.direccionHuesped)
+          GDH -> Huesped: setTelefono(HuespedDTO.telefono)
+          GDH -> Huesped: setEmail(HuespedDTO.email)
+          GDH -> Huesped: setOcupacion(HuespedDTO.ocupacion)
+          GDH -> Huesped: setNacionalidad(HuespedDTO.nacionalidad)
+          GDH -> Huesped: setCuit(HuespedDTO.cuit)
+          GDH -> Huesped: setPosicionIVA(HuespedDTO.posicionIVA)
+          GDH -> HuesDAO: GuardarHuesped(Huesped)
           deactivate GDH
           activate HuesDAO
           HuesDAO -> GDH: Huesped guardado en BD
