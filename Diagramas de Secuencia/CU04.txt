@@ -4,7 +4,6 @@ actor Conserje
 participant "UI- Reservar habitacion" as UIR
 participant "Gestor de reservas" as GDR
 participant "ReservasDAO" as ResDAO
-participant "ReservasDTO" as ResDTO
 
 
 Conserje -> UIR: Solicita reservar habitaciones
@@ -25,18 +24,7 @@ alt Habitaciones disponibles
 Conserje -> UIR: Presionar boton de confirmacion
 activate UIR
 
-UIR -> GDR: crearReservasDTO()
-deactivate UIR
-activate GDR
-  GDR -> ResDTO: crearReservasDTO()
-  deactivate GDR
-  activate ResDTO
-  ResDTO -> GDR
-  deactivate ResDTO
-  activate GDR
-GDR -> UIR
-deactivate GDR
-activate UIR
+
 UIR -> Conserje: Mostrar listado de reservas con mensaje de confirmacion
 deactivate UIR
 Conserje -> UIR: Responde confirmacion
@@ -53,31 +41,27 @@ activate UIR
       end
     end
     
-  UIR -> GDR: f:=crearReservas(reservaDTO)
+  UIR -> GDR: f:=crearReservas(Lista<ReservaDTO>)
   deactivate UIR
   activate GDR
-  
-    GDR -> ResDAO: f:=crearReservas(reservaDTO)
-    deactivate GDR
-    activate ResDAO
-    ResDAO -> GDR: reservaCreada
-    deactivate ResDAO
-    activate GDR
-    
-    GDR -> Reserva: f:=crearReservas(reservaDTO)
-    deactivate GDR
-    activate Reserva
-    GDR -> Reserva: setIdReserva(reservaDTO.idReserva)
-    GDR -> Reserva: setFechaInicio(reservaDTO.fechaInicio)
-    GDR -> Reserva: setFechaFin(reservaDTO.fechaFin)
-    GDR -> Reserva: setEstado(reservaDTO.estado)
-    GDR -> Reserva: setNombre(reservaDTO.nombre)
-    GDR -> Reserva: setApellido(reservaDTO.apellido)
-    GDR -> Reserva: setTelefono(reservaDTO.telefono)
-    Reserva -> GDR: reservaCreada
-    deactivate Reserva
-    activate GDR
-    
+  loop para cada habitacion recervada
+  create Reserva
+  GDR -> Reserva: <<create>>
+  GDR -> Reserva: setIdReserva(reservaDTO.idReserva)
+  GDR -> Reserva: setFechaInicio(reservaDTO.fechaInicio)
+  GDR -> Reserva: setFechaFin(reservaDTO.fechaFin)
+  GDR -> Reserva: setEstado(reservaDTO.estado)
+  GDR -> Reserva: setNombre(reservaDTO.nombre)
+  GDR -> Reserva: setApellido(reservaDTO.apellido)
+  GDR -> Reserva: setTelefono(reservaDTO.telefono)
+  GDR -> Reserva: setHabitacion(habitacion)
+  end
+  GDR -> ResDAO: guardarEnBDD(Lista<Reserva>)
+  deactivate GDR
+  activate ResDAO
+  ResDAO -> GDR: reservas guardadas
+  deactivate ResDAO
+  activate GDR
   GDR -> UIR: reservaCreada
   deactivate GDR
   activate UIR
@@ -85,9 +69,10 @@ activate UIR
   deactivate UIR
   else Rechazar
   end
+  
 else no hay habitaciones disponibles del tipo solicitado
-  activate UIR
-  UIR -> Conserje: Mostrar mensaje de error no hay habitaciones disponibles del tipo solicitado
+ UIR -> Conserje: Mostrar mensaje de error no hay habitaciones disponibles del tipo solicitado
 end
+
 
 @enduml
