@@ -136,7 +136,7 @@ export default function Home() {
 
       try {
         const res = await fetch('http://localhost:8080/huespedes', {
-          method: 'POST',
+          method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(finalData),
         });
@@ -173,7 +173,7 @@ export default function Home() {
     if (!pendingFinalData) return;
     try {
       const res = await fetch('http://localhost:8080/huespedes?forzar=true', {
-        method: 'POST',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(pendingFinalData),
       });

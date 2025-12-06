@@ -25,7 +25,7 @@ export default function Dashboard() {
       }}>
         {/* CU 02 - Botón para ir a Buscar (y luego Alta) */}
         {/* En tu código local usa <Link href="..."> ... </Link> */}
-        <a href="/buscar-huesped" style={cardStyle}>
+        <a href="/buscarHuesped" style={cardStyle}>
           <div style={{ fontSize: '40px' }}>🔍</div>
           <h3>Buscar Huésped</h3>
           <p>CU 02 - Buscar, modificar o dar de alta nuevos huéspedes.</p>
