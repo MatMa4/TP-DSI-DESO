@@ -4,13 +4,16 @@
  */
 package TP_Back.appSpringTP.DTOs;
 
-import jakarta.persistence.Entity;
 import java.time.LocalDate;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
  * @author mateo
  */
+@Getter
+@Setter
 public class HuespedDTO {
   
     private String numeroDocumento;
@@ -29,62 +32,9 @@ public class HuespedDTO {
  
     public HuespedDTO() {
     }
-
-        //Getters
-    public String getApellido() {
-    return apellido;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public String getTipoDocumento() {
-        return tipoDocumento;
-    }
-
-    public String getNumeroDocumento() {
-        return numeroDocumento;
-    }
-
-    public LocalDate getFechaNacimiento() {
-        return fechaNacimiento;
-    }
-
-    public DireccionDTO getDireccionHuesped() {
-        return direccionHuesped;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getOcupacion() {
-        return ocupacion;
-    }
-
-    public String getNacionalidad() {
-        return nacionalidad;
-    }
-
-    public String getCuit() {
-        return cuit;
-    }
-
-    public String getPosicionIVA() {
-        return posicionIVA;
-    }
     
     public boolean getAlojado(){
         return alojado;
-    }
-    
-    public void setDireccion(DireccionDTO dir){
-        this.direccionHuesped = dir;
     }
 
     private HuespedDTO(Builder builder) {

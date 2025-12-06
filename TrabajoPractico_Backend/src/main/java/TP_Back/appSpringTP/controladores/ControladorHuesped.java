@@ -7,6 +7,9 @@ package TP_Back.appSpringTP.controladores;
 import TP_Back.appSpringTP.DTOs.HuespedDTO;
 import TP_Back.appSpringTP.excepciones.HuespedExistenteException;
 import TP_Back.appSpringTP.gestores.GestorHuespedes;
+import TP_Back.appSpringTP.modelo.direccion.Direccion;
+import TP_Back.appSpringTP.modelo.huesped.Huesped;
+import TP_Back.appSpringTP.repositorios.repositorioDireccion;
 import java.util.List;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -18,17 +21,20 @@ import org.springframework.web.bind.annotation.*;
 public class ControladorHuesped {
 
     private final GestorHuespedes gestorHuespedes;
+    
+    private final repositorioDireccion repoDir;
 
-    public ControladorHuesped(GestorHuespedes gestorHuespedes) {
+    public ControladorHuesped(GestorHuespedes gestorHuespedes, repositorioDireccion repoDir) {
         this.gestorHuespedes = gestorHuespedes;
+        this.repoDir = repoDir;
     }
     
     @PutMapping
     public ResponseEntity<?> agregarHuesped(@RequestBody HuespedDTO huesped,
                                             @RequestParam(defaultValue = "false") Boolean forzar) {
         try {
-            HuespedDTO guardado = gestorHuespedes.guardarHuesped(huesped, forzar);
-            return ResponseEntity.status(HttpStatus.CREATED).body(guardado);
+            gestorHuespedes.registrarHuesped(huesped, forzar);
+            return ResponseEntity.status(HttpStatus.CREATED).body(huesped.getNumeroDocumento());
         } catch (HuespedExistenteException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "CONFLICTO", "mensaje", e.getMessage()));
         }
@@ -47,6 +53,16 @@ public class ControladorHuesped {
             @RequestParam(required = false) String numeroDocumento) {
 
         return ResponseEntity.ok(gestorHuespedes.buscarHuesped(nombre, apellido, tipoDocumento, numeroDocumento));
+    }
+    @GetMapping("/obtener")
+    public ResponseEntity<Huesped> obtenerHuespedes(HuespedDTO huesped) {
+
+        return ResponseEntity.ok(gestorHuespedes.obtenerHuesped(huesped));
+    }
+    @GetMapping("/direcciones")
+    public ResponseEntity<List<Direccion>> obtenerDirecciones() {
+
+        return ResponseEntity.ok(repoDir.findAll());
     }
 
 }

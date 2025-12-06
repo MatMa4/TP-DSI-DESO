@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import TP_Back.appSpringTP.DTOs.DireccionDTO;
 import TP_Back.appSpringTP.DTOs.HuespedDTO;
+import TP_Back.appSpringTP.modelo.direccion.Direccion;
+import TP_Back.appSpringTP.modelo.huesped.Huesped;
 
 @Service
 public class GestorHuespedes {
@@ -34,25 +36,58 @@ public class GestorHuespedes {
         this.direccionDAO = direccionDAO;
     }
 
-    public HuespedDTO guardarHuesped(HuespedDTO h, Boolean forzar) {
+    public Boolean registrarHuesped(HuespedDTO h, Boolean forzar) {
         if (forzar){
-            DireccionDTO dir = h.getDireccionHuesped();
-            // Buscar si ya existe una dirección igual
-            Optional<DireccionDTO> existente = direccionDAO.findByCalleAndNumero(dir.getCalle(), dir.getNumero());
-
-            if (existente.isPresent()) {
-                // Reutilizar la dirección existente
-                h.setDireccion(existente.get());
-            } else {
-                // Guardar la nueva dirección primero
-                direccionDAO.save(dir);
-            }
-            return huespedDAO.save(h);
+            DireccionDTO direccionDto=h.getDireccionHuesped();
+            Direccion direccion = new Direccion();
+            direccion.setDepartamento(direccionDto.getDepartamento());
+            direccion.setCodigo(direccionDto.getCodigo());
+            direccion.setPiso(direccionDto.getPiso());
+            direccion.setId(direccionDto.getCalle(), direccionDto.getNumero(), direccionDto.getLocalidad(), direccionDto.getProvincia(), direccionDto.getPais());
+            direccionDAO.save(direccion);
+            Huesped huesped = new Huesped();
+            huesped.setNombre(h.getNombre());
+            huesped.setApellido(h.getApellido());
+            huesped.setTipoDocumento(h.getTipoDocumento());
+            huesped.setNumeroDocumento(h.getNumeroDocumento());
+            huesped.setFechaNacimiento(h.getFechaNacimiento());
+            huesped.setTelefono(h.getTelefono());
+            huesped.setEmail(h.getEmail());
+            huesped.setOcupacion(h.getOcupacion());
+            huesped.setNacionalidad(h.getNacionalidad());
+            huesped.setCuit(h.getCuit());
+            huesped.setPosicionIVA(h.getPosicionIVA());
+            huesped.setAlojado(h.getAlojado());
+            huesped.setDireccionHuesped(direccion);
+            huespedDAO.save(huesped);
+            return true;
             
         }else {
             Optional <HuespedDTO> optHuesp = huespedDAO.findByTipoDocumentoAndNumeroDocumento(h.getTipoDocumento(), h.getNumeroDocumento());
             if (optHuesp.isEmpty()){ 
-                return huespedDAO.save(h);
+                            DireccionDTO direccionDto=h.getDireccionHuesped();
+                Direccion direccion = new Direccion();
+                direccion.setDepartamento(direccionDto.getDepartamento());
+                direccion.setCodigo(direccionDto.getCodigo());
+                direccion.setPiso(direccionDto.getPiso());
+                direccion.setId(direccionDto.getCalle(), direccionDto.getNumero(), direccionDto.getLocalidad(), direccionDto.getProvincia(), direccionDto.getPais());
+                direccionDAO.save(direccion);
+                Huesped huesped = new Huesped();
+                huesped.setNombre(h.getNombre());
+                huesped.setApellido(h.getApellido());
+                huesped.setTipoDocumento(h.getTipoDocumento());
+                huesped.setNumeroDocumento(h.getNumeroDocumento());
+                huesped.setFechaNacimiento(h.getFechaNacimiento());
+                huesped.setTelefono(h.getTelefono());
+                huesped.setEmail(h.getEmail());
+                huesped.setOcupacion(h.getOcupacion());
+                huesped.setNacionalidad(h.getNacionalidad());
+                huesped.setCuit(h.getCuit());
+                huesped.setPosicionIVA(h.getPosicionIVA());
+                huesped.setAlojado(h.getAlojado());
+                huesped.setDireccionHuesped(direccion);
+                huespedDAO.save(huesped);
+                return true;
             } else {
                 throw new HuespedExistenteException("Huesped existente");
             }
@@ -64,6 +99,9 @@ public class GestorHuespedes {
     
     public List<HuespedDTO> buscarHuesped(String nombre, String apellido, String tipoDocumento, String numeroDocumento){
         return huespedDAO.buscarHuesped(nombre, apellido, tipoDocumento, numeroDocumento);
+    }
+    public Huesped obtenerHuesped(HuespedDTO huesped ){
+        return huespedDAO.obtenerHuesped(huesped);
     }
 }
 

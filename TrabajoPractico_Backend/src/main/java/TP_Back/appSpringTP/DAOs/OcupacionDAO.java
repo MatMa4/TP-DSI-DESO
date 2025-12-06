@@ -4,11 +4,7 @@
  */
 package TP_Back.appSpringTP.DAOs;
 
-import TP_Back.appSpringTP.DTOs.HabitacionDTO;
-import TP_Back.appSpringTP.DTOs.HuespedDTO;
-import TP_Back.appSpringTP.DTOs.ocupacion.OcupacionDTO;
-import java.util.Date;
-import java.util.List;
+import TP_Back.appSpringTP.modelo.ocupacion.Ocupacion;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,5 +13,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface OcupacionDAO {
-        public void crearOcupacion(OcupacionDTO ocupacion);
+        public void crearOcupacion(Ocupacion ocupacion);
 }

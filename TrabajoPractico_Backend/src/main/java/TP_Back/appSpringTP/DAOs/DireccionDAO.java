@@ -5,6 +5,7 @@
 package TP_Back.appSpringTP.DAOs;
 
 import TP_Back.appSpringTP.DTOs.DireccionDTO;
+import TP_Back.appSpringTP.modelo.direccion.Direccion;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 
@@ -15,5 +16,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface DireccionDAO {
     public Optional<DireccionDTO> findByCalleAndNumero(String calle, String numero);
-    public DireccionDTO save(DireccionDTO dir);
+    public Direccion save(Direccion dir);
 }

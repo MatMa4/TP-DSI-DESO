@@ -32,8 +32,7 @@ public class DireccionDAOImpl implements DireccionDAO {
         return repoDireccion.findByIdCalleAndIdNumero(calle, numero).map(huespedMapper::toDTO);
     }
     @Override
-    public DireccionDTO save(DireccionDTO dir){
-        Direccion d = huespedMapper.toEntity(dir);
-        return huespedMapper.toDTO(repoDireccion.save(d));
+    public Direccion save(Direccion dir){
+        return repoDireccion.save(dir);
     }
 }

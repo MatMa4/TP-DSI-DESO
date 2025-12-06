@@ -14,10 +14,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Entity
 @Table(name = "huesped")
+@Getter
+@Setter
 public class Huesped {
     
     @EmbeddedId
@@ -46,16 +50,7 @@ public class Huesped {
     private Direccion direccionHuesped;
  
     public Huesped(){
-
-    }
-
-        //Getters
-    public String getApellido() {
-    return apellido;
-    }
-
-    public String getNombre() {
-        return nombre;
+        this.id = new HuespedId();
     }
 
     public String getTipoDocumento() {
@@ -65,40 +60,16 @@ public class Huesped {
     public String getNumeroDocumento() {
         return this.id.getNumeroDocumento();
     }
-
-    public LocalDate getFechaNacimiento() {
-        return fechaNacimiento;
+    
+    public void setTipoDocumento(String tipo) {
+        this.id.setTipoDocumento(tipo);
     }
 
-    public Direccion getDireccionHuesped() {
-        return direccionHuesped;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getOcupacion() {
-        return ocupacion;
-    }
-
-    public String getNacionalidad() {
-        return nacionalidad;
-    }
-
-    public String getCuit() {
-        return cuit;
-    }
-
-    public String getPosicionIVA() {
-        return posicionIVA;
+    public void setNumeroDocumento(String numero) {
+        this.id.setNumeroDocumento(numero);
     }
     
-    public boolean getAlojado(){
+    public Boolean getAlojado(){
         return alojado;
     }
     private Huesped(Builder builder) {

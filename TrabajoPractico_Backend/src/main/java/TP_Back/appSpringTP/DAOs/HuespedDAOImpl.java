@@ -29,9 +29,8 @@ public class HuespedDAOImpl implements HuespedDAO {
         this.huespedMapper = huespedMapper;
     }
     @Override
-    public HuespedDTO save(HuespedDTO huesp){
-        Huesped h = huespedMapper.toEntity(huesp);
-        return huespedMapper.toDTO(repoHuesped.save(h));
+    public Huesped save(Huesped huesp){
+        return repoHuesped.save(huesp);
     }
     @Override
     public Optional<HuespedDTO> findByTipoDocumentoAndNumeroDocumento(String tipoDocumento, String numeroDocumento){
@@ -44,6 +43,10 @@ public class HuespedDAOImpl implements HuespedDAO {
     @Override
     public List<HuespedDTO> buscarHuesped(String nombre, String apellido, String tipoDoc, String numDoc){
         return huespedMapper.toDTOList(repoHuesped.buscarHuespedes(nombre, apellido, tipoDoc, numDoc));
+    }
+    @Override
+    public Huesped obtenerHuesped(HuespedDTO huesped){
+        return repoHuesped.findByIdTipoDocumentoAndIdNumeroDocumento(huesped.getTipoDocumento(), huesped.getNumeroDocumento()).get();
     }
     
 

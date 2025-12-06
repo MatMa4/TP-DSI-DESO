@@ -19,15 +19,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class OcupacionDAOImpl implements OcupacionDAO{
     @Autowired
-    private OcupacionMapper ocupacionMapper;
-    @Autowired
     private repositorioOcupacion repoOcupacion;
-    @Autowired
-    private HabitacionMapper habitacionMapper;
     @Override
-    public void crearOcupacion(OcupacionDTO ocupDTO){
-        Ocupacion ocupacion = ocupacionMapper.toEntity(ocupDTO);
-        ocupacion.setHabitacion(habitacionMapper.toEntity(ocupDTO.getHabitacion()));
+    public void crearOcupacion(Ocupacion ocupacion){
         repoOcupacion.save(ocupacion);
     }
 }

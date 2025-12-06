@@ -7,11 +7,15 @@ package TP_Back.appSpringTP.modelo.direccion;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import lombok.Getter;
+import lombok.Setter;
 /**
  *
  * @author mateo
  */
 @Entity
+@Getter
+@Setter
 public class Direccion {
     @EmbeddedId
     @JsonUnwrapped
@@ -37,39 +41,29 @@ public class Direccion {
     public Direccion(){
         this.id = new DireccionId();
     }
-    //Getters
-    public String getCalle() {
-        return id.getCalle();
-    }
 
-    public String getNumero() {
-        return id.getNumero();
+    public void setId(String calle, String numero, String localidad, String provincia, String pais){
+        this.id.setCalle(calle);
+        this.id.setNumero(numero);
+        this.id.setLocalidad(localidad);
+        this.id.setProvincia(provincia);
+        this.id.setPais(pais);
     }
-
-    public String getDepartamento() {
-        return departamento;
+    public String getCalle(){
+        return this.id.getCalle();
     }
-
-    public Integer getPiso() {
-        return piso;
+    public String getNumero(){
+        return this.id.getNumero();
     }
-
-    public Integer getCodigo() {
-        return codigo;
+    public String getLocalidad(){
+        return this.id.getLocalidad();
     }
-
-    public String getLocalidad() {
-        return id.getLocalidad();
+    public String getProvincia(){
+        return this.id.getProvincia();
     }
-
-    public String getProvincia() {
-        return id.getProvincia();
+    public String getPais(){
+        return this.id.getPais();
     }
-
-    public String getPais() {
-        return id.getPais();
-    }
-    
     private Direccion(Builder builder) {
         this.id = builder.id;
         this.departamento = builder.departamento;

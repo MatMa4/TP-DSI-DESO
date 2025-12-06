@@ -4,10 +4,15 @@
  */
 package TP_Back.appSpringTP.DTOs;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  *
  * @author mateo
  */
+@Getter
+@Setter
 public class DireccionDTO {
 
     private String calle;
@@ -33,38 +38,6 @@ public class DireccionDTO {
 
     public DireccionDTO(){
         
-    }
-    //Getters
-    public String getCalle() {
-        return calle;
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public String getDepartamento() {
-        return departamento;
-    }
-
-    public Integer getPiso() {
-        return piso;
-    }
-
-    public Integer getCodigo() {
-        return codigo;
-    }
-
-    public String getLocalidad() {
-        return localidad;
-    }
-
-    public String getProvincia() {
-        return provincia;
-    }
-
-    public String getPais() {
-        return pais;
     }
         private DireccionDTO(Builder builder) {
         this.calle = builder.calle;
