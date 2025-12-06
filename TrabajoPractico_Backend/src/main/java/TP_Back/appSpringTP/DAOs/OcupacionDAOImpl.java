@@ -20,7 +20,9 @@ import org.springframework.stereotype.Service;
 public class OcupacionDAOImpl implements OcupacionDAO{
     @Autowired
     private OcupacionMapper ocupacionMapper;
+    @Autowired
     private repositorioOcupacion repoOcupacion;
+    @Autowired
     private HabitacionMapper habitacionMapper;
     @Override
     public void crearOcupacion(OcupacionDTO ocupDTO){

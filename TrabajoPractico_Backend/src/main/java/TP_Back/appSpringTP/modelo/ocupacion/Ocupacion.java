@@ -42,6 +42,7 @@ public class Ocupacion {
     private Date fechaFin;
     private Time checkIn;
     private Time checkOut;
+    
     @OneToMany
     private List<Consumo> consumos;
     @ManyToMany
