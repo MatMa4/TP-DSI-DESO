@@ -5,6 +5,7 @@
 package TP_Back.appSpringTP.repositorios;
 
 import TP_Back.appSpringTP.modelo.habitacion.Habitacion;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

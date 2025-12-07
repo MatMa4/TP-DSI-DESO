@@ -26,6 +26,8 @@ public class HabitacionDAOImpl implements HabitacionDAO {
     
     @Autowired
     private repositorioReserva repoReserva;
+    
+    @Autowired
     private TP_Back.appSpringTP.mappers.HabitacionMapper habitacionMapper;
 
     @Override
@@ -101,3 +103,4 @@ public class HabitacionDAOImpl implements HabitacionDAO {
         
         return dto;
     }
+}
