@@ -1,0 +1,418 @@
+/* 1. Establecer el tamaño fijo para el contenido principal */
+.main-container {
+    width: 1440px;
+    height: 1080px; /* Nota: Usar una altura fija puede causar problemas de scroll */
+    background-color: white; /* Color de fondo del área de trabajo */
+    margin: 0 auto; /* Centrar horizontalmente */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.6); /* Opcional: para que se vea el borde */
+    overflow-y: auto; /* Permite el scroll vertical si el contenido excede 1080px */
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+
+/* 2. Asegurar que el cuerpo de la página permite el centrado */
+body {
+    background-color: #6B99C3;
+    margin: 0;
+    padding: 0;
+    /* Usar un min-height para asegurar que el centrado vertical funcione si lo implementas */
+    min-height: 100vh;
+    font-family: sans-serif;
+    color: #000000;
+    box-sizing: border-box;
+}
+
+label{
+    text-align: start;
+    margin-bottom: 10px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+
+
+.main_box{
+    background-color: #ffffff ;
+    text-align: center;
+    max-width: 1380px;
+    margin: 0;
+    margin-top: 20px;
+    padding: 20px 10px;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+.main_title{
+  font-family:cursive;
+}
+.full-grid-view{
+  box-sizing: border-box;
+}
+.grid-container{
+  max-height: 600px; 
+  max-width:1200px; 
+  overflow-y: scroll; 
+  overflow-x: auto; 
+  margin: 20px 0; 
+}
+.container{
+    display:flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+.tittle_box{
+    position: static;
+    background-color: #507393;
+    font-family: sans-serif;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    font-size: 60px; 
+    font-weight: bold;
+    top: 50px; 
+    width: 40vw;
+    margin: auto;
+    border-radius: 20px;
+    padding: 20px 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.box1{
+    display:flex;
+    flex-direction: column;
+    
+}
+.box1_simplebox{
+    display:flex;
+    flex-direction: column;
+    margin: 0 3vh 0 1vh;
+    margin-bottom: 20px;
+}
+.boxDocumento{
+    flex-direction: row;
+    display:flex;
+    flex-direction: column;
+    margin: 0 3vh 0 1vh;
+    z-index: 2;
+}
+input, select{
+    height: 32px;
+    border-radius: 30px;
+    width: 20vw;
+    background-color: #C2C3C5;
+    border-color: #818283;
+    border-width: 1px;
+}
+select{
+    width: 200px;
+    height: 40px;
+    background-color: #022E66 ;
+    color:#ffffff;
+    border-radius: 30px;
+}
+input:hover, select:hover{
+    text-decoration: none;
+    background-color: #e3e4e6;
+}
+select:hover{
+    background-color: #022E66;
+}
+input:focus,select:focus{
+    text-decoration: none;
+    outline: none;
+}
+.input-group input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    
+    /* Fondo claro y borde suave para el estilo moderno */
+    background-color: white; 
+    border: 1px solid #999999; /* Borde gris suave */
+    border-radius: 6px; /* Esquinas más suaves */
+    
+    /* Transición para el efecto de foco */
+    transition: border-color 0.2s ease-in-out;
+}
+
+.input-group input:focus {
+    border-color: #03469e; 
+    outline: none; 
+    box-shadow: 0 0 0 1px #03469e; 
+}
+.date-input-card {
+    /* Fondo y borde para la apariencia de tarjeta */
+    background-color: #D9D9D9; 
+    border-radius: 8px; /* Esquinas redondeadas */
+    padding: 10px 15px;
+ /* Permite que ocupe espacio uniformemente */
+}
+
+.date-input-card label {
+    font-weight: bold;
+    color: #004d99; 
+    display: block; 
+}
+
+.date-input-card input {
+    border: 1px solid #cccccc; 
+    background-color: #ffffff;
+}
+
+.type-label-button {
+    background-color: #022E66; 
+    color: white;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-radius: 6px 0 0 6px; 
+    height: 40px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 60px;
+    margin: 0;
+}
+
+
+.room-type-search-line select {
+    border-radius: 0 6px 6px 0; 
+}
+.room-type-search-line {
+    display: flex;
+    align-items: center;
+}
+.room-type-select-override {
+    width: auto !important; 
+}
+
+.input_box{
+    background-color: #C2C3C5;
+    padding-left: 10px;
+    padding-right: 10px;
+    z-index: 1;
+    left: 10px;
+}
+.input_box_documento{
+    position: relative;
+    background-color: #C2C3C5;
+    width: 15vw;
+    padding-left: 95px;
+    padding-right: 10px;
+    left: -85px;
+
+
+}
+.error {
+    color: red;
+    font-size: 0.85rem;
+    height: 20px;
+    margin-bottom: -20px;
+    text-align: left;    
+    width: 100%;
+    max-width: 370px;
+}
+.documento_inputs {
+    position: relative;
+    display: flex;
+    gap: 8px;
+    align-items: center; 
+}
+.stage{
+    font-size:  0.85rem;
+    font-family: italic;
+}
+/* Fondo borroso */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10050; /* subir para asegurarse que quede encima de todos */
+}
+
+/* Caja del modal */
+.modal {
+  background: white;
+  border-radius: 12px;
+  padding: 30px 40px;
+  text-align: center;
+  width: 600px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  z-index: 10051;
+}
+
+.modal h2 {
+  margin-top: 10px;
+  font-size: 40px;
+  color: #333;
+}
+
+.modal p {
+  color: #555;
+  font-size: 20px;
+  margin: 10px 0 20px 0;
+  white-space: pre-wrap;
+}
+
+.modal-icon {
+  font-size: 40px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.btn-cancel {
+  position: relative;
+  background: #eef1f6;
+  border: none;
+  color: #2d4f7c;
+  padding: 8px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  width: auto;
+}
+
+.btn-accept {
+  position: relative;
+  background: #022E66;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  padding: 8px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  width: auto;
+}
+
+.btn-accept.yellow {
+  background: #FFA500;
+}
+
+.btn-accept.yellow:hover {
+  background: #FF8C00;
+}
+
+.btn-cancel:hover {
+  background: #dde4ef;
+}
+
+.btn-accept:hover {
+  background: #033577;
+}
+
+.btn-accept.yellow:hover {
+  background: #FF8C00;
+}
+
+.btn-cancel:hover {
+  background: #dde4ef;
+}
+.btn-accept:disabled {
+    background-color: #cccccc !important; 
+    color: #666666 !important; 
+    cursor: not-allowed; 
+    box-shadow: none; 
+    opacity: 0.8;
+}
+
+.btn-accept:disabled:hover {
+    background-color: #cccccc !important; 
+}
+
+.completion-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #6B99C3;
+  font-size: 48px;
+  font-weight: bold;
+  color: #ffffff;
+  font-family: sans-serif;
+  z-index: 10060;
+}
+
+
+
+/*Grilla de estados*/
+.disponibilidad-table{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 5px;
+}
+
+.disponibilidad-table td.selected {
+    background-color: #ffc400 !important; 
+    color: #000000; 
+    border: 1px solid #000000;
+}
+.data-cell{
+  padding: 10px;
+}
+
+.disponibilidad-table thead {
+    position: sticky; 
+    top: 0;           
+    z-index: 20;      
+    background-color: #f0f0f0; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+}
+
+.disponibilidad-table th {
+    background-color: inherit; 
+    border: 1px solid #999999;
+    padding: 12px 2px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    height: 40px;
+}
+.disponibilidad-table td {
+    border: 1px solid #999999;
+    padding: 12px 2px;
+    text-align: center;
+    user-select: none;
+    height: 40px;
+    white-space: nowrap;
+}
+
+/*fecha*/
+.disponibilidad-table td.date-cell {
+    position: sticky; 
+    left: 0; 
+    z-index: 15; 
+    background-color: #f7f7f7;
+    white-space: nowrap;
+    min-width: 100px;
+    
+}
+/*Estados de grilla*/
+.estado-Disponible {
+    background-color: #4AC881; /* Verde más claro */
+}
+.estado-Reservada{
+  background-color: #FFD138;
+}
+.estado-Ocupada{
+  background-color: #FF6D6D;
+}
+.estado-Fueradeservicio{
+  background-color: #982B4F;
+}
