@@ -48,7 +48,7 @@ body {
 .form-container {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 40px;
     width: 350px; /* Ancho FIJO */
 }
 
@@ -79,65 +79,71 @@ body {
 }
 
 /* ========================================================= */
-/* === SECCIÓN CRÍTICA: DOCUMENTO (Superposición en PX) === */
-/* ========================================================= */
-
-/* Contenedor Padre */
+/* documento*/
 .documento_inputs {
-    position: relative; /* Clave para el posicionamiento absoluto */
+    position: relative;
     display: flex;
-    width: 350px; /* Igual que los otros inputs */
+    gap: 8px;
+    width: 350px;       /* Ancho fijo igual al resto */
     height: 40px;
     align-items: center;
+    margin-bottom: 20px 
 }
-
-/* LA PASTILLA AZUL (Select) - FLOTA ENCIMA */
+.input_box_documento{
+    position: relative;
+    background-color: #C2C3C5;
+    width: 350px;
+    padding-left: 95px;
+    padding-right: 10px;
+    left: -85px;
+    border-radius: 30px
+}
+input, select{
+    position: relative;
+    height: 40px;
+    border-radius: 30px;
+    width: 20px;
+    background-color: #C2C3C5;
+    border-color: #818283;
+    border-width: 1px;
+    left:20 px;
+    z-index: 0;
+    
+}
 .select_documento {
-    /* --- COLORES --- */
-    background-color: #022E66 !important; /* Azul oscuro */
-    color: white !important; /* Letra blanca */
-    
-    /* --- GEOMETRÍA FIJA --- */
-    width: 100px !important;
-    height: 40px !important;
-    border-radius: 30px !important;
-    border: none !important;
-    padding-left: 15px !important;
-    font-size: 14px;
-    
-    /* --- SUPERPOSICIÓN --- */
-    position: absolute; 
+    /* Posición ABSOLUTA para que flote encima */
+    position: relative; 
     left: 0;
     top: 0;
-    z-index: 20; /* Flota SOBRE el input gris */
+    z-index: 20; /* Se pone al frente */
+
+    /* Estilo Visual */
+    background-color: #022E66 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 30px !important; /* Redondeado completo */
+    
+    /* Tamaño */
+    width: 100px !important;
+    height: 40px !important;
+    padding-left: 15px !important;
     
     cursor: pointer;
+    -webkit-appearance: none; /* Truco para que Chrome respete el azul */
 }
+.boxDocumento{
+    flex-direction: row;
+    display:flex;
+    flex-direction: column;
+    margin: 0 3vh 0 1vh;
+    z-index: 20;
 
-/* EL INPUT GRIS (Texto) - SE QUEDA ABAJO */
-.input_box_documento {
-    background-color: #C2C3C5 !important;
-    border: 1px solid #818283 !important;
-    border-radius: 30px !important;
-    color: black !important;
-    
-    height: 40px !important;
-    width: 350px !important; /* Ocupa todo el ancho */
-    
-    /* --- ESPACIADO --- */
-    /* Empujamos el texto 115px (100px de azul + 15px aire) para que no se tape */
-    padding-left: 15px !important; 
-    
-    box-sizing: border-box;
-    z-index: 10; /* Debajo del select */
+
 }
-
-/* ========================================================= */
-
 .form-actions {
     display: flex;
     justify-content: space-between;
-    margin-top: 40px;
+    margin-top: 120px;
     width: 350px;
 }
 

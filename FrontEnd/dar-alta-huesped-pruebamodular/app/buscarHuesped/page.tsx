@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from 'react';
 // Nota: Usamos window.location en lugar de useRouter para forzar la navegación en tu entorno
 import InputField from '../components/InputField';
-import DocumentoField from '../components/DocumentoField';
+import DocumentoFieldCU2 from '../components/DocumentoFieldCU2';
 import { validateBuscarForm } from './ValidacionDatosCU2'; 
 import '../styles/stylesCU2.css'; // Asegurate de que este import coincida con tu CSS actual
 
@@ -177,7 +177,7 @@ const BuscarHuesped = () => {
         <form onSubmit={handleSearch} className="form-container">
             <InputField label="Nombre" name="nombre" value={formData.nombre} onChange={handleChange} error={errors.nombre} />
             <InputField label="Apellido" name="apellido" value={formData.apellido} onChange={handleChange} error={errors.apellido} />
-            <DocumentoField tipoDocumento={formData.tipoDocumento} numeroDocumento={formData.numeroDocumento} onChange={handleChange} error={errors.numeroDocumento} highlight={!!errors.numeroDocumento} />
+            <DocumentoFieldCU2 tipoDocumento={formData.tipoDocumento} numeroDocumento={formData.numeroDocumento} onChange={handleChange} error={errors.numeroDocumento} highlight={!!errors.numeroDocumento} />
             
             <div className="form-actions">
                 <button type="button" className="btn-cancel" onClick={handleCancelar}>Cancelar</button>
