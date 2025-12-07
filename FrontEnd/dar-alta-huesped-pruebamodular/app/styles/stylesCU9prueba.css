@@ -104,8 +104,6 @@ input:focus,select:focus{
     padding-left: 95px;
     padding-right: 10px;
     left: -85px;
-
-
 }
 .error {
     color: red;

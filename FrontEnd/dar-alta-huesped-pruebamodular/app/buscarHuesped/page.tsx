@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 // Nota: Usamos window.location en lugar de useRouter para forzar la navegación en tu entorno
 import InputField from '../components/InputField';
 import DocumentoField from '../components/DocumentoField';
 import { validateBuscarForm } from './ValidacionDatosCU2'; 
-import '../styles/stylesCU2.css';
+import '../styles/stylesCU2.css'; // Asegurate de que este import coincida con tu CSS actual
 
 interface FormData {
   nombre: string;
@@ -19,6 +19,12 @@ interface HuespedResultado {
   apellido: string;
   tipoDocumento: string;
   numeroDocumento: string;
+}
+
+// <--- NUEVO: Interfaz para la configuración del orden
+interface SortConfig {
+  key: keyof HuespedResultado; // Solo permite claves que existan en HuespedResultado
+  direction: 'asc' | 'desc';
 }
 
 const BuscarHuesped = () => {
@@ -35,6 +41,9 @@ const BuscarHuesped = () => {
   const [busquedaRealizada, setBusquedaRealizada] = useState(false);
   const [seleccionadoId, setSeleccionadoId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  // <--- NUEVO: Estado para el ordenamiento
+  const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
 
   // --- MANEJADORES ---
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -67,6 +76,7 @@ const BuscarHuesped = () => {
     setIsLoading(true);
     setSeleccionadoId(null);
     setResultados([]); 
+    setSortConfig(null); // <--- NUEVO: Reseteamos el orden al hacer una nueva búsqueda
 
     try {
         // 2. Construir URL dinámica
@@ -104,8 +114,41 @@ const BuscarHuesped = () => {
     }
   };
 
+  // <--- NUEVO: Función para manejar el clic en los encabezados
+  const handleSort = (key: keyof HuespedResultado) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    
+    // Si ya estamos ordenando por esta columna y es ascendente, cambiamos a descendente
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  // <--- NUEVO: Calculamos los resultados ordenados dinámicamente
+  const resultadosOrdenados = useMemo(() => {
+    let sortedData = [...resultados];
+    if (sortConfig !== null) {
+      sortedData.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === 'asc' ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return sortedData;
+  }, [resultados, sortConfig]);
+
+  // <--- NUEVO: Helper para mostrar la flechita
+  const getSortIcon = (key: keyof HuespedResultado) => {
+    if (!sortConfig || sortConfig.key !== key) return null; // Sin icono
+    return sortConfig.direction === 'asc' ? ' ▲' : ' ▼';
+  };
+
   // --- NAVEGACIÓN "FUERZA BRUTA" (Infalible) ---
-  
   const handleSiguiente = () => {
       // CASO 1: Selección -> Modificar (Simulado)
       if (seleccionadoId) {
@@ -114,7 +157,6 @@ const BuscarHuesped = () => {
       // CASO 2: Sin selección o sin resultados -> Ir a ALTA (CU09)
       else {
           console.log("Redirigiendo a Alta de Huésped...");
-          // Usamos la ruta exacta de tu carpeta
           window.location.href = '/darAltaHuesped';
       }
   };
@@ -157,15 +199,25 @@ const BuscarHuesped = () => {
                     <table className="custom-table">
                         <thead>
                             <tr>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Tipo</th>
-                                <th>Nro Documento</th>
+                                {/* <--- NUEVO: Agregamos onClick y estilos a los TH */}
+                                <th onClick={() => handleSort('nombre')} style={{ cursor: 'pointer' }}>
+                                    Nombre {getSortIcon('nombre')}
+                                </th>
+                                <th onClick={() => handleSort('apellido')} style={{ cursor: 'pointer' }}>
+                                    Apellido {getSortIcon('apellido')}
+                                </th>
+                                <th onClick={() => handleSort('tipoDocumento')} style={{ cursor: 'pointer' }}>
+                                    Tipo {getSortIcon('tipoDocumento')}
+                                </th>
+                                <th onClick={() => handleSort('numeroDocumento')} style={{ cursor: 'pointer' }}>
+                                    Nro Documento {getSortIcon('numeroDocumento')}
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            {resultados.length > 0 ? (
-                                resultados.map((h) => (
+                            {/* <--- NUEVO: Usamos resultadosOrdenados en vez de resultados */}
+                            {resultadosOrdenados.length > 0 ? (
+                                resultadosOrdenados.map((h) => (
                                     <tr 
                                         key={h.numeroDocumento}
                                         onClick={() => setSeleccionadoId(h.numeroDocumento === seleccionadoId ? null : h.numeroDocumento)}

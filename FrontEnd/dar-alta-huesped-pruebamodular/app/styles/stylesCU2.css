@@ -1,30 +1,34 @@
-/* --- CONFIGURACIÓN BASICA --- */
+/* --- CSS EN PIXELES (FIJO) --- */
+
+/* 1. ESTRUCTURA PRINCIPAL */
 body {
     margin: 0;
     padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #507393;
-    overflow: hidden;
+    overflow: hidden; /* Evita scrolls innecesarios */
 }
 
 .buscar-huesped-layout {
     display: flex;
-    width: 100vw;
-    height: 100vh;
+    width: 1920px; /* Ancho fijo estándar */
+    height: 1080px; /* Alto fijo */
 }
 
-/* --- PANEL IZQUIERDO --- */
+/* 2. PANEL IZQUIERDO (Formulario) */
 .left-pane {
-    width: 35%;
-    min-width: 400px;
+    width: 500px; /* Ancho FIJO */
+    min-width: 500px;
     background-color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px;
+    padding-top: 60px;
+    padding-left: 40px;
+    padding-right: 40px;
     box-sizing: border-box;
     position: relative;
-    z-index: 50; /* Alto pero controlado */
+    z-index: 50; 
     box-shadow: 4px 0 10px rgba(0,0,0,0.1);
 }
 
@@ -36,113 +40,210 @@ body {
     text-align: center;
     font-size: 32px;
     margin-bottom: 50px;
-    width: 100%;
-    max-width: 350px;
+    width: 350px; /* Ancho fijo */
 }
 .header-title-box h1 { margin: 0; font-size: inherit; line-height: 1.2; }
 
-/* Contenedor del formulario LIMITADO para que no tape el lado derecho */
+/* Contenedor del formulario */
 .form-container {
     display: flex;
     flex-direction: column;
     gap: 25px;
-    width: 100%;
-    max-width: 320px; 
+    width: 350px; /* Ancho FIJO */
 }
 
-/* --- INPUTS --- */
-.box1_simplebox, .boxDocumento { width: 100%; }
-.box1_simplebox label, .box1 label {
-    font-size: 13px; color: #444; margin-left: 10px; margin-bottom: 4px; display: block;
+/* 3. ESTILOS DE LOS INPUTS */
+.box1_simplebox { 
+    width: 350px; 
 }
 
+.box1_simplebox label, .boxDocumento label {
+    font-size: 14px;
+    color: #444;
+    margin-left: 15px;
+    margin-bottom: 5px;
+    display: block;
+    text-align: left;
+}
+
+/* Input Normal (Nombre, Apellido) */
 .input_box {
     background-color: #C2C3C5 !important;
-    border: none !important; border-radius: 20px !important;
-    height: 35px !important; padding-left: 15px !important;
-    width: 100% !important;
-}
-
-/* --- DOCUMENTO FIELD (Superposición Azul/Gris) --- */
-.documento_inputs {
-    position: relative;
-    display: flex;
-    width: 100%;
-    height: 35px;
-}
-
-/* Select Azul */
-.select_documento {
-    background-color: #022E66 !important;
-    color: white !important;
-    border: none !important; border-radius: 20px !important;
-    height: 35px !important; width: 90px !important;
-    padding-left: 15px !important;
-    position: absolute; left: 0; top: 0;
-    z-index: 20;
-    cursor: pointer; appearance: none;
-}
-
-/* Input Gris */
-.input_box_documento {
-    background-color: #C2C3C5 !important;
-    border: none !important; border-radius: 20px !important;
-    height: 35px !important;
-    width: 100% !important;
-    padding-left: 100px !important; /* Espacio para la pastilla azul */
+    border: 1px solid #818283 !important;
+    border-radius: 30px !important;
+    height: 40px !important;
+    width: 350px !important;
+    padding-left: 20px !important;
+    font-size: 16px;
     box-sizing: border-box;
 }
 
-.form-actions {
-    display: flex; justify-content: space-between; margin-top: 40px; width: 100%;
-}
-.btn-cancel {
-    background-color: #C2C3C5; color: #555; border: none;
-    padding: 10px 30px; border-radius: 20px; font-weight: bold; cursor: pointer;
-}
-.btn-search {
-    background-color: #022E66; color: white; border: none;
-    padding: 10px 30px; border-radius: 20px; font-weight: bold; cursor: pointer;
+/* ========================================================= */
+/* === SECCIÓN CRÍTICA: DOCUMENTO (Superposición en PX) === */
+/* ========================================================= */
+
+/* Contenedor Padre */
+.documento_inputs {
+    position: relative; /* Clave para el posicionamiento absoluto */
+    display: flex;
+    width: 350px; /* Igual que los otros inputs */
+    height: 40px;
+    align-items: center;
 }
 
-/* --- PANEL DERECHO --- */
+/* LA PASTILLA AZUL (Select) - FLOTA ENCIMA */
+.select_documento {
+    /* --- COLORES --- */
+    background-color: #022E66 !important; /* Azul oscuro */
+    color: white !important; /* Letra blanca */
+    
+    /* --- GEOMETRÍA FIJA --- */
+    width: 100px !important;
+    height: 40px !important;
+    border-radius: 30px !important;
+    border: none !important;
+    padding-left: 15px !important;
+    font-size: 14px;
+    
+    /* --- SUPERPOSICIÓN --- */
+    position: absolute; 
+    left: 0;
+    top: 0;
+    z-index: 20; /* Flota SOBRE el input gris */
+    
+    cursor: pointer;
+}
+
+/* EL INPUT GRIS (Texto) - SE QUEDA ABAJO */
+.input_box_documento {
+    background-color: #C2C3C5 !important;
+    border: 1px solid #818283 !important;
+    border-radius: 30px !important;
+    color: black !important;
+    
+    height: 40px !important;
+    width: 350px !important; /* Ocupa todo el ancho */
+    
+    /* --- ESPACIADO --- */
+    /* Empujamos el texto 115px (100px de azul + 15px aire) para que no se tape */
+    padding-left: 15px !important; 
+    
+    box-sizing: border-box;
+    z-index: 10; /* Debajo del select */
+}
+
+/* ========================================================= */
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    width: 350px;
+}
+
+.btn-cancel {
+    background-color: #C2C3C5;
+    color: #555;
+    border: none;
+    width: 140px;
+    height: 40px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-search {
+    background-color: #022E66;
+    color: white;
+    border: none;
+    width: 140px;
+    height: 40px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* 4. PANEL DERECHO (Resultados) */
 .right-pane {
-    width: 65%;
+    width: 1420px; 
     background-color: #507393;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 40px;
     box-sizing: border-box;
-    z-index: 1;
 }
+
 .empty-state { width: 100%; height: 100%; }
 
 .results-card {
     background-color: white;
-    width: 100%; max-width: 950px;
-    height: 85%; max-height: 800px;
+    width: 1100px;
+    height: 800px;
     border-radius: 40px;
-    padding: 20px;
-    display: flex; flex-direction: column;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
     box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     position: relative;
     z-index: 10;
 }
 
-.results-header { text-align: center; font-weight: bold; color: #444; margin-bottom: 20px; }
-.table-scroll-container { flex: 1; overflow-y: auto; padding-right: 5px; }
+.results-header {
+    text-align: center;
+    font-weight: bold;
+    color: #444;
+    font-size: 24px;
+    margin-bottom: 30px;
+}
 
-.custom-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-.custom-table th { text-align: left; color: #999; font-weight: normal; padding: 10px; border-bottom: 1px solid #e0e0e0; }
-.custom-table td { padding: 12px 10px; border-bottom: 1px solid #f0f0f0; color: #333; cursor: pointer; }
+.table-scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* TABLA */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+.custom-table th {
+    text-align: left;
+    color: #999;
+    font-weight: normal;
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.custom-table td {
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+    cursor: pointer;
+}
+
 .custom-table tr:hover { background-color: #f5f9fc; }
 .selected-row { background-color: #e3f2fd !important; font-weight: 600; }
 
-.results-footer { margin-top: 15px; display: flex; justify-content: flex-end; }
-/* Botón Siguiente con Z-Index Extremo */
+.results-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
 .btn-next {
-    background-color: #022E66; color: white; border: none;
-    padding: 10px 40px; border-radius: 20px; font-weight: bold; cursor: pointer;
-    position: relative; z-index: 9999 !important; pointer-events: auto !important;
+    background-color: #022E66;
+    color: white;
+    border: none;
+    width: 160px;
+    height: 45px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    position: relative;
+    z-index: 9999 !important;
 }
