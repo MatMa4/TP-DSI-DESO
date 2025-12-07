@@ -12,36 +12,26 @@ package TP_Back.appSpringTP.modelo.direccion;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
+import lombok.Getter;
+import lombok.Setter;
 
+
+@Getter
+@Setter
 @Embeddable
 public class DireccionId implements Serializable {
     private String calle;
-    private String numero;
+    private Integer numero;
     private String localidad;
     private String provincia;
     private String pais;
 
     public DireccionId() {}
 
-    public DireccionId(String calle, String numero) {
+    public DireccionId(String calle, Integer numero) {
         this.calle = calle;
         this.numero = numero;
     }
-
-    public String getCalle() { return calle; }
-    public void setCalle(String calle) { this.calle = calle; }
-
-    public String getNumero() { return numero; }
-    public void setNumero(String numero) { this.numero = numero; }
-    
-    public String getLocalidad() { return localidad; }
-    public void setLocalidad(String localidad) { this.localidad = localidad; }
-    
-    public String getProvincia() { return provincia; }
-    public void setProvincia(String provincia ) { this.provincia =provincia ; }
-    
-    public String getPais() { return pais; }
-    public void setPais(String pais ) { this.pais =pais ; }
     
     
 
