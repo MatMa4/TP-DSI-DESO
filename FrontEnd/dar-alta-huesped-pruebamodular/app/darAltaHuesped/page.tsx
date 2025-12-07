@@ -3,7 +3,6 @@ import '../styles/stylesCU9prueba.css';
 import React, { useState } from 'react';
 
 // --- IMPORTACIONES DE COMPONENTES ---
-// Asegúrate de que estos archivos existan en tu carpeta componentss
 import InputField from '../components/InputField';
 import DocumentoField from '../components/DocumentoField';
 import DireccionHuesped from '../components/DireccionHuesped';
@@ -11,9 +10,7 @@ import ModalConfirmacion from '../components/ModalConfirmacion';
 import ModalExito from '../components/ModalExito';
 
 // --- IMPORTACIONES DE TIPOS Y LÓGICA ---
-// Importamos los tipos desde el archivo centralizado
 import { FormData } from '../types';
-// Importamos la función de validación
 import { validateHuespedForm } from './ValidacionLogicaErrores'; 
 
 // Estado inicial 
@@ -50,11 +47,12 @@ export default function Home() {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [pendingFinalData, setPendingFinalData] = useState<any | null>(null);
+  
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [highlightDocumento, setHighlightDocumento] = useState(false);
-  const [showCompletionScreen, setShowCompletionScreen] = useState(false);
 
   // --- MANEJADORES DE ESTADO ---
 
@@ -94,17 +92,11 @@ export default function Home() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // --- AQUÍ ESTÁ LA MAGIA MODULAR ---
-    // En lugar de las 50 líneas de if/else, llamamos a la función importada:
     const newErrors = validateHuespedForm(formData);
-    // ----------------------------------
-
     setErrors(newErrors);
 
-    // Si no hay errores (objeto vacío), procedemos
     if (Object.keys(newErrors).length === 0) {
       
-      // Transformación de datos (Mayúsculas, valores por defecto, etc.)
       const transformedData = {
         ...formData,
         numeroDocumento: formData.numeroDocumento ? formData.numeroDocumento.toUpperCase() : formData.numeroDocumento,
@@ -197,17 +189,22 @@ export default function Home() {
     setShowModal(false);
   };
 
+  // CASO 1: Confirmar Cancelación -> IR AL MENÚ
   const handleConfirmCancel = () => {
     resetForm();
     setShowCancelModal(false);
-    setShowCompletionScreen(true);
+    // Redirección infalible al menú principal
+    window.location.href = '/';
   };
 
+  // CASO 2: Éxito -> Opción "NO" (Cerrar) -> IR AL MENÚ
   const handleSuccessClose = () => {
-    setShowCompletionScreen(true);
     setShowSuccessModal(false);
+    // Redirección infalible al menú principal
+    window.location.href = '/';
   };
 
+  // CASO 3: Éxito -> Opción "SI" (Confirmar) -> LIMPIAR Y SEGUIR AQUÍ
   const handleSuccessConfirm = () => {
     resetForm();
     setShowSuccessModal(false);
@@ -223,104 +220,31 @@ export default function Home() {
       <form className="main_box" onSubmit={handleSubmit} noValidate>
         <div className="container">
           <div className="box1">
-            <InputField
-              label="Nombre"
-              name="nombre"
-              value={formData.nombre}
-              onChange={handleChange}
-              error={errors.nombre}
-              isRequired={true}
-            />
-            <InputField
-              label="CUIT"
-              name="cuit"
-              value={formData.cuit}
-              onChange={handleChange}
-              error={errors.cuit}
-            />
-            <InputField
-              label="Fecha de Nacimiento"
-              name="fechaNacimiento"
-              value={formData.fechaNacimiento}
-              onChange={handleChange}
-              error={errors.fechaNacimiento}
-              type="date"
-              isRequired={true}
-            />
+            <InputField label="Nombre" name="nombre" value={formData.nombre} onChange={handleChange} error={errors.nombre} isRequired={true} />
+            <InputField label="CUIT" name="cuit" value={formData.cuit} onChange={handleChange} error={errors.cuit} />
+            <InputField label="Fecha de Nacimiento" name="fechaNacimiento" value={formData.fechaNacimiento} onChange={handleChange} error={errors.fechaNacimiento} type="date" isRequired={true} />
           </div>
 
           <div className="box1">
-            <InputField
-              label="Apellido"
-              name="apellido"
-              value={formData.apellido}
-              onChange={handleChange}
-              error={errors.apellido}
-              isRequired={true}
-            />
-            <InputField
-              label="Teléfono"
-              name="telefono"
-              value={formData.telefono}
-              onChange={handleChange}
-              error={errors.telefono}
-              type="tel"
-              isRequired={true}
-            />
-            <InputField
-              label="Posición IVA"
-              name="posicionIVA"
-              value={formData.posicionIVA}
-              onChange={handleChange}
-              error={errors.posicionIVA}
-            />
+            <InputField label="Apellido" name="apellido" value={formData.apellido} onChange={handleChange} error={errors.apellido} isRequired={true} />
+            <InputField label="Teléfono" name="telefono" value={formData.telefono} onChange={handleChange} error={errors.telefono} type="tel" isRequired={true} />
+            <InputField label="Posición IVA" name="posicionIVA" value={formData.posicionIVA} onChange={handleChange} error={errors.posicionIVA} />
           </div>
 
-          <DocumentoField
-            tipoDocumento={formData.tipoDocumento}
-            numeroDocumento={formData.numeroDocumento}
-            onChange={handleChange}
-            error={errors.numeroDocumento}
-            highlight={highlightDocumento}
-          />
+          <DocumentoField tipoDocumento={formData.tipoDocumento} numeroDocumento={formData.numeroDocumento} onChange={handleChange} error={errors.numeroDocumento} highlight={highlightDocumento} />
         </div>
 
-        <DireccionHuesped
-          direccion={formData.direccionHuesped}
-          onChange={handleChange}
-          errors={errors}
-        />
+        <DireccionHuesped direccion={formData.direccionHuesped} onChange={handleChange} errors={errors} />
 
         <div className="container">
           <div className="box1">
-            <InputField
-              label="Email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              error={errors.email}
-              type="email"
-            />
+            <InputField label="Email" name="email" value={formData.email} onChange={handleChange} error={errors.email} type="email" />
           </div>
           <div className="box1">
-            <InputField
-              label="Ocupación"
-              name="ocupacion"
-              value={formData.ocupacion}
-              onChange={handleChange}
-              error={errors.ocupacion}
-              isRequired={true}
-            />
+            <InputField label="Ocupación" name="ocupacion" value={formData.ocupacion} onChange={handleChange} error={errors.ocupacion} isRequired={true} />
           </div>
           <div className="box1">
-            <InputField
-              label="Nacionalidad"
-              name="nacionalidad"
-              value={formData.nacionalidad}
-              onChange={handleChange}
-              error={errors.nacionalidad}
-              isRequired={true}
-            />
+            <InputField label="Nacionalidad" name="nacionalidad" value={formData.nacionalidad} onChange={handleChange} error={errors.nacionalidad} isRequired={true} />
           </div>
         </div>
 
@@ -331,9 +255,7 @@ export default function Home() {
             </button>
           </div>
           <div className="box1">
-            <p>
-              <small><span style={{ color: 'red' }}>*</span> Campos obligatorios</small>
-            </p>
+            <p><small><span style={{ color: 'red' }}>*</span> Campos obligatorios</small></p>
           </div>
           <div className="box1">
             <button className="button2" type="submit">
@@ -373,12 +295,6 @@ export default function Home() {
         onClose={handleSuccessClose}
         onConfirm={handleSuccessConfirm}
       />
-
-      {showCompletionScreen && (
-        <div className="completion-screen">
-          Caso de Uso Terminado
-        </div>
-      )}
     </main>
   );
 };
