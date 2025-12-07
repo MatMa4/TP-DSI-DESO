@@ -9,6 +9,10 @@ import TP_Back.appSpringTP.repositorios.repositorioOcupacion;
 import TP_Back.appSpringTP.repositorios.repositorioReserva;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import TP_Back.appSpringTP.mappers.HabitacionMapper;
+import TP_Back.appSpringTP.DTOs.HabitacionDTO;
+import TP_Back.appSpringTP.DTOs.ocupacion.OcupacionDTO;
+import TP_Back.appSpringTP.DTOs.ReservaDTO;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,7 +32,7 @@ public class HabitacionDAOImpl implements HabitacionDAO {
     private repositorioReserva repoReserva;
     
     @Autowired
-    private TP_Back.appSpringTP.mappers.HabitacionMapper habitacionMapper;
+    private HabitacionMapper habitacionMapper;
 
     @Override
     public List<HabitacionDetalleDTO> getHabitacionesConDetalle(Date fechaInicio, Date fechaFin) {
@@ -49,16 +53,16 @@ public class HabitacionDAOImpl implements HabitacionDAO {
         for (Habitacion h : habitaciones) {
             
             // Mapeamos Habitacion -> HabitacionDTO
-            TP_Back.appSpringTP.DTOs.HabitacionDTO hDTO = habitacionMapper.toDTO(h);
+            HabitacionDTO hDTO = habitacionMapper.toDTO(h);
 
             // Filtramos y Mapeamos Reservas -> ReservaDTO (con truncado)
-            List<TP_Back.appSpringTP.DTOs.ReservaDTO> resDTOs = reservas.stream()
+            List<ReservaDTO> resDTOs = reservas.stream()
                 .filter(r -> r.getHabitacion().getNumero().equals(h.getNumero()))
                 .map(r -> mapReservaDTO(r, fechaInicio, fechaFin))
                 .collect(Collectors.toList());
                 
             // Filtramos y Mapeamos Ocupaciones -> OcupacionDTO (con truncado)
-            List<TP_Back.appSpringTP.DTOs.ocupacion.OcupacionDTO> ocuDTOs = ocupaciones.stream()
+            List<OcupacionDTO> ocuDTOs = ocupaciones.stream()
                 .filter(o -> o.getHabitacion().getNumero().equals(h.getNumero()))
                 .map(o -> mapOcupacionDTO(o, fechaInicio, fechaFin))
                 .collect(Collectors.toList());
@@ -69,8 +73,8 @@ public class HabitacionDAOImpl implements HabitacionDAO {
         return resultado;
     }
 
-    private TP_Back.appSpringTP.DTOs.ReservaDTO mapReservaDTO(Reserva r, Date rangoInicio, Date rangoFin) {
-        TP_Back.appSpringTP.DTOs.ReservaDTO dto = new TP_Back.appSpringTP.DTOs.ReservaDTO();
+    private ReservaDTO mapReservaDTO(Reserva r, Date rangoInicio, Date rangoFin) {
+        ReservaDTO dto = new ReservaDTO();
         dto.setIdReserva(r.getIdReserva());
         // Truncado de fechas (Math.max para inicio, Math.min para fin)
         dto.setFechaInicio(r.getFechaInicio().before(rangoInicio) ? rangoInicio : r.getFechaInicio());
@@ -84,8 +88,8 @@ public class HabitacionDAOImpl implements HabitacionDAO {
         return dto;
     }
 
-    private TP_Back.appSpringTP.DTOs.ocupacion.OcupacionDTO mapOcupacionDTO(Ocupacion o, Date rangoInicio, Date rangoFin) {
-        TP_Back.appSpringTP.DTOs.ocupacion.OcupacionDTO dto = new TP_Back.appSpringTP.DTOs.ocupacion.OcupacionDTO();
+    private OcupacionDTO mapOcupacionDTO(Ocupacion o, Date rangoInicio, Date rangoFin) {
+        OcupacionDTO dto = new OcupacionDTO();
         // Nota: OcupacionDTO requiere HabitacionDTO, pero aquí para evitar ciclos o complejidad extra 
         // podríamos ponerle null o mapear la habitación "light". Por performance/diseño, a veces se deja null 
         // si ya está dentro de una HabitacionDetalleDTO. Asignamos null por ahora para evitar re-mapear recursivamente.

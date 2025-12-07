@@ -20,7 +20,7 @@ public class HabitacionController {
     @Autowired
     private HabitacionDAO habitacionDAO;
 
-    @GetMapping("/disponibles")
+    @GetMapping
     public ResponseEntity<List<HabitacionDetalleDTO>> getHabitacionesDisponibles(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaInicio,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fechaFin) {
