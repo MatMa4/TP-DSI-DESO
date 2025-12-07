@@ -26,7 +26,7 @@ import lombok.Setter;
 public class Suite extends Habitacion {
     private float costoPorNoche;
     private Integer capacidad;
-    private String estado;
+
     private String descripcion;
     private Integer camaKingsize;
 }

@@ -5,6 +5,9 @@
 package TP_Back.appSpringTP.DAOs;
 
 import org.springframework.stereotype.Service;
+import TP_Back.appSpringTP.DTOs.HabitacionDetalleDTO;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -12,5 +15,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface HabitacionDAO {
-    
+    List<HabitacionDetalleDTO> getHabitacionesConDetalle(Date fechaInicio, Date fechaFin);
 }

@@ -12,5 +12,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author mateo
  */
 public interface repositorioHabitacion extends JpaRepository<Habitacion, Integer>{
-    
+    List<Habitacion> findByEstado(String estado);
 }

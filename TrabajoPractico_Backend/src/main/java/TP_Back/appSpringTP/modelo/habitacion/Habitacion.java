@@ -29,4 +29,6 @@ import lombok.Setter;
 public abstract class Habitacion {
     @Id
     private Integer numero;
+    
+    private String estado;
 }
