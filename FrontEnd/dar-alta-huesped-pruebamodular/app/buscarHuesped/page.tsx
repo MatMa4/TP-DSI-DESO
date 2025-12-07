@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+// Nota: Usamos window.location en lugar de useRouter para forzar la navegación en tu entorno
 import InputField from '../components/InputField';
 import DocumentoField from '../components/DocumentoField';
 import { validateBuscarForm } from './ValidacionDatosCU2'; 
@@ -38,10 +39,12 @@ const BuscarHuesped = () => {
   // --- MANEJADORES ---
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    // Forzar mayúsculas en Nombre y Apellido
     const valorFinal = (name === 'nombre' || name === 'apellido') ? value.toUpperCase() : value;
 
     setFormData(prev => ({ ...prev, [name]: valorFinal }));
     
+    // Limpiar error al escribir
     if (errors[name]) {
         setErrors(prev => {
             const newErrors = { ...prev };
@@ -54,6 +57,7 @@ const BuscarHuesped = () => {
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // 1. Validar formato
     const validationErrors = validateBuscarForm(formData);
     if (Object.keys(validationErrors).length > 0) {
         setErrors(validationErrors);
@@ -65,16 +69,18 @@ const BuscarHuesped = () => {
     setResultados([]); 
 
     try {
+        // 2. Construir URL dinámica
         const params = new URLSearchParams();
         if (formData.nombre.trim()) params.append('nombre', formData.nombre.trim());
         if (formData.apellido.trim()) params.append('apellido', formData.apellido.trim());
+        
+        // Solo enviar documento si hay número escrito
         if (formData.numeroDocumento.trim()) {
             params.append('numeroDocumento', formData.numeroDocumento.trim());
             params.append('tipoDocumento', formData.tipoDocumento);
         }
 
         const queryString = params.toString();
-        // Ajusta el puerto 8080 si tu backend corre en otro
         const urlFinal = `http://localhost:8080/huespedes/buscar${queryString ? `?${queryString}` : ''}`;
         
         console.log('Buscando en:', urlFinal);
@@ -92,62 +98,45 @@ const BuscarHuesped = () => {
 
     } catch (error) {
         console.error("Error:", error);
-        alert("Error de conexión con el Backend.");
+        alert("Error de conexión con el Backend. Revise que esté encendido.");
     } finally {
         setIsLoading(false);
     }
   };
 
-  // --- NAVEGACIÓN "FUERZA BRUTA" (Funciona siempre) ---
+  // --- NAVEGACIÓN "FUERZA BRUTA" (Infalible) ---
   
   const handleSiguiente = () => {
-      // CASO 1: Huésped seleccionado -> Simulamos CU10
+      // CASO 1: Selección -> Modificar (Simulado)
       if (seleccionadoId) {
-          alert(`Simulación: Ir a Modificar Huésped (DNI: ${seleccionadoId})`);
+          alert(`Simulación: Ir a Modificar Huésped (Documento: ${seleccionadoId})`);
       } 
       // CASO 2: Sin selección o sin resultados -> Ir a ALTA (CU09)
       else {
           console.log("Redirigiendo a Alta de Huésped...");
-          // Usamos window.location para forzar la carga, igual que un link normal
+          // Usamos la ruta exacta de tu carpeta
           window.location.href = '/darAltaHuesped';
       }
   };
 
   const handleCancelar = () => {
-      // Volver al inicio (Menú principal)
+      // Volver al Menú Principal
       window.location.href = '/';
   };
 
   return (
     <div className="buscar-huesped-layout">
-      {/* IZQUIERDA: FORMULARIO */}
+      {/* PANEL IZQUIERDO */}
       <div className="left-pane">
         <div className="header-title-box">
             <h1>Buscar<br />Huésped</h1>
         </div>
 
         <form onSubmit={handleSearch} className="form-container">
-            <InputField 
-                label="Nombre"
-                name="nombre"
-                value={formData.nombre}
-                onChange={handleChange}
-                error={errors.nombre}
-            />
-            <InputField 
-                label="Apellido"
-                name="apellido"
-                value={formData.apellido}
-                onChange={handleChange}
-                error={errors.apellido}
-            />
-            <DocumentoField 
-                tipoDocumento={formData.tipoDocumento}
-                numeroDocumento={formData.numeroDocumento}
-                onChange={handleChange}
-                error={errors.numeroDocumento}
-                highlight={!!errors.numeroDocumento}
-            />
+            <InputField label="Nombre" name="nombre" value={formData.nombre} onChange={handleChange} error={errors.nombre} />
+            <InputField label="Apellido" name="apellido" value={formData.apellido} onChange={handleChange} error={errors.apellido} />
+            <DocumentoField tipoDocumento={formData.tipoDocumento} numeroDocumento={formData.numeroDocumento} onChange={handleChange} error={errors.numeroDocumento} highlight={!!errors.numeroDocumento} />
+            
             <div className="form-actions">
                 <button type="button" className="btn-cancel" onClick={handleCancelar}>Cancelar</button>
                 <button type="submit" className="btn-search" disabled={isLoading}>
@@ -157,7 +146,7 @@ const BuscarHuesped = () => {
         </form>
       </div>
 
-      {/* DERECHA: RESULTADOS */}
+      {/* PANEL DERECHO */}
       <div className="right-pane">
         {!busquedaRealizada ? (
             <div className="empty-state"></div>
@@ -199,7 +188,7 @@ const BuscarHuesped = () => {
                     </table>
                 </div>
                 <div className="results-footer">
-                    {/* Botón Siguiente con ESTILOS FORZADOS para asegurar el clic */}
+                    {/* Botón con Z-INDEX forzado para asegurar clic */}
                     <button 
                         type="button" 
                         className="btn-next" 
