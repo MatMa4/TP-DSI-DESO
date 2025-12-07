@@ -19,6 +19,7 @@ public interface HuespedDAO {
     public Huesped save(Huesped huesp);
     public Optional<HuespedDTO> findByTipoDocumentoAndNumeroDocumento(String tipoDocumento, String numeroDocumento);
     public List<HuespedDTO> findAll();
-    public List<HuespedDTO> buscarHuesped(String nombre, String apellido, String tipoDoc, String numDoc);
+    public List<HuespedDTO> buscarHuesped(HuespedDTO huesped);
     public Huesped obtenerHuesped(HuespedDTO huesped);
+    public HuespedDTO consultarDocumento(String tipo, String numero);
 }

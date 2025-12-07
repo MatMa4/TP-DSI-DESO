@@ -46,18 +46,20 @@ public class ControladorHuesped {
     }
     
     @GetMapping("/buscar")
-    public ResponseEntity<List<HuespedDTO>> buscarHuespedes(
-            @RequestParam(required = false) String nombre,
-            @RequestParam(required = false) String apellido,
-            @RequestParam(required = false) String tipoDocumento,
-            @RequestParam(required = false) String numeroDocumento) {
+    public ResponseEntity<List<HuespedDTO>> buscarHuespedes(@RequestBody HuespedDTO huesped) {
 
-        return ResponseEntity.ok(gestorHuespedes.buscarHuesped(nombre, apellido, tipoDocumento, numeroDocumento));
+        return ResponseEntity.ok(gestorHuespedes.buscarHuesped(huesped));
     }
     @GetMapping("/obtener")
-    public ResponseEntity<Huesped> obtenerHuespedes(HuespedDTO huesped) {
-
+    public ResponseEntity<Huesped> obtenerHuespedes(@RequestBody HuespedDTO huesped) {
+        System.out.println(huesped.getTipoDocumento());
+        System.out.println(huesped.getNumeroDocumento());
         return ResponseEntity.ok(gestorHuespedes.obtenerHuesped(huesped));
+    }
+    @GetMapping("/consultarDocumento")
+    public ResponseEntity<HuespedDTO> consultarDocumento(@RequestParam String tipo, @RequestParam String numero) {
+
+        return ResponseEntity.ok(gestorHuespedes.consultarDocumento(tipo, numero));
     }
     @GetMapping("/direcciones")
     public ResponseEntity<List<Direccion>> obtenerDirecciones() {

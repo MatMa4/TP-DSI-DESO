@@ -41,14 +41,19 @@ public class HuespedDAOImpl implements HuespedDAO {
         return huespedMapper.toDTOList(repoHuesped.findAll());
     }
     @Override
-    public List<HuespedDTO> buscarHuesped(String nombre, String apellido, String tipoDoc, String numDoc){
-        return huespedMapper.toDTOList(repoHuesped.buscarHuespedes(nombre, apellido, tipoDoc, numDoc));
+    public List<HuespedDTO> buscarHuesped(HuespedDTO h){
+        return huespedMapper.toDTOList(repoHuesped.buscarHuespedes(h.getNombre(), h.getApellido(), h.getTipoDocumento(), h.getNumeroDocumento()));
     }
     @Override
     public Huesped obtenerHuesped(HuespedDTO huesped){
+        System.out.println(huesped.getTipoDocumento());
+        System.out.println(huesped.getNumeroDocumento());
         return repoHuesped.findByIdTipoDocumentoAndIdNumeroDocumento(huesped.getTipoDocumento(), huesped.getNumeroDocumento()).get();
     }
-    
+    @Override
+    public HuespedDTO consultarDocumento(String tipoDocumento, String numeroDocumento){
+        return huespedMapper.toDTO(repoHuesped.findByIdTipoDocumentoAndIdNumeroDocumento(tipoDocumento, numeroDocumento).get());
+    }
 
 
 }

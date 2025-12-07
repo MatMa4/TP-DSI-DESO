@@ -10,8 +10,6 @@ import TP_Back.appSpringTP.DTOs.ocupacion.OcupacionDTO;
 import TP_Back.appSpringTP.mappers.HabitacionMapper;
 import TP_Back.appSpringTP.mappers.HuespedMapper;
 import TP_Back.appSpringTP.modelo.ocupacion.Ocupacion;
-import java.util.HashSet;
-import java.util.Set;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

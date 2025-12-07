@@ -97,11 +97,14 @@ public class GestorHuespedes {
         return huespedDAO.findAll();
     }
     
-    public List<HuespedDTO> buscarHuesped(String nombre, String apellido, String tipoDocumento, String numeroDocumento){
-        return huespedDAO.buscarHuesped(nombre, apellido, tipoDocumento, numeroDocumento);
+    public List<HuespedDTO> buscarHuesped(HuespedDTO huesped){
+        return huespedDAO.buscarHuesped(huesped);
     }
     public Huesped obtenerHuesped(HuespedDTO huesped ){
         return huespedDAO.obtenerHuesped(huesped);
+    }
+    public HuespedDTO consultarDocumento(String tipoDocumento, String numeroDocumento){
+        return huespedDAO.consultarDocumento(tipoDocumento, numeroDocumento);
     }
 }
 
