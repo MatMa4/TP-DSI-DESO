@@ -400,3 +400,26 @@ Table "SPRING_SESSION" not found; SQL statement:
 DELETE FROM SPRING_SESSION
 WHERE EXPIRY_TIME < ?
  [42102-232]
+2025-12-08 16:16:24.890063-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "INSERT INTO HABITACION (\000d\000a    CAMA_DOBLES,\000d\000a    CAMA_KINGSIZE,\000d\000a    CAMAS_INDIVIDUALES,\000d\000a    CAPACIDAD,\000d\000a    COSTO_POR_NOCHE,\000d\000a    NUMERO,\000d\000a    TIPO_HABITACION,\000d\000a    DESCRIPCION,\000d\000a    ESTADO\000d\000a) VALUES\000d\000a(1,\000d\000a 1,\000d\000a 0,\000d\000a 2,\000d\000a 90560.0\000d\000a [*]301,\000d\000a 'DobleSuperior',\000d\000a 'Habitación amplia con cama doble y mobiliario mejorado.',\000d\000a 'HABITABLE')"; se esperaba "[, ., ::, AT, FORMAT, *, /, %, +, -, ||, NOT, IS, ILIKE, REGEXP, AND, OR, ,, )"
+Syntax error in SQL statement "INSERT INTO HABITACION (\000d\000a    CAMA_DOBLES,\000d\000a    CAMA_KINGSIZE,\000d\000a    CAMAS_INDIVIDUALES,\000d\000a    CAPACIDAD,\000d\000a    COSTO_POR_NOCHE,\000d\000a    NUMERO,\000d\000a    TIPO_HABITACION,\000d\000a    DESCRIPCION,\000d\000a    ESTADO\000d\000a) VALUES\000d\000a(1,\000d\000a 1,\000d\000a 0,\000d\000a 2,\000d\000a 90560.0\000d\000a [*]301,\000d\000a 'DobleSuperior',\000d\000a 'Habitación amplia con cama doble y mobiliario mejorado.',\000d\000a 'HABITABLE')"; expected "[, ., ::, AT, FORMAT, *, /, %, +, -, ||, NOT, IS, ILIKE, REGEXP, AND, OR, ,, )"; SQL statement:
+INSERT INTO HABITACION (
+    CAMA_DOBLES,
+    CAMA_KINGSIZE,
+    CAMAS_INDIVIDUALES,
+    CAPACIDAD,
+    COSTO_POR_NOCHE,
+    NUMERO,
+    TIPO_HABITACION,
+    DESCRIPCION,
+    ESTADO
+) VALUES
+(1,
+ 1,
+ 0,
+ 2,
+ 90560.0
+ 301,
+ 'DobleSuperior',
+ 'Habitación amplia con cama doble y mobiliario mejorado.',
+ 'HABITABLE') [42001-232]
