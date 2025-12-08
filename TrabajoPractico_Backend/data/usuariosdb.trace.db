@@ -400,3 +400,128 @@ Table "SPRING_SESSION" not found; SQL statement:
 DELETE FROM SPRING_SESSION
 WHERE EXPIRY_TIME < ?
  [42102-232]
+2025-12-08 16:16:24.890063-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "INSERT INTO HABITACION (\000d\000a    CAMA_DOBLES,\000d\000a    CAMA_KINGSIZE,\000d\000a    CAMAS_INDIVIDUALES,\000d\000a    CAPACIDAD,\000d\000a    COSTO_POR_NOCHE,\000d\000a    NUMERO,\000d\000a    TIPO_HABITACION,\000d\000a    DESCRIPCION,\000d\000a    ESTADO\000d\000a) VALUES\000d\000a(1,\000d\000a 1,\000d\000a 0,\000d\000a 2,\000d\000a 90560.0\000d\000a [*]301,\000d\000a 'DobleSuperior',\000d\000a 'Habitación amplia con cama doble y mobiliario mejorado.',\000d\000a 'HABITABLE')"; se esperaba "[, ., ::, AT, FORMAT, *, /, %, +, -, ||, NOT, IS, ILIKE, REGEXP, AND, OR, ,, )"
+Syntax error in SQL statement "INSERT INTO HABITACION (\000d\000a    CAMA_DOBLES,\000d\000a    CAMA_KINGSIZE,\000d\000a    CAMAS_INDIVIDUALES,\000d\000a    CAPACIDAD,\000d\000a    COSTO_POR_NOCHE,\000d\000a    NUMERO,\000d\000a    TIPO_HABITACION,\000d\000a    DESCRIPCION,\000d\000a    ESTADO\000d\000a) VALUES\000d\000a(1,\000d\000a 1,\000d\000a 0,\000d\000a 2,\000d\000a 90560.0\000d\000a [*]301,\000d\000a 'DobleSuperior',\000d\000a 'Habitación amplia con cama doble y mobiliario mejorado.',\000d\000a 'HABITABLE')"; expected "[, ., ::, AT, FORMAT, *, /, %, +, -, ||, NOT, IS, ILIKE, REGEXP, AND, OR, ,, )"; SQL statement:
+INSERT INTO HABITACION (
+    CAMA_DOBLES,
+    CAMA_KINGSIZE,
+    CAMAS_INDIVIDUALES,
+    CAPACIDAD,
+    COSTO_POR_NOCHE,
+    NUMERO,
+    TIPO_HABITACION,
+    DESCRIPCION,
+    ESTADO
+) VALUES
+(1,
+ 1,
+ 0,
+ 2,
+ 90560.0
+ 301,
+ 'DobleSuperior',
+ 'Habitación amplia con cama doble y mobiliario mejorado.',
+ 'HABITABLE') [42001-232]
+2025-12-08 16:42:00.503293-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Imposible interpretar la constante "TIME" "2025-12-01 14:30:00"
+Cannot parse "TIME" constant "2025-12-01 14:30:00"; SQL statement:
+-- Script de generación de datos para la tabla OCUPACION
+-- Rango de fechas: 01-Dic-2025 al 31-Dic-2025
+
+INSERT INTO OCUPACION (ID_OCUPACION, HABITACION_NUMERO, FECHA_INICIO, FECHA_FIN, CHECK_IN, CHECK_OUT) VALUES 
+-- 1. Individual Estándar (Rango 101-110)
+-- Huésped que ya se fue (Estancia completa)
+(1, 101, '2025-12-01', '2025-12-05', '2025-12-01 14:30:00', '2025-12-05 10:15:00'),
+-- Huésped que llegó tarde (Check-in día 2)
+(2, 105, '2025-12-10', '2025-12-12', '2025-12-10 19:45:00', '2025-12-12 09:00:00'),
+-- Huésped actual (Sin Check-out aún)
+(3, 110, '2025-12-28', '2025-12-31', '2025-12-28 15:00:00', NULL),
+
+-- 2. Doble Estándar (Rango 201-218)
+-- Estancia típica de semana
+(4, 201, '2025-12-05', '2025-12-10', '2025-12-05 13:00:00', '2025-12-10 11:00:00'),
+-- Estancia de fin de semana
+(5, 210, '2025-12-12', '2025-12-14', '2025-12-12 16:20:00', '2025-12-14 12:30:00'),
+-- Huésped que no ha hecho check-out (ej. late checkout o sigue en el hotel)
+(6, 218, '2025-12-30', '2025-12-31', '2025-12-30 14:10:00', NULL),
+
+-- 3. Doble Superior (Rango 301-308)
+-- Estancia de Navidad
+(7, 301, '2025-12-24', '2025-12-26', '2025-12-24 12:00:00', '2025-12-26 11:00:00'),
+-- Estancia a principios de mes
+(8, 305, '2025-12-02', '2025-12-04', '2025-12-02 14:00:00', '2025-12-04 10:00:00'),
+
+-- 4. Superior Family Plan (Rango 401-410)
+-- Familia vacaciones largas
+(9, 401, '2025-12-15', '2025-12-22', '2025-12-15 15:30:00', '2025-12-22 10:45:00'),
+-- Familia que acaba de llegar para año nuevo (Sin Check-out)
+(10, 410, '2025-12-30', '2025-12-31', '2025-12-30 13:00:00', NULL),
+
+-- 5. Suite Doble (Rango 501-502)
+-- VIP estancia corta
+(11, 501, '2025-12-20', '2025-12-21', '2025-12-20 20:00:00', '2025-12-2 [22007-232]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:518)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
+	at org.h2.message.DbException.get(DbException.java:212)
+	at org.h2.value.ValueTime.parse(ValueTime.java:94)
+	at org.h2.value.Value.convertToTime(Value.java:1914)
+	at org.h2.value.Value.convertTo(Value.java:1175)
+	at org.h2.value.Value.convertForAssignTo(Value.java:1118)
+	at org.h2.table.Column.validateConvertUpdateSequence(Column.java:406)
+	at org.h2.table.Table.convertInsertRow(Table.java:963)
+	at org.h2.command.dml.Insert.insertRows(Insert.java:167)
+	at org.h2.command.dml.Insert.update(Insert.java:135)
+	at org.h2.command.dml.DataChangeStatement.update(DataChangeStatement.java:74)
+	at org.h2.command.CommandContainer.update(CommandContainer.java:139)
+	at org.h2.command.Command.executeUpdate(Command.java:304)
+	at org.h2.command.Command.executeUpdate(Command.java:248)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:262)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:231)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1344)
+	at org.h2.server.web.WebApp.query(WebApp.java:1142)
+	at org.h2.server.web.WebApp.query(WebApp.java:1118)
+	at org.h2.server.web.WebApp.process(WebApp.java:244)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:176)
+	at org.h2.server.web.JakartaWebServlet.doGet(JakartaWebServlet.java:129)
+	at org.h2.server.web.JakartaWebServlet.doPost(JakartaWebServlet.java:166)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1774)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1447)
+Caused by: java.lang.IllegalArgumentException: -12-01 14:30:00
+	at org.h2.util.TimeZoneProvider.ofId(TimeZoneProvider.java:139)
+	at org.h2.util.DateTimeUtils.parseTime(DateTimeUtils.java:422)
+	at org.h2.value.ValueTime.parse(ValueTime.java:92)
+	... 55 more
