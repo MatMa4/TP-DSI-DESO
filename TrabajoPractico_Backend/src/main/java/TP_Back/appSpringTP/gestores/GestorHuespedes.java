@@ -36,62 +36,30 @@ public class GestorHuespedes {
         this.direccionDAO = direccionDAO;
     }
 
-    public Boolean registrarHuesped(HuespedDTO h, Boolean forzar) {
-        if (forzar){
-            DireccionDTO direccionDto=h.getDireccionHuesped();
-            Direccion direccion = new Direccion();
-            direccion.setDepartamento(direccionDto.getDepartamento());
-            direccion.setCodigo(direccionDto.getCodigo());
-            direccion.setPiso(direccionDto.getPiso());
-            direccion.setId(direccionDto.getCalle(), direccionDto.getNumero(), direccionDto.getLocalidad(), direccionDto.getProvincia(), direccionDto.getPais());
-            direccionDAO.save(direccion);
-            Huesped huesped = new Huesped();
-            huesped.setNombre(h.getNombre());
-            huesped.setApellido(h.getApellido());
-            huesped.setTipoDocumento(h.getTipoDocumento());
-            huesped.setNumeroDocumento(h.getNumeroDocumento());
-            huesped.setFechaNacimiento(h.getFechaNacimiento());
-            huesped.setTelefono(h.getTelefono());
-            huesped.setEmail(h.getEmail());
-            huesped.setOcupacion(h.getOcupacion());
-            huesped.setNacionalidad(h.getNacionalidad());
-            huesped.setCuit(h.getCuit());
-            huesped.setPosicionIVA(h.getPosicionIVA());
-            huesped.setAlojado(h.getAlojado());
-            huesped.setDireccionHuesped(direccion);
-            huespedDAO.save(huesped);
-            return true;
-            
-        }else {
-            Optional <HuespedDTO> optHuesp = huespedDAO.findByTipoDocumentoAndNumeroDocumento(h.getTipoDocumento(), h.getNumeroDocumento());
-            if (optHuesp.isEmpty()){ 
-                            DireccionDTO direccionDto=h.getDireccionHuesped();
-                Direccion direccion = new Direccion();
-                direccion.setDepartamento(direccionDto.getDepartamento());
-                direccion.setCodigo(direccionDto.getCodigo());
-                direccion.setPiso(direccionDto.getPiso());
-                direccion.setId(direccionDto.getCalle(), direccionDto.getNumero(), direccionDto.getLocalidad(), direccionDto.getProvincia(), direccionDto.getPais());
-                direccionDAO.save(direccion);
-                Huesped huesped = new Huesped();
-                huesped.setNombre(h.getNombre());
-                huesped.setApellido(h.getApellido());
-                huesped.setTipoDocumento(h.getTipoDocumento());
-                huesped.setNumeroDocumento(h.getNumeroDocumento());
-                huesped.setFechaNacimiento(h.getFechaNacimiento());
-                huesped.setTelefono(h.getTelefono());
-                huesped.setEmail(h.getEmail());
-                huesped.setOcupacion(h.getOcupacion());
-                huesped.setNacionalidad(h.getNacionalidad());
-                huesped.setCuit(h.getCuit());
-                huesped.setPosicionIVA(h.getPosicionIVA());
-                huesped.setAlojado(h.getAlojado());
-                huesped.setDireccionHuesped(direccion);
-                huespedDAO.save(huesped);
-                return true;
-            } else {
-                throw new HuespedExistenteException("Huesped existente");
-            }
-        }        
+    public Boolean registrarHuesped(HuespedDTO h) {
+        DireccionDTO direccionDto=h.getDireccionHuesped();
+        Direccion direccion = new Direccion();
+        direccion.setDepartamento(direccionDto.getDepartamento());
+        direccion.setCodigo(direccionDto.getCodigo());
+        direccion.setPiso(direccionDto.getPiso());
+        direccion.setId(direccionDto.getCalle(), direccionDto.getNumero(), direccionDto.getLocalidad(), direccionDto.getProvincia(), direccionDto.getPais());
+        direccionDAO.save(direccion);
+        Huesped huesped = new Huesped();
+        huesped.setNombre(h.getNombre());
+        huesped.setApellido(h.getApellido());
+        huesped.setTipoDocumento(h.getTipoDocumento());
+        huesped.setNumeroDocumento(h.getNumeroDocumento());
+        huesped.setFechaNacimiento(h.getFechaNacimiento());
+        huesped.setTelefono(h.getTelefono());
+        huesped.setEmail(h.getEmail());
+        huesped.setOcupacion(h.getOcupacion());
+        huesped.setNacionalidad(h.getNacionalidad());
+        huesped.setCuit(h.getCuit());
+        huesped.setPosicionIVA(h.getPosicionIVA());
+        huesped.setAlojado(h.getAlojado());
+        huesped.setDireccionHuesped(direccion);
+        huespedDAO.save(huesped);
+        return true;     
     }
     public List<HuespedDTO> obtenerTodos() {
         return huespedDAO.findAll();
@@ -111,8 +79,14 @@ public class GestorHuespedes {
         huesped.setNumeroDocumento(numero);
         return huespedDAO.obtenerHuesped(huesped);
     }
-    public HuespedDTO consultarDocumento(String tipoDocumento, String numeroDocumento){
-        return huespedDAO.consultarDocumento(tipoDocumento, numeroDocumento);
+    public boolean consultarDocumento(String tipoDocumento, String numeroDocumento){
+        Optional<HuespedDTO> huesped = huespedDAO.consultarDocumento(tipoDocumento, numeroDocumento);
+        if(huesped.isEmpty()){
+            return true;
+        }else{
+            throw new HuespedExistenteException("Huesped existente");
+        }
+        
     }
 }
 

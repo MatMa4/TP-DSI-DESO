@@ -30,14 +30,8 @@ public class ControladorHuesped {
     }
     
     @PutMapping
-    public ResponseEntity<?> agregarHuesped(@RequestBody HuespedDTO huesped,
-                                            @RequestParam(defaultValue = "false") Boolean forzar) {
-        try {
-            gestorHuespedes.registrarHuesped(huesped, forzar);
-            return ResponseEntity.status(HttpStatus.CREATED).body(huesped.getNumeroDocumento());
-        } catch (HuespedExistenteException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "CONFLICTO", "mensaje", e.getMessage()));
-        }
+    public ResponseEntity<?> registrarHuesped(@RequestBody HuespedDTO huesped) {
+        return ResponseEntity.ok(gestorHuespedes.registrarHuesped(huesped));
     }
 
     @GetMapping
@@ -46,7 +40,7 @@ public class ControladorHuesped {
     }
     
     @GetMapping("/buscar")
-    public ResponseEntity<List<HuespedDTO>> buscarHuespedes(@RequestParam String tipo, @RequestParam String numero, @RequestParam String nombre, @RequestParam String apellido) {
+    public ResponseEntity<List<HuespedDTO>> buscarHuespedes(@RequestParam(defaultValue = "") String tipo, @RequestParam(defaultValue = "") String numero, @RequestParam(defaultValue = "") String nombre, @RequestParam(defaultValue = "") String apellido) {
 
         return ResponseEntity.ok(gestorHuespedes.buscarHuesped(tipo, numero, nombre, apellido));
     }
@@ -55,9 +49,13 @@ public class ControladorHuesped {
         return ResponseEntity.ok(gestorHuespedes.obtenerHuesped(tipo, numero));
     }
     @GetMapping("/consultarDocumento")
-    public ResponseEntity<HuespedDTO> consultarDocumento(@RequestParam String tipo, @RequestParam String numero) {
-
-        return ResponseEntity.ok(gestorHuespedes.consultarDocumento(tipo, numero));
+    public ResponseEntity<?> consultarDocumento(@RequestParam String tipo, @RequestParam String numero) {
+        try {
+            gestorHuespedes.consultarDocumento(tipo, numero);
+            return ResponseEntity.status(HttpStatus.OK).body("Huesped no existe");
+        } catch (HuespedExistenteException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "CONFLICTO", "mensaje", e.getMessage()));
+        }
     }
     @GetMapping("/direcciones")
     public ResponseEntity<List<Direccion>> obtenerDirecciones() {
