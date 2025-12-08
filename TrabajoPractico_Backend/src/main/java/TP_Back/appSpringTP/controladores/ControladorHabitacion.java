@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/habitaciones")
-public class HabitacionController {
+public class ControladorHabitacion {
 
     @Autowired
     private HabitacionDAO habitacionDAO;

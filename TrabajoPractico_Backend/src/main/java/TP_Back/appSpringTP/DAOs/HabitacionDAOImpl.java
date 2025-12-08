@@ -17,6 +17,7 @@ import TP_Back.appSpringTP.DTOs.ReservaDTO;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,6 +34,11 @@ public class HabitacionDAOImpl implements HabitacionDAO {
     
     @Autowired
     private HabitacionMapper habitacionMapper;
+
+    @Override
+    public Optional<Habitacion> findById(Integer numero) {
+        return repoHabitacion.findById(numero);
+    }
 
     @Override
     public List<HabitacionDetalleDTO> getHabitacionesConDetalle(Date fechaInicio, Date fechaFin) {

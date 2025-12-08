@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import TP_Back.appSpringTP.DTOs.HabitacionDetalleDTO;
 import java.util.Date;
 import java.util.List;
+import TP_Back.appSpringTP.modelo.habitacion.Habitacion;
+import java.util.Optional;
 
 /**
  *
@@ -15,5 +17,6 @@ import java.util.List;
  */
 @Service
 public interface HabitacionDAO {
+    public Optional<Habitacion> findById(Integer numero);
     List<HabitacionDetalleDTO> getHabitacionesConDetalle(Date fechaInicio, Date fechaFin);
 }

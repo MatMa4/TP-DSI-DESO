@@ -20,6 +20,24 @@ public class GestorDeReservas {
     @Autowired
     private HabitacionDAO habitacionDAO;
 
+    public Reserva crearReserva(ReservaDTO dto) {
+        Reserva reserva = new Reserva();
+        
+        reserva.setFechaInicio(dto.getFechaInicio());
+        reserva.setFechaFin(dto.getFechaFin());
+        reserva.setEstado(dto.getEstado());
+        reserva.setNombre(dto.getNombre());
+        reserva.setApellido(dto.getApellido());
+        reserva.setTelefono(dto.getTelefono());
+
+        if (dto.getHabitacionNumero() != null) {
+            Habitacion habitacion = habitacionDAO.findById(dto.getHabitacionNumero())
+                    .orElseThrow(() -> new RuntimeException("Habitación no encontrada con número: " + dto.getHabitacionNumero()));
+            reserva.setHabitacion(habitacion);
+        }
+        return reservaDAO.save(reserva);
+    }
+
     public void cancelarReserva(Integer idReserva) {
         reservaDAO.deleteById(idReserva);
     }

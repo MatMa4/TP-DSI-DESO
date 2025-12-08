@@ -29,7 +29,8 @@
 	<properties>
                 <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
                 <maven.compiler.release>24</maven.compiler.release>
-                <exec.mainClass>deso.tp.TP</exec.mainClass>
+                <exec.mainClass>TP_Back.appSpringTP.AppSpringTpApplication</exec.mainClass>
+                <start-class>TP_Back.appSpringTP.AppSpringTpApplication</start-class>
 	</properties>
 	<dependencies>
 		<dependency>
