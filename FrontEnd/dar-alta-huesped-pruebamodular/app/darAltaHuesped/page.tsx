@@ -127,13 +127,19 @@ export default function Home() {
       let finalData = transformedData;
 
       try {
-        const res = await fetch('http://localhost:8080/huespedes', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(finalData),
+        const res = await fetch('http://localhost:8080/huespedes/consultarDocumento?tipo=..', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
         });
 
+        
+
         if (res.ok) {
+          const res = await fetch('http://localhost:8080/huespedes', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(finalData),
+          });
           const saved = await res.json().catch(() => null);
           console.log('✅ Huésped guardado:', saved ?? 'No body');
           setSuccessMessage(
@@ -164,7 +170,7 @@ export default function Home() {
     setHighlightDocumento(false);
     if (!pendingFinalData) return;
     try {
-      const res = await fetch('http://localhost:8080/huespedes?forzar=true', {
+      const res = await fetch('http://localhost:8080/huespedes', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(pendingFinalData),
