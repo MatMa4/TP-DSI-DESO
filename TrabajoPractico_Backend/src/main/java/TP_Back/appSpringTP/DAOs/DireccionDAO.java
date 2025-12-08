@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface DireccionDAO {
-    public Optional<DireccionDTO> findByCalleAndNumero(String calle, String numero);
+    public Optional<DireccionDTO> findByCalleAndNumero(String calle, Integer numero);
     public Direccion save(Direccion dir);
 }

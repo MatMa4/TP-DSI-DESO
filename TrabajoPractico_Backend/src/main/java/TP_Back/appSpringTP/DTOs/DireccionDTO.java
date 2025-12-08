@@ -16,7 +16,7 @@ import lombok.Setter;
 public class DireccionDTO {
 
     private String calle;
-    private String numero;
+    private Integer numero;
     private String departamento;
     private Integer piso;
     private Integer codigo;
@@ -24,7 +24,7 @@ public class DireccionDTO {
     private String provincia;
     private String pais;
 
-    public DireccionDTO(String calle, String numero, String departamento, Integer piso,
+    public DireccionDTO(String calle, Integer numero, String departamento, Integer piso,
                      Integer codigo, String localidad, String provincia, String pais) {
         this.calle = calle;
         this.numero = numero;
@@ -56,7 +56,7 @@ public class DireccionDTO {
 
     public static class Builder {
         private String calle;
-        private String numero;
+        private Integer numero;
         private String departamento;
         private Integer piso;
         private Integer codigo;
@@ -65,7 +65,7 @@ public class DireccionDTO {
         private String pais;
 
         public Builder calle(String calle) { this.calle = calle; return this; }
-        public Builder numero(String numero) { this.numero = numero; return this; }
+        public Builder numero(Integer numero) { this.numero = numero; return this; }
         public Builder departamento(String departamento) { this.departamento = departamento; return this; }
         public Builder piso(Integer piso) { this.piso = piso; return this; }
         public Builder codigo(Integer codigo) { this.codigo = codigo; return this; }

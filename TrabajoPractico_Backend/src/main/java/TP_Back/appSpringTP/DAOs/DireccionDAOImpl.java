@@ -28,7 +28,7 @@ public class DireccionDAOImpl implements DireccionDAO {
         this.huespedMapper = huespedMapper;
     }
     @Override
-    public Optional<DireccionDTO> findByCalleAndNumero(String calle, String numero){
+    public Optional<DireccionDTO> findByCalleAndNumero(String calle, Integer numero){
         return repoDireccion.findByIdCalleAndIdNumero(calle, numero).map(huespedMapper::toDTO);
     }
     @Override

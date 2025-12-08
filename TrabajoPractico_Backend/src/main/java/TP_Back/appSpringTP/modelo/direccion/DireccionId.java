@@ -63,13 +63,13 @@ public class DireccionId implements Serializable {
 
     public static class Builder {
         private String calle;
-        private String numero;
+        private Integer numero;
         private String localidad;
         private String provincia;
         private String pais;
 
         public Builder calle(String calle) { this.calle = calle; return this; }
-        public Builder numero(String numero) { this.numero = numero; return this; }
+        public Builder numero(Integer numero) { this.numero = numero; return this; }
         public Builder localidad(String localidad) { this.localidad = localidad; return this; }
         public Builder provincia(String provincia) { this.provincia = provincia; return this; }
         public Builder pais(String pais) { this.pais = pais; return this; }

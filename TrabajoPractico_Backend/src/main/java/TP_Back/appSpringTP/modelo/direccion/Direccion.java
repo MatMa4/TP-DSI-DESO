@@ -26,7 +26,7 @@ public class Direccion {
     private Integer codigo;
 
 
-    public Direccion(String calle, String numero, String departamento, Integer piso,
+    public Direccion(String calle, Integer numero, String departamento, Integer piso,
                      Integer codigo, String localidad, String provincia, String pais) {
         this.id.setCalle(calle);
         this.id.setNumero(numero);
@@ -42,7 +42,7 @@ public class Direccion {
         this.id = new DireccionId();
     }
 
-    public void setId(String calle, String numero, String localidad, String provincia, String pais){
+    public void setId(String calle, Integer numero, String localidad, String provincia, String pais){
         this.id.setCalle(calle);
         this.id.setNumero(numero);
         this.id.setLocalidad(localidad);
@@ -52,7 +52,7 @@ public class Direccion {
     public String getCalle(){
         return this.id.getCalle();
     }
-    public String getNumero(){
+    public Integer getNumero(){
         return this.id.getNumero();
     }
     public String getLocalidad(){

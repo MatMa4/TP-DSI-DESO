@@ -14,6 +14,6 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface repositorioDireccion extends JpaRepository<Direccion, DireccionId> {
-    Optional<Direccion> findByIdCalleAndIdNumero(String calle, String numero);
+    Optional<Direccion> findByIdCalleAndIdNumero(String calle, Integer numero);
 }
 
