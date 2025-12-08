@@ -39,10 +39,10 @@ export default function Dashboard() {
         </a>
 
         {/* CU 04 - Reservas (Futuro) */}
-        <a href="/reservar-habitacion" style={{...cardStyle, opacity: 0.7, cursor: 'not-allowed'}}>
+        <a href="/reservarHabitacion" style={{...cardStyle}}>
           <div style={{ fontSize: '40px' }}>📅</div>
           <h3>Reservar</h3>
-          <p>CU 04 - (Próximamente)</p>
+          <p>CU 04</p>
         </a>
 
         {/* CU 05 - Estado (Futuro) */}
