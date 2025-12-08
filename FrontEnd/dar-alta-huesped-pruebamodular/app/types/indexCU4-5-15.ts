@@ -61,10 +61,12 @@ export interface RoomCellData {
  * Define la información de una reserva seleccionada para la verificación.
  */
 export interface SelectedReservation {
-  roomId: string;
-  type: string;
   fechaInicio: string;
   fechaFin: string;
+  roomId: string;
+  type: string;
+  
+  
 }
 
 /**

@@ -129,14 +129,19 @@ const handleHuespedSubmit = async (huespedData: EventualHuesped) => {
   setErrors(validationErrors);
 
   if (Object.keys(validationErrors).length === 0) {
+    
     const BASE_URL = 'http://localhost:8080';
-    const url = `${BASE_URL}/api/reservas`; 
+    const url = `${BASE_URL}/reservas`; 
 
-    const payload = {
-        reservations: selectedReservations, 
-        huesped: huespedData 
-        // clave del DTO, si hay error de datos puede ser acá 
-    };
+    const payload = selectedReservations.map(res => ({
+            "fechaInicio": res.fechaInicio,
+            "fechaFin": res.fechaFin,
+            "estado": "RESERVADA", 
+            "nombre": huespedData.nombre,
+            "apellido": huespedData.apellido,
+            "telefono": huespedData.telefono,
+            "habitacionNumero": parseInt(res.roomId), 
+        }));
     
     try {
       const response = await fetch(url, {
@@ -236,7 +241,7 @@ const handleHuespedSubmit = async (huespedData: EventualHuesped) => {
             onReject={handleRejectVerification} 
             onCancel={handleCancel}
           />
-
+          
         {stage === RESERVA_STAGES.HUESPED && (
           <EventualHuespedForm 
             onSubmit={handleHuespedSubmit} 
