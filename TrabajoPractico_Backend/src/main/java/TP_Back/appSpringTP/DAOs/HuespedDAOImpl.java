@@ -33,7 +33,7 @@ public class HuespedDAOImpl implements HuespedDAO {
         return repoHuesped.save(huesp);
     }
     @Override
-    public Optional<HuespedDTO> findByTipoDocumentoAndNumeroDocumento(String tipoDocumento, String numeroDocumento){
+    public Optional<HuespedDTO> consultarDocumento(String tipoDocumento, String numeroDocumento){
         return repoHuesped.findByIdTipoDocumentoAndIdNumeroDocumento(tipoDocumento, numeroDocumento).map(huespedMapper::toDTO);
     }
     @Override
@@ -46,13 +46,7 @@ public class HuespedDAOImpl implements HuespedDAO {
     }
     @Override
     public Huesped obtenerHuesped(HuespedDTO huesped){
-        System.out.println(huesped.getTipoDocumento());
-        System.out.println(huesped.getNumeroDocumento());
         return repoHuesped.findByIdTipoDocumentoAndIdNumeroDocumento(huesped.getTipoDocumento(), huesped.getNumeroDocumento()).get();
-    }
-    @Override
-    public HuespedDTO consultarDocumento(String tipoDocumento, String numeroDocumento){
-        return huespedMapper.toDTO(repoHuesped.findByIdTipoDocumentoAndIdNumeroDocumento(tipoDocumento, numeroDocumento).get());
     }
 
 
