@@ -8,19 +8,17 @@ import DisponibilidadGrid from '../componentsCU4-5-15/DisponibilidadGrid';
 import ReservaVerification from '../componentsCU4-5-15/ReservaVerification'; 
 import EventualHuespedForm from '../componentsCU4-5-15/EventualHuespedForm'; 
 import ModalFin from '../componentsCU4-5-15/ModalFinalizacion';
+import { useRouter } from 'next/navigation';
+import '../styles/stylesCU4-5-15.css';
 import { 
     RoomCellData, 
     SelectedReservation, 
     EventualHuesped, 
-    generateGridData 
 } from '../types/indexCU4-5-15'; 
-
-
 
 const RESERVA_STAGES = {
   GRILLA: 'GRILLA',
   HUESPED: 'HUESPED',
-  FINALIZADO: 'FINALIZADO',
 };
 
 // --- COMPONENTE PRINCIPAL ---
@@ -37,6 +35,7 @@ export default function ReservarHabitacion() {
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const router = useRouter();
 
   // --- LÓGICA DE VALIDACIÓN ---
   const validateFechas = (f: { desde: string, hasta: string }) => {
@@ -69,80 +68,106 @@ export default function ReservarHabitacion() {
   const handleFechasChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFechas(prev => ({ ...prev, [e.target.name]: e.target.value }));
     setErrors(prev => ({ ...prev, fechas: '' }));
-    setGridData([]); // Limpiar grilla al cambiar fechas
+    setGridData([]);
   };
   
-  // Lógica de búsqueda 
-  const handleSearch = (tipo: string) => {
+  const handleSearch = async (tipo: string) => {
     const errorMsg = validateFechas(fechas);
     if (errorMsg) {
-      setErrors({ fechas: errorMsg });
-      return;
-    }
-
-    // 1. Guarda el tipo seleccionado
-    setSelectedRoomType(tipo);
-    
-    // 2. Simulación de carga de datos 
-    const data = generateGridData(fechas.desde, fechas.hasta,tipo); // generateGridData debe usar el tipo como filtro
-    
-    if (data.length === 0) {
-        setErrorMessage("No existen habitaciones disponibles con las comodidades deseadas para el rango de fechas solicitado.");
-        setShowErrorModal(true);
+        setErrors({ fechas: errorMsg });
         return;
     }
+    setSelectedRoomType(tipo); 
+    const BASE_URL = 'http://localhost:8080';
+    const url = `${BASE_URL}/api/habitaciones/disponibilidad?fechaInicio=${fechas.desde}&fechaFin=${fechas.hasta}&tipo=${tipo}`;
     
-    setGridData(data);
-    setErrors({});
-  };
+    try {
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+          // Manejar errores
+          throw new Error(`Error ${response.status}: Fallo al conectar con la API de disponibilidad.`);
+      }
+      // 2. RECIBIR LA DATA
+      const data: RoomCellData[] = await response.json(); 
+      
+      if (!Array.isArray(data) || data.length === 0) {
+          setErrorMessage("No existen habitaciones disponibles con las comodidades deseadas para el rango de fechas solicitado.");
+          setShowErrorModal(true);
+          setGridData([]);
+          return;
+      }
+      // 3. ÉXITO
+      setGridData(data);
+      setErrors({});
+    } catch (error) {
+      setErrorMessage(`Hubo un error de conexión al buscar disponibilidad: ${error.message}`);
+      setShowErrorModal(true);
+      setGridData([]);
+    }
+};
 
-  // 2. Lógica para la selección de la Grilla y pasar a VERIFICACION
 const handleGridSubmit = (reservations: SelectedReservation[]) => {
-    if (reservations.length === 0) return;
-    
+    if (reservations.length === 0) return;   
     setSelectedReservations(reservations);
-    // En lugar de cambiar de stage, mostramos el modal
     setShowVerificationModal(true); 
-    // Mantenemos el stage en GRILLA o creamos un stage VERIFICANDO para bloquear la UI detrás.
 };
 
-// 3. Lógica para ACEPTAR la Verificación y pasar al formulario de Huésped (Paso 7)
+
 const handleAcceptVerification = () => {
-    setShowVerificationModal(false); // Cierra el modal
-    setStage(RESERVA_STAGES.HUESPED); // Pasa al formulario de Huésped
+    setShowVerificationModal(false); 
+    setStage(RESERVA_STAGES.HUESPED); 
 };
 
-// 3. Lógica para RECHAZAR la Verificación (Flujo Alternativo 7.A)
 const handleRejectVerification = () => {
-    setShowVerificationModal(false); // Cierra el modal
-    setSelectedReservations([]); // Deshace la selección
+    setShowVerificationModal(false); 
+    setSelectedReservations([]); 
 };
 
-  const handleHuespedSubmit = (data: EventualHuesped) => {
-    const validationErrors = validateHuespedForm(data);
-    setErrors(validationErrors);
+const handleHuespedSubmit = async (huespedData: EventualHuesped) => {
+  const validationErrors = validateHuespedForm(huespedData);
+  setErrors(validationErrors);
 
-    if (Object.keys(validationErrors).length === 0) {
-      console.log("✅ Reserva Registrada:", { selectedReservations, huesped: data });
-        setSuccessMessage(
-        `La reserva para ${data.nombre} ${data.apellido} ha sido realizada con éxito. \nPresione cualquier tecla para continuar...`
+  if (Object.keys(validationErrors).length === 0) {
+    const BASE_URL = 'http://localhost:8080';
+    const url = `${BASE_URL}/api/reservas`; 
+
+    const payload = {
+        reservations: selectedReservations, 
+        huesped: huespedData 
+        // clave del DTO, si hay error de datos puede ser acá 
+    };
+    
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.status !== 201 && response.status !== 200) {
+        // Leer un posible mensaje de error del servidor
+        const errorText = await response.text();
+        throw new Error(errorText || 'Fallo desconocido al registrar la reserva.');
+      }
+
+      setSuccessMessage(
+        `La reserva para ${huespedData.nombre} ${huespedData.apellido} ha sido realizada con éxito. \nPresione cualquier tecla para continuar...`
       );
       setShowSuccessModal(true);
       setErrors({});
-    } else {
-      setErrors(validationErrors);
-      const firstErrorField = Object.keys(validationErrors)[0];
-      setErrorMessage('Faltan completar campos obligatorios.');
+    } catch (error) {
+      setErrorMessage(`Error al registrar la reserva: ${error.message}`);
       setShowErrorModal(true);
     }
-  };
+  }
+};
     
   const handleSuccessConfirm = () => {
     setShowSuccessModal(false);
-    setStage(RESERVA_STAGES.FINALIZADO);
+    router.push('/');
   };
 
-  // Lógica de CANCELAR (Observación)
   const handleCancel = () => {
     setShowCancelModal(true);
   };
@@ -150,7 +175,6 @@ const handleRejectVerification = () => {
   const handleConfirmCancel = () => {
     setShowCancelModal(false);
     setShowVerificationModal(false);
-    setStage(RESERVA_STAGES.FINALIZADO);
   };
 
   const currentStageName = Object.keys(RESERVA_STAGES).find(key => RESERVA_STAGES[key as keyof typeof RESERVA_STAGES] === stage);
@@ -220,19 +244,6 @@ const handleRejectVerification = () => {
             onCancel={handleCancel}
           />
         )}
-        
-        {stage === RESERVA_STAGES.FINALIZADO && (
-        <div>
-            <h2 style={{ 
-              marginTop:'150px',
-                color: '#022E66', 
-                fontSize: '36px', 
-                marginBottom: '20px' 
-            }}>
-                ✅ Caso de Uso Finalizado.
-            </h2>
-        </div>
-    )}
 
       </div>
 
