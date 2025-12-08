@@ -40,7 +40,11 @@ public class ControladorHuesped {
     }
     
     @GetMapping("/buscar")
-    public ResponseEntity<List<HuespedDTO>> buscarHuespedes(@RequestParam(defaultValue = "") String tipo, @RequestParam(defaultValue = "") String numero, @RequestParam(defaultValue = "") String nombre, @RequestParam(defaultValue = "") String apellido) {
+    public ResponseEntity<List<HuespedDTO>> buscarHuespedes(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) String apellido,
+            @RequestParam(required = false) String tipo,
+            @RequestParam(required = false) String numero) {
 
         return ResponseEntity.ok(gestorHuespedes.buscarHuesped(tipo, numero, nombre, apellido));
     }
