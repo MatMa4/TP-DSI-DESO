@@ -27,7 +27,7 @@ const DocumentoField: React.FC<DocumentoFieldProps> = ({
           onChange={onChange}
           style={highlight ? { borderColor: 'red', borderWidth: '3px' } : {}}
         >
-          {/* Corregido: los values deben coincidir con la lógica de estado y validación (mayúsculas) */}
+          
           <option value="DNI">DNI</option>
           <option value="LE">LE</option>
           <option value="LC">LC</option>

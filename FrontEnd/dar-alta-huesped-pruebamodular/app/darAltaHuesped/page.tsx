@@ -58,7 +58,6 @@ export default function Home() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-    // @ts-ignore
     const checked = e.target.checked; 
 
     if (name.startsWith('direccionHuesped.')) {
@@ -168,7 +167,7 @@ export default function Home() {
       setFormData(transformedData);
       let finalData = transformedData;
     
-      // 2. EL LOG MÁGICO PARA VER EL JSON
+      // LOG PARA VER EL JSON
       // JSON.stringify(objeto, null, 2) hace que se vea ordenado y legible en la consola
       console.log("📦 DATOS LIMPIOS A ENVIAR:", JSON.stringify(finalData, null, 2));
 

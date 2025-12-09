@@ -1,8 +1,5 @@
  import React from 'react';
-// Fix: Se quita la extensión .tsx. Es más estándar no incluirla
-// y dejar que el bundler (Next.js/esbuild) resuelva el archivoo.
 import InputField from './InputField';
-// Fix: Se quita la extensión .tsx también aquí.
 import { Direccion } from '../page';
 
 // Tipos para las props

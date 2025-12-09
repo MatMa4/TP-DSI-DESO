@@ -22,7 +22,7 @@ const ModalConfirmacion: React.FC<ModalConfirmacionProps> = ({
   onConfirm,
   closeText,
   confirmText,
-  confirmClass = 'btn-accept', // Valor por defecto
+  confirmClass = 'btn-accept',
 }) => {
   if (!show) return null;
 

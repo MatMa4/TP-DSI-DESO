@@ -1,11 +1,10 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-// Nota: Usamos window.location en lugar de useRouter para forzar la navegación en tu entorno
 import InputField from '../components/InputField';
 import DocumentoFieldCU2 from '../components/DocumentoFieldCU2';
 import { validateBuscarForm } from './ValidacionDatosCU2'; 
-import '../styles/stylesCU2.css'; // Asegurate de que este import coincida con tu CSS actual
+import '../styles/stylesCU2.css';
 
 interface FormData {
   nombre: string;
@@ -168,10 +167,7 @@ const BuscarHuesped = () => {
             const huespedCompleto = await response.json();
             console.log("Huésped recibido:", huespedCompleto);
 
-            alert(`¡Huésped encontrado en el Back!\n\nNombre: ${huespedCompleto.nombre} ${huespedCompleto.apellido}\nDocumento: ${huespedCompleto.tipoDocumento} ${huespedCompleto.numeroDocumento}\n\n(Redirigiendo al CU 10 Modificar Huesped...)`);
-            
-            // window.location.href = `/modificarHuesped?id=${huespedCompleto.id}`;
-
+            alert(`¡Huésped encontrado en la Base De Datos!\n\nNombre: ${huespedCompleto.nombre} ${huespedCompleto.apellido}\nDocumento: ${huespedCompleto.tipoDocumento} ${huespedCompleto.numeroDocumento}\n\n(Redirigiendo al CU 10 Modificar Huesped...)`);
         } catch (error) {
             console.error(error);
             alert("Error de conexión: El backend no respondió correctamente al intentar obtener el huésped.");
@@ -241,13 +237,8 @@ const BuscarHuesped = () => {
                                 resultadosOrdenados.map((h) => (
                                     <tr 
                                         key={h.numeroDocumento}
-                                        // 1. Permite seleccionar con TAB
                                         tabIndex={0} 
-                                        
-                                        // 2. Click normal con ratón
                                         onClick={() => setSeleccionadoId(h.numeroDocumento === seleccionadoId ? null : h.numeroDocumento)}
-                                        
-                                        // 3. Selección con teclado (Enter o Espacio)
                                         onKeyDown={(e) => {
                                             if (e.key === 'Enter' || e.key === ' ') {
                                                 e.preventDefault(); // Evita scroll con espacio
@@ -257,7 +248,6 @@ const BuscarHuesped = () => {
 
                                         className={seleccionadoId === h.numeroDocumento ? 'selected-row' : ''}
                                         
-                                        // Estilo para indicar visualmente el foco (outline)
                                         style={{ cursor: 'pointer', outline: 'none' }} 
                                     >
                                         <td>{h.nombre}</td>

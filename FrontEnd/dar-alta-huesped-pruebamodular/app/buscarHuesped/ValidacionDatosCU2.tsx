@@ -1,10 +1,10 @@
-import { FormData } from '../types'; // Asegúrate de que esta ruta sea correcta según tu estructura
+import { FormData } from '../types';
 
 export function validateBuscarForm(formData: FormData): Record<string, string> {
   const newErrors: Record<string, string> = {};
 
   // VALIDACIÓN NOMBRE
-  // Si hay texto, verificamos que sean solo letras. Si está vacío, no pasa nada.
+  // Si hay texto,se verificamos que sean solo letras. Si está vacío, no pasa nada.
   if (formData.nombre.trim()) {
       if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.nombre)) {
           newErrors.nombre = 'Solo se permiten letras';
@@ -12,7 +12,6 @@ export function validateBuscarForm(formData: FormData): Record<string, string> {
   }
 
   // VALIDACIÓN APELLIDO
-  // Misma lógica: Opcional, pero si se llena, solo letras.
   if (formData.apellido.trim()) {
       if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.apellido)) {
           newErrors.apellido = 'Solo se permiten letras';
