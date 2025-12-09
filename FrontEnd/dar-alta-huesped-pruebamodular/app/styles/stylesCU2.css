@@ -1,4 +1,3 @@
-/* --- CSS EN PIXELES (FIJO) --- */
 
 /* 1. ESTRUCTURA PRINCIPAL */
 body {
@@ -11,13 +10,13 @@ body {
 
 .buscar-huesped-layout {
     display: flex;
-    width: 1440px; /* Ancho fijo estándar */
-    height: 1080px; /* Alto fijo */
+    width: 1440px; 
+    height: 1080px;  
 }
 
 /* 2. PANEL IZQUIERDO (Formulario) */
 .left-pane {
-    width: 500px; /* Ancho FIJO */
+    width: 500px; 
     min-width: 500px;
     background-color: white;
     display: flex;
@@ -40,7 +39,7 @@ body {
     text-align: center;
     font-size: 32px;
     margin-bottom: 50px;
-    width: 350px; /* Ancho fijo */
+    width: 350px;
 }
 .header-title-box h1 { margin: 0; font-size: inherit; line-height: 1.2; }
 
@@ -78,13 +77,12 @@ body {
     box-sizing: border-box;
 }
 
-/* ========================================================= */
-/* documento*/
+/* Inputs documento*/
 .documento_inputs {
     position: relative;
     display: flex;
     gap: 8px;
-    width: 350px;       /* Ancho fijo igual al resto */
+    width: 350px;      
     height: 40px;
     align-items: center;
     margin-bottom: 20px 
@@ -111,25 +109,19 @@ input, select{
     
 }
 .select_documento {
-    /* Posición ABSOLUTA para que flote encima */
     position: relative; 
     left: 0;
     top: 0;
-    z-index: 20; /* Se pone al frente */
-
-    /* Estilo Visual */
-    background-color: #022E66 !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 30px !important; /* Redondeado completo */
-    
-    /* Tamaño */
-    width: 100px !important;
-    height: 40px !important;
-    padding-left: 15px !important;
-    
+    z-index: 20;
+    background-color: #022E66 ;
+    color: white ;
+    border: none ;
+    border-radius: 30px ;
+    width: 100px ;
+    height: 40px;
+    padding-left: 15px;
     cursor: pointer;
-    -webkit-appearance: none; /* Truco para que Chrome respete el azul */
+
 }
 .boxDocumento{
     flex-direction: row;
@@ -137,8 +129,6 @@ input, select{
     flex-direction: column;
     margin: 0 3vh 0 1vh;
     z-index: 20;
-
-
 }
 .form-actions {
     display: flex;
@@ -169,7 +159,7 @@ input, select{
     cursor: pointer;
 }
 
-/* 4. PANEL DERECHO (Resultados) */
+/*  PANEL DERECHO (Resultados) */
 .right-pane {
     width: 940px; 
     background-color: #507393;
@@ -233,7 +223,7 @@ input, select{
 }
 
 .custom-table tr:hover { background-color: #f5f9fc; }
-.selected-row { background-color: #e3f2fd !important; font-weight: 600; }
+.selected-row { background-color: #e3f2fd; font-weight: 600; }
 
 .results-footer {
     margin-top: 20px;
@@ -252,11 +242,20 @@ input, select{
     font-size: 16px;
     cursor: pointer;
     position: relative;
-    z-index: 9999 !important;
+    z-index: 9999 ;
 }
 /* Indicador visual cuando navegas con TAB */
 .custom-table tr:focus {
-    background-color: #f0f8ff; /* Un azul muy clarito */
-    outline: 2px solid #022E66; /* Borde azul para resaltar */
+    background-color: #f0f8ff;
+    outline: 2px solid #022E66;
     outline-offset: -2px;
+}
+.error {
+    color: red;
+    font-size: 0.85rem;
+    height: 20px;
+    margin-bottom: -20px;
+    text-align: left;    
+    width: 100%;
+    max-width: 370px;
 }

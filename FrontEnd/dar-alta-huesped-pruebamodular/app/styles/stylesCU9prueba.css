@@ -133,7 +133,7 @@ input:focus,select:focus{
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10050; /* subir para asegurarse que quede encima de todos */
+  z-index: 10050;
 }
 
 /* Caja del modal */
