@@ -5,11 +5,11 @@ import TP_Back.appSpringTP.DAOs.ReservaDAO;
 import TP_Back.appSpringTP.DTOs.ReservaDTO;
 import TP_Back.appSpringTP.modelo.habitacion.Habitacion;
 import TP_Back.appSpringTP.modelo.reserva.Reserva;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GestorDeReservas {
@@ -20,23 +20,30 @@ public class GestorDeReservas {
     @Autowired
     private HabitacionDAO habitacionDAO;
 
-    public Reserva crearReserva(ReservaDTO dto) {
-        Reserva reserva = new Reserva();
-        
-        reserva.setFechaInicio(dto.getFechaInicio());
-        reserva.setFechaFin(dto.getFechaFin());
-        reserva.setEstado(dto.getEstado());
-        reserva.setNombre(dto.getNombre());
-        reserva.setApellido(dto.getApellido());
-        reserva.setTelefono(dto.getTelefono());
+    public List<Reserva> crearReserva(List<ReservaDTO> listaDto) {
+        List<Reserva> reservas = new ArrayList<>();
 
-        if (dto.getHabitacionNumero() != null) {
-            Habitacion habitacion = habitacionDAO.findById(dto.getHabitacionNumero())
-                    .orElseThrow(() -> new RuntimeException("Habitación no encontrada con número: " + dto.getHabitacionNumero()));
-            reserva.setHabitacion(habitacion);
+        for (ReservaDTO dto : listaDto) {
+            Reserva reserva = new Reserva();
+            reserva.setFechaInicio(dto.getFechaInicio());
+            reserva.setFechaFin(dto.getFechaFin());
+            reserva.setEstado(dto.getEstado());
+            reserva.setNombre(dto.getNombre());
+            reserva.setApellido(dto.getApellido());
+            reserva.setTelefono(dto.getTelefono());
+
+            if (dto.getHabitacionNumero() != null) {
+                Habitacion habitacion = habitacionDAO.findById(dto.getHabitacionNumero())
+                        .orElseThrow(() -> new RuntimeException("Habitación no encontrada con número: " + dto.getHabitacionNumero()));
+                reserva.setHabitacion(habitacion);
+            }
+
+            reservas.add(reserva);
         }
-        return reservaDAO.save(reserva);
+
+        return reservaDAO.saveAll(reservas);
     }
+
 
     public void cancelarReserva(Integer idReserva) {
         reservaDAO.deleteById(idReserva);
