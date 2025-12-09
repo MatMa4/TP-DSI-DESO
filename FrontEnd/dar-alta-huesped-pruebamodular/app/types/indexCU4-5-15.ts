@@ -56,3 +56,25 @@ export const DNI_TYPES_OPTIONS: Array<'DNI' | 'LC' | 'Pasaporte'> = [
 
 export const ROOM_TYPES = ['Individual Estándar', 'Doble Estándar', 'Doble Superior', 'Superior Family Plan', 'Suite Doble'];
 export const ROOMS =['A101', 'A102', 'B201', 'B202', 'C301', 'C302', 'D401', 'D402', 'S501'];
+
+export interface RoomDetail {
+    numero: number;
+    costoPorNoche: number;
+    capacidad: number;
+    estado: string; // "HABITABLE"
+    tipoHabitacion: string; // "IndividualEstándar"
+    // ... otros detalles de cama
+}
+
+export interface OcupacionDetail {
+    fechaInicio: string; // Ej: "2025-12-01T03:00:00.000+00:00"
+    fechaFin: string;   // Ej: "2025-12-05T03:00:00.000+00:00"
+    // ... otros detalles de ocupación
+}
+
+// Interfaz para la respuesta del Back-End (GET /habitaciones)
+export interface RoomStatusDTO {
+    habitacion: RoomDetail;
+    ocupaciones: OcupacionDetail[];
+    reservas: any[]; // Usamos 'any' si la estructura es desconocida o compleja
+}

@@ -8,12 +8,14 @@ import DisponibilidadGrid from '../componentsCU4-5-15/DisponibilidadGrid';
 import ReservaVerification from '../componentsCU4-5-15/ReservaVerification'; 
 import EventualHuespedForm from '../componentsCU4-5-15/EventualHuespedForm'; 
 import ModalFin from '../componentsCU4-5-15/ModalFinalizacion';
+import { transformToGridData } from './transformToGridData';
 import { useRouter } from 'next/navigation';
 import '../styles/stylesCU4-5-15.css';
 import { 
     RoomCellData, 
     SelectedReservation, 
-    EventualHuesped, 
+    EventualHuesped,
+    RoomStatusDTO, 
 } from '../types/indexCU4-5-15'; 
 
 const RESERVA_STAGES = {
@@ -38,12 +40,20 @@ export default function ReservarHabitacion() {
   const router = useRouter();
 
   // --- LÓGICA DE VALIDACIÓN ---
+  const getTodayDateString = () => {
+    const d = new Date();
+    const timezoneOffset = d.getTimezoneOffset() * 60000;
+    const dateLocal = new Date(d.getTime() - timezoneOffset);
+    const today = new Date();
+    return dateLocal.toISOString().split('T')[0];
+  };
   const validateFechas = (f: { desde: string, hasta: string }) => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = getTodayDateString();
+    console.log(`Comparando: ${f.desde} < ${today}`);
     if (!f.desde || !f.hasta) return 'Debe seleccionar ambas fechas.';
     if (f.desde < today) return 'La fecha inicial debe ser posterior o igual a la fecha actual.';
     if (f.desde > f.hasta) return 'La fecha inicial no puede ser posterior a la fecha final.';
-    return '';
+    return null;
   };
 
   const validateHuespedForm = (data: EventualHuesped): Record<string, string> => {
@@ -78,9 +88,8 @@ export default function ReservarHabitacion() {
         setErrors({ fechas: errorMsg });
         return;
     }
-    setSelectedRoomType(tipo); 
     const BASE_URL = 'http://localhost:8080';
-    const url = `${BASE_URL}/api/habitaciones/disponibilidad?fechaInicio=${fechas.desde}&fechaFin=${fechas.hasta}&tipo=${tipo}`;
+    const url = `${BASE_URL}/habitaciones`;
     
     try {
       const response = await fetch(url);
@@ -90,17 +99,24 @@ export default function ReservarHabitacion() {
           throw new Error(`Error ${response.status}: Fallo al conectar con la API de disponibilidad.`);
       }
       // 2. RECIBIR LA DATA
-      const data: RoomCellData[] = await response.json(); 
+      const rawData: RoomStatusDTO[] = await response.json();
       
-      if (!Array.isArray(data) || data.length === 0) {
-          setErrorMessage("No existen habitaciones disponibles con las comodidades deseadas para el rango de fechas solicitado.");
-          setShowErrorModal(true);
-          setGridData([]);
-          return;
-      }
+      const processedGridData = transformToGridData(
+            rawData,
+            fechas.desde,
+            fechas.hasta,
+            tipo 
+        );
+      
+        if (processedGridData.length === 0) {
+            setErrorMessage("No existen habitaciones disponibles...");
+            setShowErrorModal(true);
+            setGridData([]);
+            return;
+        }
       // 3. ÉXITO
-      setGridData(data);
-      setErrors({});
+      setGridData(processedGridData);
+      setSelectedRoomType(tipo);
     } catch (error) {
       setErrorMessage(`Hubo un error de conexión al buscar disponibilidad: ${error.message}`);
       setShowErrorModal(true);
@@ -131,18 +147,26 @@ const handleHuespedSubmit = async (huespedData: EventualHuesped) => {
 
   if (Object.keys(validationErrors).length === 0) {
     
-    const BASE_URL = 'http://localhost:8080';
-    const url = `${BASE_URL}/reservas`; 
+    const reservationToSend = selectedReservations[0];
 
-    const payload = selectedReservations.map(res => ({
-            "fechaInicio": res.fechaInicio,
-            "fechaFin": res.fechaFin,
-            "estado": "RESERVADA", 
+    if (!reservationToSend) {
+            setErrorMessage("Error: No se encontró una selección de habitación válida.");
+            setShowErrorModal(true);
+            return;
+        }
+
+    const BASE_URL = 'http://localhost:8080';
+    const url = `${BASE_URL}/habitaciones`;
+
+    const payload = {
+            "fechaInicio": reservationToSend.fechaInicio,
+            "fechaFin": reservationToSend.fechaFin,
+            "estado": "RESERVADA",
             "nombre": huespedData.nombre,
             "apellido": huespedData.apellido,
             "telefono": huespedData.telefono,
-            "habitacionNumero": parseInt(res.roomId), 
-        }));
+            "habitacionNumero": parseInt(reservationToSend.roomId), // ID de habitación como número
+        };
     
     try {
       const response = await fetch(url, {
@@ -162,6 +186,7 @@ const handleHuespedSubmit = async (huespedData: EventualHuesped) => {
       );
       setShowSuccessModal(true);
       setErrors({});
+
     } catch (error) {
       setErrorMessage(`Error al registrar la reserva: ${error.message}`);
       setShowErrorModal(true);

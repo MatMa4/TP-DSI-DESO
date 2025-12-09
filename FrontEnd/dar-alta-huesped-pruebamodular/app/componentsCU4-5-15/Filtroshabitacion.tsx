@@ -12,13 +12,9 @@ interface FiltrosHabitacionProps {
 }
 
 const FiltrosHabitacion: React.FC<FiltrosHabitacionProps> = ({ fechas, onChange, onSearch, onCancel, error }) => {
-    // 1. CAMBIO: Estado local para el valor del desplegable
-    const [selectedType, setSelectedType] = useState(ROOM_TYPES[0] || ''); // Inicia con el primer tipo o vacío
-    
-    // Lista de todos los tipos de habitación
+    const [selectedType, setSelectedType] = useState(ROOM_TYPES[0] || ''); 
     const allRoomTypes = ROOM_TYPES; 
 
-    // Opcional: Establecer el tipo por defecto si la lista se carga después
     useEffect(() => {
         if (!selectedType && allRoomTypes.length > 0) {
             setSelectedType(allRoomTypes[0]);
