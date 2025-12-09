@@ -29,7 +29,7 @@ const HuespedSearchAndSelect: React.FC<HuespedSearchAndSelectProps> = ({ onSelec
    const [huespedData, setHuespedData] = useState<HuespedDTOCompleto>({
     nombre: '',
     apellido: '',
-    tipoDocumento: 'DNI', 
+    tipoDocumento: '', 
     numeroDocumento: '',
     fechaNacimiento: '', 
     telefono: '', 
@@ -81,9 +81,6 @@ const HuespedSearchAndSelect: React.FC<HuespedSearchAndSelectProps> = ({ onSelec
 
     const validateBuscarForm = (data: HuespedDTOCompleto): Record<string, string> => {
         const validationErrors: Record<string, string> = {};
-        if (!data.apellido.trim() && !data.nombre.trim() && !data.numeroDocumento.trim()) {
-            validationErrors.general = 'Debe ingresar al menos un criterio de búsqueda.';
-        }
         return validationErrors;
     };
 const handleConfirmCancel = () => {
@@ -114,11 +111,8 @@ const handleConfirmCancel = () => {
             const params = new URLSearchParams();
             if (huespedData.nombre.trim()) params.append('nombre', huespedData.nombre.trim());
             if (huespedData.apellido.trim()) params.append('apellido', huespedData.apellido.trim());
-            
-            if (huespedData.numeroDocumento.trim()) {
-                params.append('numeroDocumento', huespedData.numeroDocumento.trim());
-                params.append('tipoDocumento', huespedData.tipoDocumento);
-            }
+            if (huespedData.numeroDocumento.trim()) params.append('numero', huespedData.numeroDocumento.trim());
+            if (huespedData.tipoDocumento.trim()) params.append('tipo', huespedData.tipoDocumento);
 
             const queryString = params.toString();
             // CRÍTICO: Asegúrate que esta URL sea la correcta para buscar huéspedes
