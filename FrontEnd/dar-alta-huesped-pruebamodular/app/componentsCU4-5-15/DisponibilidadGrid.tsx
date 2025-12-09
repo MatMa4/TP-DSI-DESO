@@ -43,13 +43,9 @@ const actualRooms = (() => { // Ejecutar como una función simple
     const roomIds = gridData.map(d => d.roomId?.toString() ?? '');
     
     const validUniqueRooms = [...new Set(roomIds)].filter(id => id.length > 0);
-    
-    console.log("Debug: uniqueRooms after removing useMemo:", validUniqueRooms); 
 
     return validUniqueRooms.sort((a, b) => parseInt(a) - parseInt(b));
 })();
-
-    console.log("Rooms for Rendering (actualRooms):", actualRooms);
 
     const getCellState = (roomId: string, date: string): RoomCellData['estado'] => {
         return gridData.find(d => d.roomId === roomId && d.date === date)?.estado || 'Disponible';

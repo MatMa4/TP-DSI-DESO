@@ -33,17 +33,16 @@ export default function OcuparHabitacion() {
     const [showVerificationModal, setShowVerificationModal] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+    const [rawRoomData, setRawRoomData] = useState<RoomStatusDTO[]>([]);
     const router = useRouter();
     
-    // --- LÓGICA DE SIMULACIÓN DE DATOS 
 const handleSearch = async (tipo: string) => {
+    console.log('API de Disponibilidad Recargada')
     if (!fechas.desde || !fechas.hasta) {
         setErrorMessage('Debe seleccionar ambas fechas.');
         setShowErrorModal(true);
         return;
     }
-    
-    // CRÍTICO: Limpieza de estado de error antes de buscar
     setErrorMessage(''); 
     setShowErrorModal(false);
     
@@ -60,13 +59,14 @@ const handleSearch = async (tipo: string) => {
         
         // 2. RECIBIR LA DATA
         const rawData: RoomStatusDTO[] = await response.json(); 
+        setRawRoomData(rawData);
         
         // 2. USO DEL TRANSFORMADOR REAL
         const processedGridData = transformToGridData(
             rawData,
             fechas.desde,
             fechas.hasta,
-            tipo // Filtramos por el tipo seleccionado
+            tipo 
         );
         
         if (processedGridData.length === 0) {
@@ -134,38 +134,54 @@ const handleSearch = async (tipo: string) => {
             return;
         }
 
-        const toISODate = (ymdString: string) => {
-        // Garantiza que el Back-End de Java interprete la hora como medianoche del día seleccionado
-        return new Date(ymdString + 'T00:00:00').toISOString(); 
+        const habitacionDTOCompleta = rawRoomData.find(
+        (roomDto) => roomDto.habitacion.numero.toString() === roomSelection.roomId
+        );
+
+        if (!habitacionDTOCompleta) {
+            setErrorMessage("Error interno: No se encontraron los detalles completos de la habitación para el registro.");
+            setShowErrorModal(true);
+            return;
+        }
+        const h = habitacionDTOCompleta.habitacion;
+
+        const toYMDString = (ymdString: string) => {
+        // Esto convierte '2025-12-09' -> '2025-12-09T00:00:00.000Z' -> '2025-12-09'
+        return new Date(ymdString + 'T00:00:00').toISOString().split('T')[0];
         };
         const tipoHabitacionLimpio = selectedRoomType.replace(/\s/g, '');
-        // 1. CONSTRUIR EL PAYLOAD (OcupacionDTO)
         const payload = {
         "habitacion": { 
-            "numero": parseInt(roomSelection.roomId) ,
-            "tipoHabitacion": tipoHabitacionLimpio},
-        "fechaInicio": toISODate(roomSelection.fechaInicio),
-        "fechaFin": toISODate(roomSelection.fechaFin),
+            "numero": parseInt(roomSelection.roomId),
+            "costoPorNoche": h.costoPorNoche,
+            "capacidad": h.capacidad,
+            "estado": h.estado,
+            "descripcion": h.descripcion,
+            "camaDoble": h.camaDoble,
+            "tipoHabitacion": tipoHabitacionLimpio, 
+        },
+        "fechaInicio": toYMDString(roomSelection.fechaInicio),
+        "fechaFin": toYMDString(roomSelection.fechaFin),
         "checkIn": "14:00:00", 
         "checkOut": "10:00:00", 
         
-        // C. Array de Huéspedes: Usamos los objetos completos tal como fueron recibidos
-        "huespedes": selectedHuespedes.map(h => ({
-            "numeroDocumento": h.numeroDocumento,
-            "tipoDocumento": h.tipoDocumento,
-            "apellido": h.apellido,
-            "nombre": h.nombre,
-            "fechaNacimiento": h.fechaNacimiento,
-            "telefono": h.telefono,
-            "email": h.email,
-            "ocupacion": h.ocupacion,
-            "nacionalidad": h.nacionalidad,
-            "cuit": h.cuit,
-            "posicionIVA": h.posicionIVA,
+        // Array de Huéspedes
+        "huespedes": selectedHuespedes.map(huesped => ({
+            "numeroDocumento": huesped.numeroDocumento,
+            "tipoDocumento": huesped.tipoDocumento,
+            "apellido": huesped.apellido,
+            "nombre": huesped.nombre,
+            "fechaNacimiento": huesped.fechaNacimiento,
+            "telefono": huesped.telefono,
+            "email": huesped.email,
+            "ocupacion": huesped.ocupacion,
+            "nacionalidad": huesped.nacionalidad,
+            "cuit": huesped.cuit,
+            "posicionIVA": huesped.posicionIVA,
             "alojado": true,
-            "direccionHuesped": h.direccionHuesped, // Objeto anidado completo
-            }))
-        };
+            "direccionHuesped": huesped.direccionHuesped, 
+        }))
+    };
         
         const BASE_URL = 'http://localhost:8080';
         const url = `${BASE_URL}/ocupacion`; // Endpoint de Ocupación

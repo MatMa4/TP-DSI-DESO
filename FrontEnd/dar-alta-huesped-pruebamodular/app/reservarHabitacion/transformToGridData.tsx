@@ -38,7 +38,6 @@ export const transformToGridData = (
 
     const normalizedTargetType = targetRoomType.replace(/\s/g, '');
     const allDates = getDatesInRange(fechaInicio, fechaFin);
-    console.log("Rango de fechas generado:", allDates);
     const gridData: RoomCellData[] = [];
 
     // 1. Filtrar las habitaciones por tipo
@@ -49,8 +48,6 @@ export const transformToGridData = (
         // CRÍTICO: Comparar las cadenas normalizadas
         return normalizedBackendType === normalizedTargetType;
     });
-    console.log("Filtered Rooms Count:", filteredRooms.length);
-
 
     // 2. Iterar sobre cada habitación y cada día dentro del rango
     for (const roomDto of filteredRooms) {

@@ -63,7 +63,8 @@ export interface RoomDetail {
     capacidad: number;
     estado: string; // "HABITABLE"
     tipoHabitacion: string; // "IndividualEstándar"
-    // ... otros detalles de cama
+    descripcion: null;
+    camaDoble: number,
 }
 
 export interface OcupacionDetail {
