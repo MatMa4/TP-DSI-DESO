@@ -21,9 +21,9 @@ interface HuespedResultado {
   numeroDocumento: string;
 }
 
-// <--- NUEVO: Interfaz para la configuración del orden
+// Interfaz para la configuración del orden
 interface SortConfig {
-  key: keyof HuespedResultado; // Solo permite claves que existan en HuespedResultado
+  key: keyof HuespedResultado; 
   direction: 'asc' | 'desc';
 }
 
@@ -42,18 +42,16 @@ const BuscarHuesped = () => {
   const [seleccionadoId, setSeleccionadoId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // <--- NUEVO: Estado para el ordenamiento
+  // Estado para el ordenamiento
   const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
 
   // --- MANEJADORES ---
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    // Forzar mayúsculas en Nombre y Apellido
     const valorFinal = (name === 'nombre' || name === 'apellido') ? value.toUpperCase() : value;
 
     setFormData(prev => ({ ...prev, [name]: valorFinal }));
     
-    // Limpiar error al escribir
     if (errors[name]) {
         setErrors(prev => {
             const newErrors = { ...prev };
@@ -66,7 +64,6 @@ const BuscarHuesped = () => {
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // 1. Validar formato
     const validationErrors = validateBuscarForm(formData);
     if (Object.keys(validationErrors).length > 0) {
         setErrors(validationErrors);
@@ -76,22 +73,17 @@ const BuscarHuesped = () => {
     setIsLoading(true);
     setSeleccionadoId(null);
     setResultados([]); 
-    setSortConfig(null); // <--- NUEVO: Reseteamos el orden al hacer una nueva búsqueda
+    setSortConfig(null); 
 
     try {
-        // 2. Construir URL dinámica
         const params = new URLSearchParams();
         if (formData.nombre.trim()) params.append('nombre', formData.nombre.trim());
         if (formData.apellido.trim()) params.append('apellido', formData.apellido.trim());
-        
-        // Solo enviar documento si hay número escrito
-        if (formData.numeroDocumento.trim()) {
-            params.append('numeroDocumento', formData.numeroDocumento.trim());
-            params.append('tipoDocumento', formData.tipoDocumento);
-        }
+        if (formData.numeroDocumento.trim()) params.append('numero', formData.numeroDocumento.trim());
+        if (formData.tipoDocumento.trim()) params.append('tipo', formData.tipoDocumento);
 
         const queryString = params.toString();
-        const urlFinal = `http://localhost:8080/huespedes/buscar${queryString ? `?${queryString}` : ''}`;
+        const urlFinal = `http://localhost:8080/huespedes/buscar?${queryString}`;
         
         console.log('Buscando en:', urlFinal);
 
@@ -114,18 +106,15 @@ const BuscarHuesped = () => {
     }
   };
 
-  // <--- NUEVO: Función para manejar el clic en los encabezados
   const handleSort = (key: keyof HuespedResultado) => {
     let direction: 'asc' | 'desc' = 'asc';
     
-    // Si ya estamos ordenando por esta columna y es ascendente, cambiamos a descendente
     if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
       direction = 'desc';
     }
     setSortConfig({ key, direction });
   };
 
-  // <--- NUEVO: Calculamos los resultados ordenados dinámicamente
   const resultadosOrdenados = useMemo(() => {
     let sortedData = [...resultados];
     if (sortConfig !== null) {
@@ -142,27 +131,61 @@ const BuscarHuesped = () => {
     return sortedData;
   }, [resultados, sortConfig]);
 
-  // <--- NUEVO: Helper para mostrar la flechita
   const getSortIcon = (key: keyof HuespedResultado) => {
-    if (!sortConfig || sortConfig.key !== key) return null; // Sin icono
+    if (!sortConfig || sortConfig.key !== key) return null; 
     return sortConfig.direction === 'asc' ? ' ▲' : ' ▼';
   };
 
-  // --- NAVEGACIÓN "FUERZA BRUTA" (Infalible) ---
-  const handleSiguiente = () => {
-      // CASO 1: Selección -> Modificar (Simulado)
-      if (seleccionadoId) {
-          alert(`Simulación: Ir a Modificar Huésped (Documento: ${seleccionadoId})`);
-      } 
-      // CASO 2: Sin selección o sin resultados -> Ir a ALTA (CU09)
-      else {
-          console.log("Redirigiendo a Alta de Huésped...");
-          window.location.href = '/darAltaHuesped';
-      }
+  const handleSiguiente = async () => {
+    // CASO 1: Hay un huésped seleccionado -> Validar con Back e ir a Modificar
+    if (seleccionadoId) {
+        
+        const huespedElegido = resultados.find(h => h.numeroDocumento === seleccionadoId);
+
+        if (!huespedElegido) {
+            alert("Error: No se pudieron obtener los datos del huésped seleccionado.");
+            return;
+        }
+
+        try {
+            const params = new URLSearchParams();
+            params.append('tipo', huespedElegido.tipoDocumento);
+            params.append('numero', huespedElegido.numeroDocumento);
+
+            const urlObtener = `http://localhost:8080/huespedes/obtener?${params.toString()}`;
+            
+            console.log("Consultando huésped en:", urlObtener);
+
+            const response = await fetch(urlObtener, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: No se pudo recuperar el huésped.`);
+            }
+
+            const huespedCompleto = await response.json();
+            console.log("Huésped recibido:", huespedCompleto);
+
+            alert(`¡Huésped encontrado en el Back!\n\nNombre: ${huespedCompleto.nombre} ${huespedCompleto.apellido}\nDocumento: ${huespedCompleto.tipoDocumento} ${huespedCompleto.numeroDocumento}\n\n(Redirigiendo al CU 10 Modificar Huesped...)`);
+            
+            // window.location.href = `/modificarHuesped?id=${huespedCompleto.id}`;
+
+        } catch (error) {
+            console.error(error);
+            alert("Error de conexión: El backend no respondió correctamente al intentar obtener el huésped.");
+        }
+
+    } 
+    // CASO 2: Sin selección -> Ir a ALTA (CU09)
+    else {
+        console.log("Redirigiendo a Alta de Huésped...");
+        window.location.href = '/darAltaHuesped';
+    }
   };
 
   const handleCancelar = () => {
-      // Volver al Menú Principal
       window.location.href = '/';
   };
 
@@ -199,7 +222,6 @@ const BuscarHuesped = () => {
                     <table className="custom-table">
                         <thead>
                             <tr>
-                                {/* <--- NUEVO: Agregamos onClick y estilos a los TH */}
                                 <th onClick={() => handleSort('nombre')} style={{ cursor: 'pointer' }}>
                                     Nombre {getSortIcon('nombre')}
                                 </th>
@@ -215,13 +237,28 @@ const BuscarHuesped = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {/* <--- NUEVO: Usamos resultadosOrdenados en vez de resultados */}
                             {resultadosOrdenados.length > 0 ? (
                                 resultadosOrdenados.map((h) => (
                                     <tr 
                                         key={h.numeroDocumento}
+                                        // 1. Permite seleccionar con TAB
+                                        tabIndex={0} 
+                                        
+                                        // 2. Click normal con ratón
                                         onClick={() => setSeleccionadoId(h.numeroDocumento === seleccionadoId ? null : h.numeroDocumento)}
+                                        
+                                        // 3. Selección con teclado (Enter o Espacio)
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter' || e.key === ' ') {
+                                                e.preventDefault(); // Evita scroll con espacio
+                                                setSeleccionadoId(h.numeroDocumento === seleccionadoId ? null : h.numeroDocumento);
+                                            }
+                                        }}
+
                                         className={seleccionadoId === h.numeroDocumento ? 'selected-row' : ''}
+                                        
+                                        // Estilo para indicar visualmente el foco (outline)
+                                        style={{ cursor: 'pointer', outline: 'none' }} 
                                     >
                                         <td>{h.nombre}</td>
                                         <td>{h.apellido}</td>
@@ -240,7 +277,6 @@ const BuscarHuesped = () => {
                     </table>
                 </div>
                 <div className="results-footer">
-                    {/* Botón con Z-INDEX forzado para asegurar clic */}
                     <button 
                         type="button" 
                         className="btn-next" 

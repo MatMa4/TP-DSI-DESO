@@ -89,6 +89,33 @@ export default function Home() {
     setShowCancelModal(true);
   };
 
+  // --- FUNCIÓN AUXILIAR PARA GUARDAR (Definida una sola vez) ---
+  const guardarHuespedDirecto = async (dataAGuardar: any) => {
+      try {
+          const res = await fetch('http://localhost:8080/huespedes', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dataAGuardar),
+          });
+
+          if (res.ok) {
+            const saved = await res.json().catch(() => null);
+            console.log('✅ Guardado exitoso:', saved);
+            setSuccessMessage(
+              `El huésped ${dataAGuardar.nombre} ${dataAGuardar.apellido} ha sido cargado correctamente.\n¿Desea cargar otro?`
+            );
+            setShowSuccessModal(true);
+            setPendingFinalData(null);
+          } else {
+            console.error("Fallo al guardar:", res.status);
+            alert("No se pudo guardar el huésped. Verifique los datos enviados.");
+          }
+      } catch (e) {
+          console.error("Error en la petición de guardado:", e);
+          alert("Error de red al intentar guardar.");
+      }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -96,64 +123,86 @@ export default function Home() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      
+  
+      // 1. APLICAR TRIM() A TODO + MAYÚSCULAS
+      // El orden .trim().toUpperCase() es el mejor: primero limpia, luego convierte.
       const transformedData = {
         ...formData,
-        numeroDocumento: formData.numeroDocumento ? formData.numeroDocumento.toUpperCase() : formData.numeroDocumento,
-        tipoDocumento: formData.tipoDocumento ? formData.tipoDocumento.toUpperCase() : formData.tipoDocumento,
-        apellido: formData.apellido ? formData.apellido.toUpperCase() : formData.apellido,
-        nombre: formData.nombre ? formData.nombre.toUpperCase() : formData.nombre,
-        telefono: formData.telefono? formData.telefono.toUpperCase() : formData.telefono,
-        email: formData.email? formData.email.toUpperCase() : formData.email,
-        ocupacion: formData.ocupacion? formData.ocupacion.toUpperCase() : formData.ocupacion,
-        nacionalidad: formData.nacionalidad? formData.nacionalidad.toUpperCase() : formData.nacionalidad,
-        cuit: formData.cuit,
-        posicionIVA: formData.posicionIVA.trim()? formData.posicionIVA.toUpperCase() : "CONSUMIDOR FINAL",
+        
+        // --- DATOS PERSONALES ---
+        // reemplaza "muchos espacios" por "un espacio"
+        nombre: formData.nombre.replace(/\s+/g, ' ').trim().toUpperCase(),
+        apellido: formData.apellido.replace(/\s+/g, ' ').trim().toUpperCase(),
+        
+        // Para el DNI y Teléfono, generalmente no queremos NINGUN espacio interno
+        // Si quieres borrar TODOS los espacios (ej: "123 456" -> "123456"), usa '' en vez de ' '
+        numeroDocumento: formData.numeroDocumento.trim(), // O .replace(/\s+/g, '') si quieres sin espacios
+        tipoDocumento: formData.tipoDocumento,
+        telefono: formData.telefono.trim().toUpperCase(),
+        
+        email: formData.email.trim().toUpperCase(),
+        ocupacion: formData.ocupacion.replace(/\s+/g, ' ').trim().toUpperCase(),
+        nacionalidad: formData.nacionalidad.replace(/\s+/g, ' ').trim().toUpperCase(),
+        
+        cuit: formData.cuit.trim(),
+        posicionIVA: formData.posicionIVA.trim() ? formData.posicionIVA.trim().toUpperCase() : "CONSUMIDOR FINAL",
+        
         fechaNacimiento: formData.fechaNacimiento,
         alojado: formData.alojado,
+        
+        // --- DIRECCIÓN (También aplicamos limpieza de espacios internos) ---
         direccionHuesped: {
-          calle: formData.direccionHuesped.calle? formData.direccionHuesped.calle.toUpperCase() : formData.direccionHuesped.calle,
-          numero: formData.direccionHuesped.numero,
-          piso: formData.direccionHuesped.piso,
-          codigo: formData.direccionHuesped.codigo,
-          departamento: formData.direccionHuesped.departamento? formData.direccionHuesped.departamento.toUpperCase() : formData.direccionHuesped.departamento,
-          localidad: formData.direccionHuesped.localidad? formData.direccionHuesped.localidad.toUpperCase() : formData.direccionHuesped.localidad,
-          provincia: formData.direccionHuesped.provincia? formData.direccionHuesped.provincia.toUpperCase() : formData.direccionHuesped.provincia,
-          pais: formData.direccionHuesped.pais? formData.direccionHuesped.pais.toUpperCase() : formData.direccionHuesped.pais
+          calle: formData.direccionHuesped.calle.replace(/\s+/g, ' ').trim().toUpperCase(),
+          departamento: formData.direccionHuesped.departamento.replace(/\s+/g, ' ').trim().toUpperCase(),
+          localidad: formData.direccionHuesped.localidad.replace(/\s+/g, ' ').trim().toUpperCase(),
+          provincia: formData.direccionHuesped.provincia.replace(/\s+/g, ' ').trim().toUpperCase(),
+          pais: formData.direccionHuesped.pais.replace(/\s+/g, ' ').trim().toUpperCase(),
+          
+          // Estos suelen ser números o códigos cortos, el trim básico alcanza
+          numero: formData.direccionHuesped.numero.trim(),
+          piso: formData.direccionHuesped.piso.trim(),
+          codigo: formData.direccionHuesped.codigo.trim(),
         }
       };
       
       setFormData(transformedData);
       let finalData = transformedData;
+    
+      // 2. EL LOG MÁGICO PARA VER EL JSON
+      // JSON.stringify(objeto, null, 2) hace que se vea ordenado y legible en la consola
+      console.log("📦 DATOS LIMPIOS A ENVIAR:", JSON.stringify(finalData, null, 2));
 
       try {
-        const res = await fetch('http://localhost:8080/huespedes/consultarDocumento?tipo=..', {
+        // Consultar Disponibilidad
+        const params = new URLSearchParams();
+        params.append('tipo', finalData.tipoDocumento);
+        params.append('numero', finalData.numeroDocumento);
+
+        const checkRes = await fetch(`http://localhost:8080/huespedes/consultarDocumento?${params.toString()}`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' }
         });
 
-        
-
-        if (res.ok) {
-          const res = await fetch('http://localhost:8080/huespedes', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(finalData),
-          });
-          const saved = await res.json().catch(() => null);
-          console.log('✅ Huésped guardado:', saved ?? 'No body');
-          setSuccessMessage(
-            `El huésped ${finalData.nombre ?? ''} ${finalData.apellido ?? ''} ha sido satisfactoriamente cargado al sistema\n¿Desea cargar otro?`
-          );
-          setShowSuccessModal(true);
-          setPendingFinalData(null);
-        } else if (res.status === 409) {
-          setModalMessage('El tipo y número de documento ya existen en el sistema');
-          setPendingFinalData(finalData); 
-          setShowModal(true);
+        // CASO 1: 200 OK -> NO EXISTE (Libre) -> GUARDAR
+        if (checkRes.ok) {
+            console.log("Documento disponible. Guardando...");
+            await guardarHuespedDirecto(finalData);
+        } 
+        // CASO 2: 409 CONFLICT -> YA EXISTE -> MOSTRAR MODAL
+        else if (checkRes.status === 409) {
+            console.log("Conflicto: El huésped ya existe.");
+            setPendingFinalData(finalData); 
+            setModalMessage(`El huésped con ${finalData.tipoDocumento} ${finalData.numeroDocumento} ya existe en el sistema.\n¿Desea sobreescribir sus datos?`);
+            setShowModal(true);
+        } 
+        else {
+            console.error("Error inesperado:", checkRes.status);
+            alert("Ocurrió un error al verificar el documento.");
         }
+
       } catch (err) {
-        console.error('❌ Error de conexión al backend:', err);
+        console.error('❌ Error de conexión:', err);
+        alert("Error de conexión con el servidor.");
       }
     }
   };
@@ -169,25 +218,9 @@ export default function Home() {
     setShowModal(false);
     setHighlightDocumento(false);
     if (!pendingFinalData) return;
-    try {
-      const res = await fetch('http://localhost:8080/huespedes', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(pendingFinalData),
-      });
-      if (res.ok) {
-        setSuccessMessage(
-          `El huésped ${pendingFinalData.nombre ?? ''} ${pendingFinalData.apellido ?? ''} ha sido satisfactoriamente cargado al sistema\n¿Desea cargar otro?`
-        );
-        setShowSuccessModal(true);
-      } else {
-        console.error('Error al forzar registro:', res.status);
-      }
-    } catch (e) {
-      console.error('Error de conexión al forzar:', e);
-    } finally {
-      setPendingFinalData(null);
-    }
+    
+    // Si confirma conflicto, usamos la misma lógica de guardado (sobrescribe por ser PUT)
+    await guardarHuespedDirecto(pendingFinalData);
   };
 
   const handleCloseConflict = () => {
@@ -195,22 +228,17 @@ export default function Home() {
     setShowModal(false);
   };
 
-  // CASO 1: Confirmar Cancelación -> IR AL MENÚ
   const handleConfirmCancel = () => {
     resetForm();
     setShowCancelModal(false);
-    // Redirección infalible al menú principal
     window.location.href = '/';
   };
 
-  // CASO 2: Éxito -> Opción "NO" (Cerrar) -> IR AL MENÚ
   const handleSuccessClose = () => {
     setShowSuccessModal(false);
-    // Redirección infalible al menú principal
     window.location.href = '/';
   };
 
-  // CASO 3: Éxito -> Opción "SI" (Confirmar) -> LIMPIAR Y SEGUIR AQUÍ
   const handleSuccessConfirm = () => {
     resetForm();
     setShowSuccessModal(false);

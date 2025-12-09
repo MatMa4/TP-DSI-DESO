@@ -11,7 +11,7 @@ body {
 
 .buscar-huesped-layout {
     display: flex;
-    width: 1920px; /* Ancho fijo estándar */
+    width: 1440px; /* Ancho fijo estándar */
     height: 1080px; /* Alto fijo */
 }
 
@@ -171,7 +171,7 @@ input, select{
 
 /* 4. PANEL DERECHO (Resultados) */
 .right-pane {
-    width: 1420px; 
+    width: 940px; 
     background-color: #507393;
     display: flex;
     justify-content: center;
@@ -184,7 +184,7 @@ input, select{
 
 .results-card {
     background-color: white;
-    width: 1100px;
+    width: 940px;
     height: 800px;
     border-radius: 40px;
     padding: 30px;
@@ -193,6 +193,7 @@ input, select{
     box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     position: relative;
     z-index: 10;
+    left: 230px;
 }
 
 .results-header {
@@ -252,4 +253,10 @@ input, select{
     cursor: pointer;
     position: relative;
     z-index: 9999 !important;
+}
+/* Indicador visual cuando navegas con TAB */
+.custom-table tr:focus {
+    background-color: #f0f8ff; /* Un azul muy clarito */
+    outline: 2px solid #022E66; /* Borde azul para resaltar */
+    outline-offset: -2px;
 }
