@@ -77,8 +77,8 @@ export const transformToGridData = (
             if (estado !== 'Fuera de servicio') {
                 for (const ocupacion of roomDto.ocupaciones) {
                     // Nota: Asegúrate que fechaInicio/fechaFin del DTO de ocupación sean válidos
-                    const ocupacionStart = new Date(ocupacion.fechaInicio);
-                    const ocupacionEnd = new Date(ocupacion.fechaFin);
+                    const ocupacionStart = new Date(ocupacion.fechaInicio + 'T00:00:00');
+                    const ocupacionEnd = new Date(ocupacion.fechaFin + 'T00:00:00');
 
                     // Comparamos el día destino con el rango de ocupación
                     if (targetDate >= ocupacionStart && targetDate <= ocupacionEnd) {
@@ -92,7 +92,7 @@ export const transformToGridData = (
             if (estado === 'Disponible') { 
                 for (const reserva of roomDto.reservas) {
                     const reservaStart = new Date(reserva.fechaInicio);
-                    const reservaEnd = new Date(reserva.fechaFin+ 'T00:00:00');
+                    const reservaEnd = new Date(reserva.fechaFin + 'T00:00:00');
 
                     if (targetDate >= reservaStart && targetDate <= reservaEnd) {
                         estado = 'Reservada';

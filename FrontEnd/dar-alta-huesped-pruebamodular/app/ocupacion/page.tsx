@@ -145,9 +145,9 @@ const handleSearch = async (tipo: string) => {
         }
         const h = habitacionDTOCompleta.habitacion;
 
-        const toYMDString = (ymdString: string) => {
-        // Esto convierte '2025-12-09' -> '2025-12-09T00:00:00.000Z' -> '2025-12-09'
-        return new Date(ymdString + 'T00:00:00').toISOString().split('T')[0];
+        const toISODate = (ymdString: string) => {
+        // Garantiza que el Back-End de Java interprete la hora como medianoche del día
+        return new Date(ymdString + 'T00:00:00').toISOString(); 
         };
         const tipoHabitacionLimpio = selectedRoomType.replace(/\s/g, '');
         const payload = {
@@ -160,8 +160,8 @@ const handleSearch = async (tipo: string) => {
             "camaDoble": h.camaDoble,
             "tipoHabitacion": tipoHabitacionLimpio, 
         },
-        "fechaInicio": toYMDString(roomSelection.fechaInicio),
-        "fechaFin": toYMDString(roomSelection.fechaFin),
+        "fechaInicio": toISODate(roomSelection.fechaInicio),
+        "fechaFin": toISODate(roomSelection.fechaFin),
         "checkIn": "14:00:00", 
         "checkOut": "10:00:00", 
         
