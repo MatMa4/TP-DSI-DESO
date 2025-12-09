@@ -31,7 +31,7 @@ const BuscarHuesped = () => {
   const [formData, setFormData] = useState<FormData>({
     nombre: '',
     apellido: '',
-    tipoDocumento: 'DNI', 
+    tipoDocumento: '', 
     numeroDocumento: '',
   });
 

@@ -123,19 +123,14 @@ export default function Home() {
 
     if (Object.keys(newErrors).length === 0) {
   
-      // 1. APLICAR TRIM() A TODO + MAYÚSCULAS
-      // El orden .trim().toUpperCase() es el mejor: primero limpia, luego convierte.
+      // 1. APLICAR TRIM() A TODO Y MAYÚSCULAS
       const transformedData = {
-        ...formData,
-        
+        ...formData, 
         // --- DATOS PERSONALES ---
-        // reemplaza "muchos espacios" por "un espacio"
         nombre: formData.nombre.replace(/\s+/g, ' ').trim().toUpperCase(),
         apellido: formData.apellido.replace(/\s+/g, ' ').trim().toUpperCase(),
         
-        // Para el DNI y Teléfono, generalmente no queremos NINGUN espacio interno
-        // Si quieres borrar TODOS los espacios (ej: "123 456" -> "123456"), usa '' en vez de ' '
-        numeroDocumento: formData.numeroDocumento.trim(), // O .replace(/\s+/g, '') si quieres sin espacios
+        numeroDocumento: formData.numeroDocumento.trim(), 
         tipoDocumento: formData.tipoDocumento,
         telefono: formData.telefono.trim().toUpperCase(),
         
@@ -156,8 +151,6 @@ export default function Home() {
           localidad: formData.direccionHuesped.localidad.replace(/\s+/g, ' ').trim().toUpperCase(),
           provincia: formData.direccionHuesped.provincia.replace(/\s+/g, ' ').trim().toUpperCase(),
           pais: formData.direccionHuesped.pais.replace(/\s+/g, ' ').trim().toUpperCase(),
-          
-          // Estos suelen ser números o códigos cortos, el trim básico alcanza
           numero: formData.direccionHuesped.numero.trim(),
           piso: formData.direccionHuesped.piso.trim(),
           codigo: formData.direccionHuesped.codigo.trim(),
@@ -172,7 +165,7 @@ export default function Home() {
       console.log("📦 DATOS LIMPIOS A ENVIAR:", JSON.stringify(finalData, null, 2));
 
       try {
-        // Consultar Disponibilidad
+        // Consultar Disponibilidad de DNI
         const params = new URLSearchParams();
         params.append('tipo', finalData.tipoDocumento);
         params.append('numero', finalData.numeroDocumento);
@@ -243,7 +236,7 @@ export default function Home() {
     setShowSuccessModal(false);
   };
 
-  // --- RENDERIZADO (UI) ---
+  // --- UI ---
   return (
     <main>
       <div className="tittle_box">

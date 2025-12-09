@@ -27,11 +27,12 @@ const DocumentoFieldCU2: React.FC<DocumentoFieldCU2Props> = ({
           onChange={onChange}
         >
           {/* Corregido: los values deben coincidir con la lógica de estado y validación (mayúsculas) */}
+          <option value="">TIPO</option>
           <option value="DNI">DNI</option>
           <option value="LE">LE</option>
           <option value="LC">LC</option>
-          <option value="pasaporte">Pasaporte</option>
-          <option value="Otro">Otro</option>
+          <option value="PASAPORTE">PASAPORTE</option>
+          <option value="OTRO">OTRO</option>
         </select>
         <input
           className="input_box_documento"
