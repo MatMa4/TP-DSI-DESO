@@ -29,7 +29,7 @@ export interface RoomCellData {
     roomId: string;
     roomType: string;
     date: string; 
-    estado: 'Disponible' | 'Reservada' | 'Ocupada' | 'Fuera de servicio';
+    estado: 'Disponible'| 'Fuera de servicio'|'Reservada'|'Ocupada';
     reservationId?: string; 
     reservedBy?: string; 
     reservedDNI?: string;
@@ -54,8 +54,8 @@ export const DNI_TYPES_OPTIONS: Array<'DNI' | 'LC' | 'Pasaporte'> = [
     'Pasaporte',
 ];
 
-export const ROOM_TYPES = ['Individual Estándar', 'Doble Estándar', 'Doble Superior', 'Superior Family Plan', 'Suite Doble'];
-export const ROOMS =['A101', 'A102', 'B201', 'B202', 'C301', 'C302', 'D401', 'D402', 'S501'];
+export const ROOM_TYPES = ['Individual Estándar', 'Doble Estándar', 'Doble Superior', 'Superior Family Plan', 'Suite'];
+
 
 export interface RoomDetail {
     numero: number;
