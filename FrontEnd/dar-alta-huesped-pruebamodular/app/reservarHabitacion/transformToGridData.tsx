@@ -95,7 +95,7 @@ export const transformToGridData = (
             if (estado === 'Disponible') { 
                 for (const reserva of roomDto.reservas) {
                     const reservaStart = new Date(reserva.fechaInicio);
-                    const reservaEnd = new Date(reserva.fechaFin);
+                    const reservaEnd = new Date(reserva.fechaFin+ 'T00:00:00');
 
                     if (targetDate >= reservaStart && targetDate <= reservaEnd) {
                         estado = 'Reservada';

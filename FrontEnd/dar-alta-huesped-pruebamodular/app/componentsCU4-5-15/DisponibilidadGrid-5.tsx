@@ -257,7 +257,7 @@ const DisponibilidadGrid: React.FC<DisponibilidadGridProps> = ({ fechas, gridDat
 
                                     return (
                                         <td 
-                                            key={cellId} 
+                                            key={cellKey} 
                                             className={cellClass}
                                             onMouseDown={(e) => handleCellClick(e, roomId, date)}
                                         >

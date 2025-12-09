@@ -172,7 +172,7 @@ const handleHuespedSubmit = async (huespedData: EventualHuesped) => {
     const payload=[reservaUnica];
 
     const BASE_URL = 'http://localhost:8080';
-    const url = `${BASE_URL}/habitaciones`;
+    const url = `${BASE_URL}/reservas`;
 
     try {
       const response = await fetch(url, {

@@ -20,7 +20,7 @@ const ReservaVerification: React.FC<ReservaVerificationProps> = ({ show, reserva
             
             <div className="modal" style={{ width: '700px', maxWidth: '90%', padding: '25px' }}>
                 
-                <h3 style={{ fontStyle:'bold',marginBottom: '15px', color: '#022E66' }}>Resumen de Reserva</h3>
+                <h3 style={{ fontStyle:'bold',marginBottom: '15px', color: '#022E66' }}>Resumen de Ocupación</h3>
                 <p>Por favor, verifique el resumen de las habitaciones y fechas seleccionadas antes de continuar:</p>                
                 <div style={{ margin: '20px 0', border: '1px solid #ccc', padding: '15px', maxHeight: '300px', overflowY: 'auto', backgroundColor: '#D9D9D9', borderRadius: '4px' }}>
                     {reservations.map((res: SelectedReservation, index: number) => (

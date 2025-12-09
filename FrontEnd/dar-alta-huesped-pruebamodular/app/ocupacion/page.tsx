@@ -5,7 +5,11 @@ import DisponibilidadGrid from '../componentsCU4-5-15/DisponibilidadGrid';
 import ModalError from '../componentsCU4-5-15/ModalError'; 
 import ReservaVerification from '../componentsCU4-5-15/ReservaVerification'; 
 import HuespedSearchAndSelect from '../componentsCU4-5-15/HuespedSearchAndSelect'; 
-import { RoomCellData, SelectedReservation, HuespedDTOCompleto } from '../types/indexCU4-5-15'; 
+import ModalConfirmacion from '../componentsCU4-5-15/ModalConfirmacion';
+import FlowDecisionModal from '../componentsCU4-5-15/FlowDecisionModal';
+import { transformToGridData } from '../reservarHabitacion/transformToGridData';
+import { RoomCellData, SelectedReservation, HuespedDTOCompleto,RoomStatusDTO } from '../types/indexCU4-5-15'; 
+import { useRouter } from 'next/navigation';
 import '../styles/stylesCU4-5-15.css';
 
 const OCUPAR_STAGES = {
@@ -24,8 +28,12 @@ export default function OcuparHabitacion() {
     const [selectedReservations, setSelectedReservations] = useState<SelectedReservation[]>([]);
     const [occupyingGuests, setOccupyingGuests] = useState<HuespedDTOCompleto[]>([]); 
     const [showErrorModal, setShowErrorModal] = useState(false);
+    const [showCancelModal, setShowCancelModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [showVerificationModal, setShowVerificationModal] = useState(false);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
+    const router = useRouter();
     
     // --- LÓGICA DE SIMULACIÓN DE DATOS 
 const handleSearch = async (tipo: string) => {
@@ -40,7 +48,7 @@ const handleSearch = async (tipo: string) => {
     setShowErrorModal(false);
     
     const BASE_URL = 'http://localhost:8080';
-    const url = `${BASE_URL}/api/habitaciones/disponibilidad?fechaInicio=${fechas.desde}&fechaFin=${fechas.hasta}&tipo=${tipo}`;
+    const url = `${BASE_URL}/habitaciones?fechaInicio=${fechas.desde}&fechaFin=${fechas.hasta}&tipo=${tipo}`;
 
     try {
         const response = await fetch(url);
@@ -51,17 +59,25 @@ const handleSearch = async (tipo: string) => {
         }
         
         // 2. RECIBIR LA DATA
-        const data: RoomCellData[] = await response.json(); 
+        const rawData: RoomStatusDTO[] = await response.json(); 
         
-        if (!Array.isArray(data) || data.length === 0) {
-            setErrorMessage("No existen habitaciones disponibles con las comodidades deseadas para el rango de fechas solicitado.");
+        // 2. USO DEL TRANSFORMADOR REAL
+        const processedGridData = transformToGridData(
+            rawData,
+            fechas.desde,
+            fechas.hasta,
+            tipo // Filtramos por el tipo seleccionado
+        );
+        
+        if (processedGridData.length === 0) {
+            setErrorMessage("No existen habitaciones disponibles...");
             setShowErrorModal(true);
             setGridData([]);
             return;
         }
         
         // 3. ÉXITO
-        setGridData(data);
+        setGridData(processedGridData);
         setSelectedRoomType(tipo); // Establecer el tipo de habitación seleccionado
         
     } catch (error) {
@@ -93,14 +109,23 @@ const handleSearch = async (tipo: string) => {
         setShowVerificationModal(false);
         setStage(OCUPAR_STAGES.BUSQUEDA_HUESPED); 
     };
+    const handleSuccessConfirm = () => {
+    setShowSuccessModal(false); // Ocultar el modal
+    setStage(OCUPAR_STAGES.GRILLA_DISPONIBILIDAD);
+    setFechas({ desde: '', hasta: '' });
+    setGridData([]);
+    setSelectedReservations([]);
+    setOccupyingGuests([]);
+    setSuccessMessage('');
+    };
 
     const handleHuespedSelectionSubmit = async (selectedHuespedes: HuespedDTOCompleto[]) => {
+        
         if (selectedHuespedes.length === 0) {
             setErrorMessage("Debe seleccionar al menos un huésped para asociar a la ocupación.");
             setShowErrorModal(true);
             return;
         }
-        
         // Asumimos que la ocupación se hace sobre la primera selección de la grilla (ya que el DTO es singular)
         const roomSelection = selectedReservations[0];
         if (!roomSelection) {
@@ -109,17 +134,23 @@ const handleSearch = async (tipo: string) => {
             return;
         }
 
+        const toISODate = (ymdString: string) => {
+        // Garantiza que el Back-End de Java interprete la hora como medianoche del día seleccionado
+        return new Date(ymdString + 'T00:00:00').toISOString(); 
+        };
+        const tipoHabitacionLimpio = selectedRoomType.replace(/\s/g, '');
         // 1. CONSTRUIR EL PAYLOAD (OcupacionDTO)
         const payload = {
-        "habitacion": { "numero": parseInt(roomSelection.roomId) },
-        "fechaInicio": roomSelection.fechaInicio,
-        "fechaFin": roomSelection.fechaFin,
+        "habitacion": { 
+            "numero": parseInt(roomSelection.roomId) ,
+            "tipoHabitacion": tipoHabitacionLimpio},
+        "fechaInicio": toISODate(roomSelection.fechaInicio),
+        "fechaFin": toISODate(roomSelection.fechaFin),
         "checkIn": "14:00:00", 
         "checkOut": "10:00:00", 
         
         // C. Array de Huéspedes: Usamos los objetos completos tal como fueron recibidos
         "huespedes": selectedHuespedes.map(h => ({
-            // Mapeamos los campos que el Back-End espera, usando el objeto 'h' completo
             "numeroDocumento": h.numeroDocumento,
             "tipoDocumento": h.tipoDocumento,
             "apellido": h.apellido,
@@ -133,11 +164,11 @@ const handleSearch = async (tipo: string) => {
             "posicionIVA": h.posicionIVA,
             "alojado": true,
             "direccionHuesped": h.direccionHuesped, // Objeto anidado completo
-        }))
-    };
+            }))
+        };
         
         const BASE_URL = 'http://localhost:8080';
-        const url = `${BASE_URL}/api/ocupaciones`; // Endpoint de Ocupación
+        const url = `${BASE_URL}/ocupacion`; // Endpoint de Ocupación
 
         try {
             const response = await fetch(url, {
@@ -147,18 +178,60 @@ const handleSearch = async (tipo: string) => {
             });
 
             if (response.status !== 201 && response.status !== 200) {
-                const errorText = await response.text();
-                throw new Error(errorText || 'Fallo al registrar la ocupación.');
-            }
-
-            // Éxito
-            setStage(OCUPAR_STAGES.FINALIZADO);
-            // Podrías usar setSuccessMessage aquí para mostrar el éxito en el modal de CU4/15
+                let errorText = 'Fallo al registrar la ocupación.';
+                try {
+                // Intenta leer el cuerpo del error (si es texto o JSON)
+                errorText = await response.text(); 
+            } catch (e) { /* ignore */ }
             
+            throw new Error(`Error ${response.status}: ${errorText.substring(0, 200)}...`); 
+        }
+        // Éxito
+        setOccupyingGuests(selectedHuespedes);
+        setSuccessMessage(`Ocupación registrada con éxito para la Habitación ${roomSelection.roomId}.`);
+        setShowSuccessModal(true);
+        setStage(OCUPAR_STAGES.FINALIZADO);
+        
         } catch (error) {
             setErrorMessage(`Error al registrar la ocupación: ${error.message}`);
             setShowErrorModal(true);
         }
+    };
+    const resetStageForNewSearch = () => {
+    // Resetea el estado para comenzar la búsqueda de habitaciones de nuevo
+    setFechas({ desde: '', hasta: '' });
+    setGridData([]);
+    setSelectedReservations([]);
+    setOccupyingGuests([]);
+    setSuccessMessage('');
+    setShowSuccessModal(false);
+    setStage(OCUPAR_STAGES.GRILLA_DISPONIBILIDAD);
+};
+
+// 1. Acción "Seguir Cargando" (Mantenerse en la búsqueda de huéspedes)
+    const handleContinueLoading = () => {
+        setShowSuccessModal(false); // Ocultar el modal
+        // No reseteamos el stage, volvemos a la búsqueda de huéspedes (o se queda ahí si está en FINALIZADO)
+        setStage(OCUPAR_STAGES.BUSQUEDA_HUESPED); 
+        setOccupyingGuests([]); // Limpiamos los huéspedes ocupados para el próximo registro
+    };
+
+// 2. Acción "Cargar Otra Habitación" (Volver a la grilla)
+    const handleLoadAnotherRoom = () => {
+        resetStageForNewSearch(); // Utiliza la función de reseteo para la grilla
+        const tipo = selectedRoomType; 
+    // Hay que esperar un momento para que el Back-End termine la transacción (opcional, pero ayuda)
+        setTimeout(() => {
+        handleSearch(tipo);
+    }, 100);
+    };
+
+// 3. Acción "Salir" (Simulación de volver al menú principal)
+    const handleExit = () => {
+        // En una aplicación real de Next.js, aquí usarías router.push('/') o similar.
+        // Para la simulación, simplemente reseteamos todo el flujo y salimos.
+        resetStageForNewSearch();
+        router.push('/');
     };
 
     const handleRejectVerification = () => {
@@ -167,12 +240,17 @@ const handleSearch = async (tipo: string) => {
     };
 
     const handleCancel = () => {
-        alert("Caso de Uso CANCELADO. Se limpiarán los estados."); 
+        setShowCancelModal(true);
         setStage(OCUPAR_STAGES.GRILLA_DISPONIBILIDAD);
         setFechas({ desde: '', hasta: '' });
         setGridData([]);
         setSelectedReservations([]);
         setOccupyingGuests([]);
+    };
+    const handleConfirmCancel = () => {
+    setShowCancelModal(false);
+    // Redirección infalible al menú principal
+    router.push('/');
     };
     
     // --- RENDERIZADO (UI) ---
@@ -204,7 +282,7 @@ const handleSearch = async (tipo: string) => {
                             {gridData.length > 0 ? (
                                 <DisponibilidadGrid 
                                     fechas={fechas} 
-                                    gridData={gridData.filter(d => d.roomType === selectedRoomType)}
+                                    gridData={gridData}
                                     onGridSubmit={handleGridSubmit} 
                                     onCancel={handleCancel}
                                     isReadOnly={false} 
@@ -231,10 +309,13 @@ const handleSearch = async (tipo: string) => {
                 
                 {/* Etapa FINALIZADO */}
                 {stage === OCUPAR_STAGES.FINALIZADO && (
-                    <div style={{ textAlign: 'center', padding: '50px' }}>
-                        <h2 style={{ color: 'green' }}>✅ Ocupación Registrada con Éxito</h2>
-                        <p>Los huéspedes asociados son: {occupyingGuests.map(g => g.nombre).join(', ')}</p>
-                    </div>
+                    <FlowDecisionModal
+                        show={showSuccessModal}
+                        message={successMessage}
+                        onContinue={handleContinueLoading}
+                        onAnotherRoom={handleLoadAnotherRoom}
+                        onExit={handleExit}
+                    />
                 )}
                 
             </div>
@@ -246,6 +327,16 @@ const handleSearch = async (tipo: string) => {
                 onAccept={handleAcceptVerification} 
                 onReject={handleRejectVerification} 
                 onCancel={handleCancel}
+            />
+            <ModalConfirmacion
+                show={showCancelModal}
+                title="CANCELAR"
+                message="¿Desea cancelar esta Ocupación? El caso de uso finalizará." 
+                icon="⚠️"
+                closeText="NO"
+                confirmText="SI"
+                onClose={() => setShowCancelModal(false)}
+                onConfirm={handleConfirmCancel}
             />
             <ModalError
                 show={showErrorModal}

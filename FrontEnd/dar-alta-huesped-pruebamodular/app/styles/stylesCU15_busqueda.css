@@ -1,0 +1,263 @@
+
+/* 1. ESTRUCTURA PRINCIPAL */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #507393;
+    overflow: hidden; /* Evita scrolls innecesarios */
+}
+
+.buscar-huesped-layout {
+    display: flex;
+    width: 1440px; 
+    height: 1080px;  
+}
+
+/* 2. PANEL IZQUIERDO (Formulario) */
+.left-pane {
+    width: 500px; 
+    min-width: 500px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 60px;
+    padding-left: 40px;
+    padding-right: 40px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 50; 
+    box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+}
+
+.header-title-box {
+    background-color: #6B99C3;
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 50px;
+    width: 350px;
+}
+.header-title-box h1 { margin: 0; font-size: inherit; line-height: 1.2; }
+
+/* Contenedor del formulario */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 350px; /* Ancho FIJO */
+}
+
+/* 3. ESTILOS DE LOS INPUTS */
+.box1_simplebox { 
+    width: 350px; 
+}
+
+.box1_simplebox label, .boxDocumento label {
+    font-size: 14px;
+    color: #444;
+    margin-left: 15px;
+    margin-bottom: 5px;
+    display: block;
+    text-align: left;
+}
+
+/* Input Normal (Nombre, Apellido) */
+.input_box {
+    background-color: #C2C3C5 !important;
+    border: 1px solid #818283 !important;
+    border-radius: 30px !important;
+    height: 40px !important;
+    width: 350px !important;
+    padding-left: 20px !important;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* Inputs documento*/
+.documento_inputs {
+    position: relative;
+    display: flex;
+    gap: 8px;
+    width: 350px;      
+    height: 40px;
+    align-items: center;
+    margin-bottom: 20px 
+}
+.input_box_documento{
+    position: relative;
+    background-color: #C2C3C5;
+    width: 350px;
+    padding-left: 95px;
+    padding-right: 10px;
+    left: -85px;
+    border-radius: 30px
+}
+input, select{
+    position: relative;
+    height: 40px;
+    border-radius: 30px;
+    width: 20px;
+    background-color: #C2C3C5;
+    border-color: #818283;
+    border-width: 1px;
+    left:20 px;
+    z-index: 0;
+    
+}
+.select_documento {
+    position: relative; 
+    left: 0;
+    top: 0;
+    z-index: 20;
+    background-color: #022E66 ;
+    color: white ;
+    border: none ;
+    border-radius: 30px ;
+    width: 100px ;
+    height: 40px;
+    padding-left: 15px;
+    cursor: pointer;
+
+}
+.boxDocumento{
+    flex-direction: row;
+    display:flex;
+    flex-direction: column;
+    margin: 0 3vh 0 1vh;
+    z-index: 20;
+}
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 120px;
+    width: 350px;
+}
+
+.btn-cancel {
+    background-color: #C2C3C5;
+    color: #555;
+    border: none;
+    width: 140px;
+    height: 40px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-search {
+    background-color: #022E66;
+    color: white;
+    border: none;
+    width: 140px;
+    height: 40px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/*  PANEL DERECHO (Resultados) */
+.right-pane {
+    width: 940px; 
+    background-color: #507393;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    padding-right: 50px;
+    box-sizing: border-box;
+}
+
+.empty-state { width: 100%; height: 100%; }
+
+.results-card {
+    background-color: white;
+    width: 940px;
+    height: 800px;
+    border-radius: 40px;
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 10;
+    left: 5px;
+}
+
+.results-header {
+    text-align: center;
+    font-weight: bold;
+    color: #444;
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+.table-scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* TABLA */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+.custom-table th {
+    text-align: left;
+    color: #999;
+    font-weight: normal;
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.custom-table td {
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+    cursor: pointer;
+}
+
+.custom-table tr:hover { background-color: #f5f9fc; }
+.selected-row { background-color: #e3f2fd; font-weight: 600; }
+
+.results-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-next {
+    background-color: #022E66;
+    color: white;
+    border: none;
+    width: 160px;
+    height: 45px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    position: relative;
+    z-index: 9999 ;
+}
+/* Indicador visual cuando navegas con TAB */
+.custom-table tr:focus {
+    background-color: #f0f8ff;
+    outline: 2px solid #022E66;
+    outline-offset: -2px;
+}
+.error {
+    color: red;
+    font-size: 0.85rem;
+    height: 20px;
+    margin-bottom: -20px;
+    text-align: left;    
+    width: 100%;
+    max-width: 370px;
+}
