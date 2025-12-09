@@ -15,7 +15,8 @@ import {
     RoomCellData, 
     SelectedReservation, 
     EventualHuesped,
-    RoomStatusDTO, 
+    RoomStatusDTO,
+    ROOM_TYPES, 
 } from '../types/indexCU4-5-15'; 
 
 const RESERVA_STAGES = {
@@ -154,20 +155,25 @@ const handleHuespedSubmit = async (huespedData: EventualHuesped) => {
             setShowErrorModal(true);
             return;
         }
+        const toISODate = (ymdString: string) => {
+        // Garantiza que el Back-End de Java interprete la hora como medianoche del día
+        return new Date(ymdString + 'T00:00:00').toISOString(); 
+    };
 
-    const BASE_URL = 'http://localhost:8080';
-    const url = `${BASE_URL}/habitaciones`;
-
-    const payload = {
-            "fechaInicio": reservationToSend.fechaInicio,
-            "fechaFin": reservationToSend.fechaFin,
+    const reservaUnica = {
+            "fechaInicio": toISODate(reservationToSend.fechaInicio),
+            "fechaFin": toISODate(reservationToSend.fechaFin),
             "estado": "RESERVADA",
             "nombre": huespedData.nombre,
             "apellido": huespedData.apellido,
             "telefono": huespedData.telefono,
-            "habitacionNumero": parseInt(reservationToSend.roomId), // ID de habitación como número
+            "habitacionNumero": parseInt(reservationToSend.roomId), 
         };
-    
+    const payload=[reservaUnica];
+
+    const BASE_URL = 'http://localhost:8080';
+    const url = `${BASE_URL}/habitaciones`;
+
     try {
       const response = await fetch(url, {
         method: 'POST',
@@ -176,14 +182,22 @@ const handleHuespedSubmit = async (huespedData: EventualHuesped) => {
       });
 
       if (response.status !== 201 && response.status !== 200) {
-        // Leer un posible mensaje de error del servidor
-        const errorText = await response.text();
-        throw new Error(errorText || 'Fallo desconocido al registrar la reserva.');
-      }
 
+        let errorText = 'Fallo al registrar la reserva. Error desconocido.';
+        try {
+            // Intenta leer como JSON (si Spring Boot devuelve un DTO de error)
+            const errorJson = await response.json();
+            errorText = errorJson.message || JSON.stringify(errorJson);
+        } catch (e) {
+            // Si falla la lectura de JSON, lee como texto plano (si devuelve HTML o el stack trace)
+            errorText = await response.text(); 
+        }
+        throw new Error(`Error ${response.status}: ${errorText.substring(0, 200)}...`);
+      }
       setSuccessMessage(
         `La reserva para ${huespedData.nombre} ${huespedData.apellido} ha sido realizada con éxito. \nPresione cualquier tecla para continuar...`
       );
+
       setShowSuccessModal(true);
       setErrors({});
 
@@ -201,13 +215,12 @@ const handleHuespedSubmit = async (huespedData: EventualHuesped) => {
 
   const handleCancel = () => {
     setShowCancelModal(true);
-    router.push('/');
   };
 
   const handleConfirmCancel = () => {
     setShowCancelModal(false);
     // Redirección infalible al menú principal
-    window.location.href = '/';
+    router.push('/');
   };
 
   const currentStageName = Object.keys(RESERVA_STAGES).find(key => RESERVA_STAGES[key as keyof typeof RESERVA_STAGES] === stage);
@@ -241,7 +254,7 @@ const handleHuespedSubmit = async (huespedData: EventualHuesped) => {
                     {gridData.length > 0 ? (
                         <DisponibilidadGrid 
                             fechas={fechas} 
-                            gridData={gridData.filter(d => d.roomType === selectedRoomType)}
+                            gridData={gridData}
                             onGridSubmit={handleGridSubmit}
                             onCancel={handleCancel}
                         />

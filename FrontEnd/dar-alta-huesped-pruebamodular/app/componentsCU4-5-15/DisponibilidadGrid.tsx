@@ -3,7 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import ModalError from './ModalError';
 import ModalConfirmacion from './ModalConfirmacion';
-import { RoomCellData, SelectedReservation, ROOM_TYPES, ROOMS } from '../types/indexCU4-5-15'; 
+import { RoomCellData, SelectedReservation, ROOM_TYPES } from '../types/indexCU4-5-15'; 
 
 interface DisponibilidadGridProps {
     fechas: { desde: string, hasta: string };
@@ -17,7 +17,7 @@ interface ConflictoData {
     conflictDetails: { date: string; user: string; dni: string; roomId: string }[];
 }
 
-const DisponibilidadGrid: React.FC<DisponibilidadGridProps> = ({ fechas, gridData, onGridSubmit, onCancel }) => {
+const DisponibilidadGrid: React.FC<DisponibilidadGridProps> = ({ fechas, gridData, onGridSubmit }) => {
     const [selectionStart, setSelectionStart] = useState<string | null>(null);
     const [currentSelection, setCurrentSelection] = useState<Set<string>>(new Set());
     const [showConflictModal, setShowConflictModal] = useState(false);
@@ -33,10 +33,27 @@ const DisponibilidadGrid: React.FC<DisponibilidadGridProps> = ({ fechas, gridDat
     }, [gridData]);
 
     // Función para obtener el estado de una celda
+    
+const actualRooms = (() => { // Ejecutar como una función simple
+    
+    if (!gridData || gridData.length === 0) {
+        return [];
+    }
+
+    const roomIds = gridData.map(d => d.roomId?.toString() ?? '');
+    
+    const validUniqueRooms = [...new Set(roomIds)].filter(id => id.length > 0);
+    
+    console.log("Debug: uniqueRooms after removing useMemo:", validUniqueRooms); 
+
+    return validUniqueRooms.sort((a, b) => parseInt(a) - parseInt(b));
+})();
+
+    console.log("Rooms for Rendering (actualRooms):", actualRooms);
+
     const getCellState = (roomId: string, date: string): RoomCellData['estado'] => {
         return gridData.find(d => d.roomId === roomId && d.date === date)?.estado || 'Disponible';
     };
-
     // Función que calcula la selección de rango (Shift+Click)
     const calculateRange = (startId: string, endId: string) => {
         const [startRoom, startDate] = startId.split('|');
@@ -243,7 +260,7 @@ const DisponibilidadGrid: React.FC<DisponibilidadGridProps> = ({ fechas, gridDat
                     <thead>
                         <tr>
                             <th className='date-cell'>Fecha</th>
-                            {ROOMS.map(roomId => (
+                            {actualRooms.map(roomId => (
                                 <th key={roomId}>Habitación {roomId}</th>
                             ))}
                         </tr>
@@ -252,7 +269,7 @@ const DisponibilidadGrid: React.FC<DisponibilidadGridProps> = ({ fechas, gridDat
                         {dates.map(date => (
                             <tr key={date}>
                                 <td className="date-cell">{date}</td>
-                                {ROOMS.map(roomId => {
+                                {actualRooms.map(roomId => {
                                     const cellId = `${roomId}|${date}`;
                                     const estado = getCellState(roomId, date);
                                     
