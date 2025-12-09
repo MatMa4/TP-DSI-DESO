@@ -1,16 +1,7 @@
 // Asumo que estas interfaces están definidas en tu archivo de tipos
 import { RoomStatusDTO, RoomCellData } from '../types/indexCU4-5-15';
 
-// -------------------------------------------------------------------------
-// NOTA: Para esta implementación, necesitarás una librería de manejo de fechas
-// como 'date-fns' o similar, pero aquí usaremos el objeto Date nativo.
-// -------------------------------------------------------------------------
 
-/**
- * Convierte una fecha YYYY-MM-DD o ISO a un string YYYY-MM-DD.
- * @param dateStr Fecha en formato ISO o YYYY-MM-DD.
- * @returns Fecha en formato YYYY-MM-DD.
- */
 const formatToYMD = (dateStr: string): string => {
     // Usamos el constructor de Date para manejar ISO y extraemos solo la fecha.
     // Esto es CRÍTICO para asegurar que la comparación sea justa (solo el día).
@@ -24,12 +15,7 @@ const formatToYMD = (dateStr: string): string => {
     return correctedDate.toISOString().split('T')[0];
 };
 
-/**
- * Genera un array de fechas (strings YYYY-MM-DD) entre dos fechas dadas.
- * @param startStr Fecha de inicio (YYYY-MM-DD).
- * @param endStr Fecha de fin (YYYY-MM-DD).
- * @returns Array de strings de fechas.
- */
+
 const getDatesInRange = (startStr: string, endStr: string): string[] => {
     const dates = [];
     const currentDate = new Date(startStr);
@@ -47,15 +33,6 @@ const getDatesInRange = (startStr: string, endStr: string): string[] => {
 };
 
 
-/**
- * Transforma el DTO de estado de habitación del Back-End (RoomStatusDTO[]) en el formato
- * de grilla día por día (RoomCellData[]), filtrando por el rango y tipo de habitación.
- * * @param rawData Datos crudos de la API (GET /habitaciones).
- * @param fechaInicio Fecha de inicio de la búsqueda del usuario (YYYY-MM-DD).
- * @param fechaFin Fecha de fin de la búsqueda del usuario (YYYY-MM-DD).
- * @param targetRoomType Tipo de habitación seleccionado (ej: 'IndividualEstándar').
- * @returns Array de RoomCellData listo para la grilla.
- */
 export const transformToGridData = (
     rawData: RoomStatusDTO[],
     fechaInicio: string,

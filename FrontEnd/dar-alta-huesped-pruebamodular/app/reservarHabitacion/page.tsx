@@ -89,7 +89,7 @@ export default function ReservarHabitacion() {
         return;
     }
     const BASE_URL = 'http://localhost:8080';
-    const url = `${BASE_URL}/habitaciones`;
+    const url = `${BASE_URL}/habitaciones?fechaInicio=${fechas.desde}&fechaFin=${fechas.hasta}`;;
     
     try {
       const response = await fetch(url);
