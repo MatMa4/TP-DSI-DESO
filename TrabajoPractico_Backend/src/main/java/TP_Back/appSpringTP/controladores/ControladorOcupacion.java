@@ -33,13 +33,13 @@ public class ControladorOcupacion {
         private final HabitacionMapper habMap;
         private final repositorioOcupacion repoOcu;
     
-    @PutMapping
+    @PostMapping
     public boolean crearOcupacion(@RequestBody OcupacionDTO ocupacion) {
         gestorOcupaciones.crearOcupacion(ocupacion);
         return true;
     }
     
-    @PostMapping
+    @PutMapping
     public boolean crearHabitacion(@RequestBody HabitacionDTO hab) {
         repoHab.save(habMap.toEntity(hab));
         return true;
