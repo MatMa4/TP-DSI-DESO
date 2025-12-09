@@ -26,31 +26,29 @@ const DisponibilidadGrid: React.FC<DisponibilidadGridProps> = ({ fechas, gridDat
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     
-    // Agrupamos los datos por fecha para el eje vertical
     const dates = useMemo(() => {
         const uniqueDates = [...new Set(gridData.map(d => d.date))];
         return uniqueDates.sort();
     }, [gridData]);
 
-    // Función para obtener el estado de una celda
     
-const actualRooms = (() => { // Ejecutar como una función simple
-    
-    if (!gridData || gridData.length === 0) {
-        return [];
-    }
+    const actualRooms = (() => { 
+        
+        if (!gridData || gridData.length === 0) {
+            return [];
+        }
 
-    const roomIds = gridData.map(d => d.roomId?.toString() ?? '');
-    
-    const validUniqueRooms = [...new Set(roomIds)].filter(id => id.length > 0);
+        const roomIds = gridData.map(d => d.roomId?.toString() ?? '');
+        
+        const validUniqueRooms = [...new Set(roomIds)].filter(id => id.length > 0);
 
-    return validUniqueRooms.sort((a, b) => parseInt(a) - parseInt(b));
-})();
+        return validUniqueRooms.sort((a, b) => parseInt(a) - parseInt(b));
+    })();
 
     const getCellState = (roomId: string, date: string): RoomCellData['estado'] => {
         return gridData.find(d => d.roomId === roomId && d.date === date)?.estado || 'Disponible';
     };
-    // Función que calcula la selección de rango (Shift+Click)
+
     const calculateRange = (startId: string, endId: string) => {
         const [startRoom, startDate] = startId.split('|');
         const [endRoom, endDate] = endId.split('|');
@@ -93,24 +91,19 @@ const actualRooms = (() => { // Ejecutar como una función simple
             return;
         }
         
-        // Requerimiento especial (2): Doble click para la misma fecha inicial y final
         if (e.detail === 2) {
-             // Simulación de Doble Click (solo selecciona una celda)
             setCurrentSelection(new Set([cellId]));
             setSelectionStart(cellId);
             return;
         }
 
         if (e.shiftKey && selectionStart) {
-            // Lógica de Shift+Click (Selección de Rango)
             const range = calculateRange(selectionStart, cellId);
 
-            // Validación de Rango: Chequear que todas las celdas del rango sean válidas
             for (const id of range) {
                 const [rId, rDate] = id.split('|');
                 const state = getCellState(rId, rDate);
-                // En CU04 (Reservar), solo Disponible es 100% seguro. 
-                // Si seleccionamos sobre una 'Reservada', es una advertencia, no un error fatal en la grilla.
+
                 if (state !== 'Disponible' && state !== 'Reservada') {
                     setErrorMessage(`El rango seleccionado incluye habitaciones con estado "${state}".`);
                     setShowErrorModal(true);
@@ -120,12 +113,12 @@ const actualRooms = (() => { // Ejecutar como una función simple
             setCurrentSelection(range);
 
         } else {
-            // Clic simple: alternar selección y establecer inicio de rango
+
             setCurrentSelection(prev => {
                 const next = new Set(prev);
                 if (next.has(cellId)) {
                     next.delete(cellId);
-                    setSelectionStart(null); // Deseleccionar completamente, resetear inicio
+                    setSelectionStart(null);
                 } else {
                     next.add(cellId);
                     setSelectionStart(cellId);
@@ -170,11 +163,8 @@ const actualRooms = (() => { // Ejecutar como una función simple
                 datesSelected.forEach(date => {
                     const cell = gridData.find(d => d.roomId === roomId && d.date === date);
                     
-                    // **CRÍTICO:** Solo procesar si la celda está RESERVADA.
                     if (cell?.estado === 'Reservada') {
-                        
-                        // ⚠️ IMPORTANTE: Aquí debes buscar la reserva real. 
-                        // Como no tenemos la base de datos, usamos datos de simulación que DEBEN ser válidos (cadenas).
+
                         const reservaInfo = { 
                             user: cell.reservedBy || "Huésped no especificado", 
                             dni: cell.reservedDNI || "DNI no especificado",        
@@ -193,7 +183,7 @@ const actualRooms = (() => { // Ejecutar como una función simple
 
         const conflictData = { reservations: selected, conflictDetails: conflictDetails };
         
-        // --- 3. MANEJO DEL FLUJO (Paso CRÍTICO) ---
+        // --- 3. MANEJO DEL FLUJO  ---
         if (conflictDetails.length > 0) {
             setPendingConflict(conflictData);
             setConflictMessage(
@@ -202,26 +192,23 @@ const actualRooms = (() => { // Ejecutar como una función simple
             );
             setShowConflictModal(true);
         } else {
-            // Si no hay conflicto, envía la selección al padre
             onGridSubmit(selected); 
         }
     };
     
     // --- MANEJADORES DEL MODAL DE CONFLICTO ---
     const handleOccupyyAnyway = () => {
-        // Opción: "Ocupar Igual" - Forzar la reserva (se maneja en el padre)
         if (pendingConflict) {
-            onGridSubmit(pendingConflict.reservations); // Pasar bandera de forzado
+            onGridSubmit(pendingConflict.reservations); 
         }
         setShowConflictModal(false);
         setPendingConflict(null);
     };
 
     const handleBackToTable = () => {
-        // Opción: "Volver" - Vuelve a la grilla para corregir la selección
         setShowConflictModal(false);
         setPendingConflict(null);
-        setCurrentSelection(new Set()); // Opcional: limpiar selección
+        setCurrentSelection(new Set());
     };
 
     // --- RENDERIZADO DEL MODAL ---
@@ -231,25 +218,22 @@ const actualRooms = (() => { // Ejecutar como una función simple
         {pendingConflict?.conflictDetails.map((c, index) => (
             <div key={index} style={{ borderBottom: '1px dotted #ccc', marginBottom: '10px', paddingBottom: '5px', textAlign: 'left' }}>
                 <strong style={{ display: 'block' }}>Habitación {c.roomId}</strong>
-                {/* CRÍTICO: Asegúrate de que c.date, c.user y c.dni tengan valores */}
+                
                 <p style={{ margin: '2px 0', fontSize: '14px' }}>
-                    Fecha: {c.date} | Reservada por: {c.user} (DNI: {c.dni})
+                    Fecha: {c.date} | Reservada por: <strong style={{ fontWeight: 'bold' }}>{c.huesped}</strong>
                 </p>
             </div>
         ))}
     </div>
-    );
+);
     
     return (
         <div className="disponibilidad-grid-box">
             <div style={{ display: 'flex', gap: '20px', marginBottom: '15px' }}>
-                {/* Visualización de fechas fijas de búsqueda (Se mantiene) */}
                 <span style={{fontWeight: 'bold'}}>Desde: {fechas.desde} | Hasta: {fechas.hasta}</span>
                 <div className="room-type-filter" style={{ marginLeft: 'auto' }}>
-                    {/* Nota: Los selectores de tipo de habitación han sido movidos a la vista principal (FiltrosHabitacion) */}
                 </div>
             </div>
-
             {/* Tabla de Disponibilidad */}
             <div style={{ maxHeight: '400px', overflow: 'auto' }}>
                 <table className="disponibilidad-table">
@@ -290,11 +274,10 @@ const actualRooms = (() => { // Ejecutar como una función simple
                 </table>
             </div>
 
-            {/* Botón Seleccionar (y Acciones de Flujo) */}
             <div style={{ marginTop: '10px', display: 'flex' }}>
                 <button 
                     className="btn-accept" 
-                    onClick={handleSubmit} // Ahora llama a la lógica que verifica el conflicto
+                    onClick={handleSubmit} 
                     disabled={currentSelection.size === 0}
                     style={{ padding: '8px 15px', width: 'auto' }}
                 >
@@ -302,7 +285,7 @@ const actualRooms = (() => { // Ejecutar como una función simple
                 </button>
             </div>
             
-            {/* --- MODAL DE CONFLICTO DE RESERVA (Nuevo) --- */}
+            {/* --- MODAL DE CONFLICTO DE RESERVA */}
             <ModalConfirmacion
                 show={showConflictModal}
                 title="⚠️ Conflicto de Reserva"

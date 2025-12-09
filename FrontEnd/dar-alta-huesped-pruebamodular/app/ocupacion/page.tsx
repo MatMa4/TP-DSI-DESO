@@ -56,12 +56,10 @@ const handleSearch = async (tipo: string) => {
             const errorBody = await response.json().catch(() => ({ message: response.statusText }));
             throw new Error(`Error ${response.status}: ${errorBody.message || 'Fallo al conectar con la API de disponibilidad.'}`);
         }
-        
-        // 2. RECIBIR LA DATA
+
         const rawData: RoomStatusDTO[] = await response.json(); 
         setRawRoomData(rawData);
-        
-        // 2. USO DEL TRANSFORMADOR REAL
+
         const processedGridData = transformToGridData(
             rawData,
             fechas.desde,
@@ -75,13 +73,11 @@ const handleSearch = async (tipo: string) => {
             setGridData([]);
             return;
         }
-        
-        // 3. ÉXITO
+
         setGridData(processedGridData);
-        setSelectedRoomType(tipo); // Establecer el tipo de habitación seleccionado
+        setSelectedRoomType(tipo); 
         
     } catch (error) {
-        // Captura errores de red o los lanzados en el bloque try
         setErrorMessage(`Hubo un error de conexión al buscar disponibilidad: ${error.message}`);
         setShowErrorModal(true);
         setGridData([]);
@@ -110,7 +106,7 @@ const handleSearch = async (tipo: string) => {
         setStage(OCUPAR_STAGES.BUSQUEDA_HUESPED); 
     };
     const handleSuccessConfirm = () => {
-    setShowSuccessModal(false); // Ocultar el modal
+    setShowSuccessModal(false); 
     setStage(OCUPAR_STAGES.GRILLA_DISPONIBILIDAD);
     setFechas({ desde: '', hasta: '' });
     setGridData([]);
@@ -120,13 +116,11 @@ const handleSearch = async (tipo: string) => {
     };
 
     const handleHuespedSelectionSubmit = async (selectedHuespedes: HuespedDTOCompleto[]) => {
-        
         if (selectedHuespedes.length === 0) {
             setErrorMessage("Debe seleccionar al menos un huésped para asociar a la ocupación.");
             setShowErrorModal(true);
             return;
         }
-        // Asumimos que la ocupación se hace sobre la primera selección de la grilla (ya que el DTO es singular)
         const roomSelection = selectedReservations[0];
         if (!roomSelection) {
             setErrorMessage("Error: La habitación y fechas seleccionadas se perdieron.");
@@ -146,7 +140,6 @@ const handleSearch = async (tipo: string) => {
         const h = habitacionDTOCompleta.habitacion;
 
         const toISODate = (ymdString: string) => {
-        // Garantiza que el Back-End de Java interprete la hora como medianoche del día
         return new Date(ymdString + 'T00:00:00').toISOString(); 
         };
         const tipoHabitacionLimpio = selectedRoomType.replace(/\s/g, '');
@@ -165,7 +158,6 @@ const handleSearch = async (tipo: string) => {
         "checkIn": "14:00:00", 
         "checkOut": "10:00:00", 
         
-        // Array de Huéspedes
         "huespedes": selectedHuespedes.map(huesped => ({
             "numeroDocumento": huesped.numeroDocumento,
             "tipoDocumento": huesped.tipoDocumento,
@@ -184,7 +176,7 @@ const handleSearch = async (tipo: string) => {
     };
         
         const BASE_URL = 'http://localhost:8080';
-        const url = `${BASE_URL}/ocupacion`; // Endpoint de Ocupación
+        const url = `${BASE_URL}/ocupacion`; 
 
         try {
             const response = await fetch(url, {
@@ -196,10 +188,9 @@ const handleSearch = async (tipo: string) => {
             if (response.status !== 201 && response.status !== 200) {
                 let errorText = 'Fallo al registrar la ocupación.';
                 try {
-                // Intenta leer el cuerpo del error (si es texto o JSON)
+
                 errorText = await response.text(); 
             } catch (e) { /* ignore */ }
-            
             throw new Error(`Error ${response.status}: ${errorText.substring(0, 200)}...`); 
         }
         // Éxito
@@ -214,7 +205,6 @@ const handleSearch = async (tipo: string) => {
         }
     };
     const resetStageForNewSearch = () => {
-    // Resetea el estado para comenzar la búsqueda de habitaciones de nuevo
     setFechas({ desde: '', hasta: '' });
     setGridData([]);
     setSelectedReservations([]);
@@ -224,28 +214,22 @@ const handleSearch = async (tipo: string) => {
     setStage(OCUPAR_STAGES.GRILLA_DISPONIBILIDAD);
 };
 
-// 1. Acción "Seguir Cargando" (Mantenerse en la búsqueda de huéspedes)
+
     const handleContinueLoading = () => {
-        setShowSuccessModal(false); // Ocultar el modal
-        // No reseteamos el stage, volvemos a la búsqueda de huéspedes (o se queda ahí si está en FINALIZADO)
+        setShowSuccessModal(false); 
         setStage(OCUPAR_STAGES.BUSQUEDA_HUESPED); 
-        setOccupyingGuests([]); // Limpiamos los huéspedes ocupados para el próximo registro
+        setOccupyingGuests([]); 
     };
 
-// 2. Acción "Cargar Otra Habitación" (Volver a la grilla)
     const handleLoadAnotherRoom = () => {
-        resetStageForNewSearch(); // Utiliza la función de reseteo para la grilla
+        resetStageForNewSearch();
         const tipo = selectedRoomType; 
-    // Hay que esperar un momento para que el Back-End termine la transacción (opcional, pero ayuda)
         setTimeout(() => {
         handleSearch(tipo);
     }, 100);
     };
 
-// 3. Acción "Salir" (Simulación de volver al menú principal)
     const handleExit = () => {
-        // En una aplicación real de Next.js, aquí usarías router.push('/') o similar.
-        // Para la simulación, simplemente reseteamos todo el flujo y salimos.
         resetStageForNewSearch();
         router.push('/');
     };
@@ -265,7 +249,6 @@ const handleSearch = async (tipo: string) => {
     };
     const handleConfirmCancel = () => {
     setShowCancelModal(false);
-    // Redirección infalible al menú principal
     router.push('/');
     };
     

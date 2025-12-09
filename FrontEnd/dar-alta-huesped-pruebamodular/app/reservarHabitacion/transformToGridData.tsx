@@ -56,10 +56,8 @@ export const transformToGridData = (
 
         for (const date of allDates) {
             
-            // 🛑 2.1 INICIALIZACIÓN DEL ESTADO DENTRO DEL BUCLE
             let estado: RoomCellData['estado']; 
             
-            // 🛑 2.2 Mapeo de estado base (HABITABLE -> Disponible)
             if (roomDto.habitacion.estado === 'HABITABLE') {
                 estado = 'Disponible';
             } else {
@@ -70,17 +68,13 @@ export const transformToGridData = (
             let reservedBy: string | undefined = undefined;
             let reservedDNI: string | undefined = undefined;
             
-            // Convertimos la fecha de comparación a objeto Date
-            const targetDate = new Date(date + 'T00:00:00'); // Asegura medianoche local
+            const targetDate = new Date(date + 'T00:00:00'); 
 
-            // 3. Revisar Ocupaciones (Solo si no está Fuera de Servicio)
             if (estado !== 'Fuera de servicio') {
                 for (const ocupacion of roomDto.ocupaciones) {
-                    // Nota: Asegúrate que fechaInicio/fechaFin del DTO de ocupación sean válidos
                     const ocupacionStart = new Date(ocupacion.fechaInicio + 'T00:00:00');
                     const ocupacionEnd = new Date(ocupacion.fechaFin + 'T00:00:00');
 
-                    // Comparamos el día destino con el rango de ocupación
                     if (targetDate >= ocupacionStart && targetDate <= ocupacionEnd) {
                         estado = 'Ocupada';
                         break;
@@ -88,7 +82,6 @@ export const transformToGridData = (
                 }
             }
             
-            // 4. Revisar Reservas (Solo si NO está Ocupada ni Fuera de Servicio)
             if (estado === 'Disponible') { 
                 for (const reserva of roomDto.reservas) {
                     const reservaStart = new Date(reserva.fechaInicio);
@@ -96,13 +89,11 @@ export const transformToGridData = (
 
                     if (targetDate >= reservaStart && targetDate <= reservaEnd) {
                         estado = 'Reservada';
-                        // Añadir lógica para reservedBy/reservedDNI si es posible.
                         break;
                     }
                 }
             }
             
-            // 5. Agregar la celda a la data final
             gridData.push({
                 roomId: roomId,
                 roomType: roomType,

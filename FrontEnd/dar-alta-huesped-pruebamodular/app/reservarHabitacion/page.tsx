@@ -185,11 +185,9 @@ const handleHuespedSubmit = async (huespedData: EventualHuesped) => {
 
         let errorText = 'Fallo al registrar la reserva. Error desconocido.';
         try {
-            // Intenta leer como JSON (si Spring Boot devuelve un DTO de error)
             const errorJson = await response.json();
             errorText = errorJson.message || JSON.stringify(errorJson);
         } catch (e) {
-            // Si falla la lectura de JSON, lee como texto plano (si devuelve HTML o el stack trace)
             errorText = await response.text(); 
         }
         throw new Error(`Error ${response.status}: ${errorText.substring(0, 200)}...`);
@@ -219,7 +217,6 @@ const handleHuespedSubmit = async (huespedData: EventualHuesped) => {
 
   const handleConfirmCancel = () => {
     setShowCancelModal(false);
-    // Redirección infalible al menú principal
     router.push('/');
   };
 
