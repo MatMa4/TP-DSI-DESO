@@ -72,6 +72,7 @@ export default function ReservarHabitacion() {
   };
   
   const handleSearch = async (tipo: string) => {
+    
     const errorMsg = validateFechas(fechas);
     if (errorMsg) {
         setErrors({ fechas: errorMsg });
@@ -175,11 +176,13 @@ const handleHuespedSubmit = async (huespedData: EventualHuesped) => {
 
   const handleCancel = () => {
     setShowCancelModal(true);
+    router.push('/');
   };
 
   const handleConfirmCancel = () => {
     setShowCancelModal(false);
-    setShowVerificationModal(false);
+    // Redirección infalible al menú principal
+    window.location.href = '/';
   };
 
   const currentStageName = Object.keys(RESERVA_STAGES).find(key => RESERVA_STAGES[key as keyof typeof RESERVA_STAGES] === stage);

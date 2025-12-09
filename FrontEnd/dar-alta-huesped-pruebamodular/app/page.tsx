@@ -46,10 +46,10 @@ export default function Dashboard() {
         </a>
 
         {/* CU 05 - Estado (Futuro) */}
-        <a href="/estado-habitaciones" style={{...cardStyle, opacity: 0.7, cursor: 'not-allowed'}}>
+        <a href="/ocupacion" style={{...cardStyle,}}>
           <div style={{ fontSize: '40px' }}>🛏️</div>
-          <h3>Estado Habitaciones</h3>
-          <p>CU 05 - (Próximamente)</p>
+          <h3>Ocupar Habitaciones</h3>
+          <p>CU 15 </p>
         </a>
       </div>
     </main>

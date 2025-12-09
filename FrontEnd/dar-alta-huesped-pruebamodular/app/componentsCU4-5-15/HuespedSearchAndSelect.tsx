@@ -3,53 +3,46 @@ import React, { useState, useMemo } from 'react';
 import { InputField } from './InputField';
 import DocumentoField from './DocumentoField';
 import ModalError from './ModalError';
-import { validateBuscarForm } from './ValidacionDatosCU2'; 
+import { validateBuscarForm } from '../buscarHuesped/ValidacionDatosCU2'; 
+import { HuespedDTOCompleto } from '../types/indexCU4-5-15'; 
+import '../styles/stylesCU2.css'; 
 
-// --- INTERFACES COPIADAS DEL ARCHIVO DE TU COMPAÑERO ---
-interface FormData {
-    nombre: string;
-    apellido: string;
-    tipoDocumento: string;
-    numeroDocumento: string;
-}
-
-interface HuespedResultado {
-    nombre: string;
-    apellido: string;
-    tipoDocumento: string;
-    numeroDocumento: string;
-}
-
-interface SortConfig {
-    key: keyof HuespedResultado;
-    direction: 'asc' | 'desc';
-}
-// --------------------------------------------------------
 
 // Props que recibe del componente padre (ocupar/page.tsx)
 interface HuespedSearchAndSelectProps {
-    onSelectionSubmit: (selectedHuespedes: HuespedResultado[]) => void;
+    onSelectionSubmit: (selectedHuespedes: HuespedDTOCompleto[]) => void;
     onCancel: () => void;
 }
 
 
 const HuespedSearchAndSelect: React.FC<HuespedSearchAndSelectProps> = ({ onSelectionSubmit, onCancel }) => {
     
-    // --- ESTADOS COPIADOS DE BuscarHuesped (Panel Izquierdo) [cite: 9] ---
-    const [formData, setFormData] = useState<FormData>({
-        nombre: '',
-        apellido: '',
-        tipoDocumento: 'DNI', 
-        numeroDocumento: '',
-    });
+    const [huespedData, setHuespedData] = useState<HuespedDTOCompleto>({
+    nombre: '',
+    apellido: '',
+    tipoDocumento: 'DNI', 
+    numeroDocumento: '',
+    fechaNacimiento: '', 
+    telefono: '', 
+    email: '',
+    ocupacion: '',
+    nacionalidad: '',
+    cuit: '',
+    posicionIVA: 'Consumidor final',
+    alojado: true,
+    direccionHuesped: { 
+        calle: '', numero: '', departamento: '', piso: '', 
+        codigo: '', localidad: '', provincia: '', pais: ''
+    }
+});
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [isLoading, setIsLoading] = useState(false);
     const [busquedaRealizada, setBusquedaRealizada] = useState(false);
     
     // --- ESTADOS ADAPTADOS PARA SELECCIÓN MÚLTIPLE (Panel Derecho) ---
-    const [searchResults, setSearchResults] = useState<HuespedResultado[]>([]); // Resultados de la búsqueda [cite: 10]
+    const [searchResults, setSearchResults] = useState<HuespedDTOCompleto[]>([]); // Resultados de la búsqueda [cite: 10]
     const [selectedHuespedes, setSelectedHuespedes] = useState<Set<string>>(new Set()); // Guarda NroDocumento de los seleccionados
-    const [sortConfig, setSortConfig] = useState<SortConfig | null>(null); // Para ordenar resultados 
+    const [sortConfig, setSortConfig] = useState<SortConfig | null>(null); 
     
     // --- ESTADOS DE MODAL ---
     const [showErrorModal, setShowErrorModal] = useState(false);
@@ -62,7 +55,7 @@ const HuespedSearchAndSelect: React.FC<HuespedSearchAndSelectProps> = ({ onSelec
         const valorFinal = (name === 'nombre' || name === 'apellido') ?
             value.toUpperCase() : value;
 
-        setFormData(prev => ({ ...prev, [name]: valorFinal }));
+        setHuespedData(prev => ({ ...prev, [name]: valorFinal }));
         
         // Limpiar error al escribir [cite: 15, 16]
         if (errors[name]) {
@@ -73,10 +66,8 @@ const HuespedSearchAndSelect: React.FC<HuespedSearchAndSelectProps> = ({ onSelec
             });
         }
     };
-    
-    // NOTA: Reemplaza validateBuscarForm(formData) con tu función real si la tienes disponible.
-    // Por simplicidad, aquí solo chequearemos campos vacíos básicos.
-    const validateBuscarForm = (data: FormData): Record<string, string> => {
+
+    const validateBuscarForm = (data: HuespedDTOCompleto): Record<string, string> => {
         const validationErrors: Record<string, string> = {};
         if (!data.apellido.trim() && !data.nombre.trim() && !data.numeroDocumento.trim()) {
             validationErrors.general = 'Debe ingresar al menos un criterio de búsqueda.';
@@ -88,8 +79,7 @@ const HuespedSearchAndSelect: React.FC<HuespedSearchAndSelectProps> = ({ onSelec
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
         
-        // 1. Validar formato [cite: 17]
-        const validationErrors = validateBuscarForm(formData);
+        const validationErrors = validateBuscarForm(huespedData);
         if (Object.keys(validationErrors).length > 0) {
             // Usamos un modal global en lugar de errores bajo el input para la validación general
             setErrorMessage(validationErrors.general || 'Datos inválidos en el formulario.');
@@ -105,12 +95,12 @@ const HuespedSearchAndSelect: React.FC<HuespedSearchAndSelectProps> = ({ onSelec
         try {
             // 2. Construir URL dinámica (Copiada del código del compañero) [cite: 20, 21, 22]
             const params = new URLSearchParams();
-            if (formData.nombre.trim()) params.append('nombre', formData.nombre.trim());
-            if (formData.apellido.trim()) params.append('apellido', formData.apellido.trim());
+            if (huespedData.nombre.trim()) params.append('nombre', huespedData.nombre.trim());
+            if (huespedData.apellido.trim()) params.append('apellido', huespedData.apellido.trim());
             
-            if (formData.numeroDocumento.trim()) {
-                params.append('numeroDocumento', formData.numeroDocumento.trim());
-                params.append('tipoDocumento', formData.tipoDocumento);
+            if (huespedData.numeroDocumento.trim()) {
+                params.append('numeroDocumento', huespedData.numeroDocumento.trim());
+                params.append('tipoDocumento', huespedData.tipoDocumento);
             }
 
             const queryString = params.toString();
@@ -145,7 +135,7 @@ const HuespedSearchAndSelect: React.FC<HuespedSearchAndSelectProps> = ({ onSelec
     };
     
     // --- LÓGICA DE ORDENAMIENTO (Copiada de BuscarHuesped) ---
-    const handleSort = (key: keyof HuespedResultado) => {
+    const handleSort = (key: keyof HuespedDTOCompleto) => {
         let direction: 'asc' | 'desc' = 'asc'; 
         if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
             direction = 'desc'; 
@@ -157,10 +147,11 @@ const HuespedSearchAndSelect: React.FC<HuespedSearchAndSelectProps> = ({ onSelec
         let sortedData = [...searchResults];
         if (sortConfig !== null) {
             sortedData.sort((a, b) => {
-                if (a[sortConfig.key] < b[sortConfig.key]) {
+                const key = sortConfig.key as keyof HuespedDTOCompleto;
+                if (a[key] < b[key]) {
                     return sortConfig.direction === 'asc' ? -1 : 1;
                 }
-                if (a[sortConfig.key] > b[sortConfig.key]) {
+                if (a[key] > b[key]) {
                     return sortConfig.direction === 'asc' ? 1 : -1; 
                 }
                 return 0;
@@ -169,7 +160,7 @@ const HuespedSearchAndSelect: React.FC<HuespedSearchAndSelectProps> = ({ onSelec
         return sortedData;
     }, [searchResults, sortConfig]);
     
-    const getSortIcon = (key: keyof HuespedResultado) => {
+    const getSortIcon = (key: keyof HuespedDTOCompleto) => {
         if (!sortConfig || sortConfig.key !== key) return null; 
         return sortConfig.direction === 'asc' ? ' ▲' : ' ▼';
     };
@@ -210,14 +201,13 @@ const HuespedSearchAndSelect: React.FC<HuespedSearchAndSelectProps> = ({ onSelec
                     </div>
 
                     <form onSubmit={handleSearch} className="form-container">
-                        {/* Aquí usamos formData/searchForm para mantener la compatibilidad */}
-                        <InputField label="Nombre" name="nombre" value={formData.nombre} onChange={handleChange} error={errors.nombre} />
-                        <InputField label="Apellido" name="apellido" value={formData.apellido} onChange={handleChange} error={errors.apellido} />
+                        <InputField label="Nombre" name="nombre" value={huespedData.nombre} onChange={handleChange} error={errors.nombre} />
+                        <InputField label="Apellido" name="apellido" value={huespedData.apellido} onChange={handleChange} error={errors.apellido} />
                         
                         {/* DocumentoFieldCU2 debe ser importado y usado correctamente */}
                         <DocumentoField 
-                            tipoDocumento={formData.tipoDocumento} 
-                            numeroDocumento={formData.numeroDocumento} 
+                            tipoDocumento={huespedData.tipoDocumento} 
+                            numeroDocumento={huespedData.numeroDocumento} 
                             onChange={handleChange} 
                             error={errors.numeroDocumento} 
                             highlight={!!errors.numeroDocumento} 
@@ -225,7 +215,7 @@ const HuespedSearchAndSelect: React.FC<HuespedSearchAndSelectProps> = ({ onSelec
                         
                         <div className="form-actions">
                             <button type="button" className="btn-cancel" onClick={onCancel}>Cancelar</button>
-                            <button type="submit" className="btn-search" disabled={isLoading}>
+                            <button type="submit" className="btn-accept" disabled={isLoading}>
                                 {isLoading ? '...' : 'Buscar'} 
                             </button>
                         </div>

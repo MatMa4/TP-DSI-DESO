@@ -3,16 +3,16 @@ import React, { useState, useEffect } from 'react';
 import FiltrosHabitacion from '../componentsCU4-5-15/Filtroshabitacion';
 import DisponibilidadGrid from '../componentsCU4-5-15/DisponibilidadGrid';
 import ModalError from '../componentsCU4-5-15/ModalError'; 
-import ReservaVerification from '../componentsCU4-5-15/ReservaVerification'; // Se reutiliza para mostrar la selección
+import ReservaVerification from '../componentsCU4-5-15/ReservaVerification'; 
 import HuespedSearchAndSelect from '../componentsCU4-5-15/HuespedSearchAndSelect'; 
-import { RoomCellData, SelectedReservation, generateGridData, HuespedSearchResult } from '../../types/indexCU4-5-15'; 
+import { RoomCellData, SelectedReservation, HuespedDTOCompleto } from '../types/indexCU4-5-15'; 
+import '../styles/stylesCU4-5-15.css';
 
-// Definición de las etapas del Caso de Uso Ocupar Habitación (CU15)
 const OCUPAR_STAGES = {
-    GRILLA_DISPONIBILIDAD: 'GRILLA_DISPONIBILIDAD', // 1. Selección de fechas/habitación
-    VERIFICACION: 'VERIFICACION', // 2. Confirmación de selección de habitación
-    BUSQUEDA_HUESPED: 'BUSQUEDA_HUESPED', // 3. Búsqueda y selección de huéspedes
-    FINALIZADO: 'FINALIZADO', // 4. Ocupación y finalización
+    GRILLA_DISPONIBILIDAD: 'GRILLA_DISPONIBILIDAD', 
+    VERIFICACION: 'VERIFICACION', 
+    BUSQUEDA_HUESPED: 'BUSQUEDA_HUESPED', 
+    FINALIZADO: 'FINALIZADO',
 };
 
 // --- COMPONENTE PRINCIPAL ---
@@ -22,35 +22,55 @@ export default function OcuparHabitacion() {
     const [gridData, setGridData] = useState<RoomCellData[]>([]);
     const [selectedRoomType, setSelectedRoomType] = useState<string>(''); 
     const [selectedReservations, setSelectedReservations] = useState<SelectedReservation[]>([]);
-    const [occupyingGuests, setOccupyingGuests] = useState<HuespedSearchResult[]>([]); // Estado para guardar los huéspedes seleccionados
-
-    // Control de modales y errores
+    const [occupyingGuests, setOccupyingGuests] = useState<HuespedDTOCompleto[]>([]); 
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [showVerificationModal, setShowVerificationModal] = useState(false);
     
-    // --- LÓGICA DE SIMULACIÓN DE DATOS (Reemplazar con fetch) ---
-    const handleSearch = (tipo: string) => {
-        if (!fechas.desde || !fechas.hasta) {
-            setErrorMessage('Debe seleccionar ambas fechas.');
-            setShowErrorModal(true);
-            return;
-        }
+    // --- LÓGICA DE SIMULACIÓN DE DATOS 
+const handleSearch = async (tipo: string) => {
+    if (!fechas.desde || !fechas.hasta) {
+        setErrorMessage('Debe seleccionar ambas fechas.');
+        setShowErrorModal(true);
+        return;
+    }
+    
+    // CRÍTICO: Limpieza de estado de error antes de buscar
+    setErrorMessage(''); 
+    setShowErrorModal(false);
+    
+    const BASE_URL = 'http://localhost:8080';
+    const url = `${BASE_URL}/api/habitaciones/disponibilidad?fechaInicio=${fechas.desde}&fechaFin=${fechas.hasta}&tipo=${tipo}`;
 
-        // SIMULACIÓN (Reemplazar con la llamada GET al Back-End)
-        const data = generateGridData(fechas.desde, fechas.hasta, tipo); 
+    try {
+        const response = await fetch(url);
         
-        if (data.length === 0) {
-            setErrorMessage("No existen habitaciones disponibles con los criterios solicitados.");
+        if (!response.ok) {
+            const errorBody = await response.json().catch(() => ({ message: response.statusText }));
+            throw new Error(`Error ${response.status}: ${errorBody.message || 'Fallo al conectar con la API de disponibilidad.'}`);
+        }
+        
+        // 2. RECIBIR LA DATA
+        const data: RoomCellData[] = await response.json(); 
+        
+        if (!Array.isArray(data) || data.length === 0) {
+            setErrorMessage("No existen habitaciones disponibles con las comodidades deseadas para el rango de fechas solicitado.");
             setShowErrorModal(true);
+            setGridData([]);
             return;
         }
         
+        // 3. ÉXITO
         setGridData(data);
-        setSelectedRoomType(tipo);
-        setErrorMessage('');
-    };
-
+        setSelectedRoomType(tipo); // Establecer el tipo de habitación seleccionado
+        
+    } catch (error) {
+        // Captura errores de red o los lanzados en el bloque try
+        setErrorMessage(`Hubo un error de conexión al buscar disponibilidad: ${error.message}`);
+        setShowErrorModal(true);
+        setGridData([]);
+    }
+};
     // --- MANEJADORES DE ESTADO Y FLUJO ---
 
     const handleFechasChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,7 +78,6 @@ export default function OcuparHabitacion() {
         setGridData([]); 
     };
     
-    // 1. Flujo: Después de seleccionar habitaciones en la grilla
     const handleGridSubmit = (reservations: SelectedReservation[]) => {
         if (reservations.length === 0) {
             setErrorMessage("Debe seleccionar una reserva o habitación para ocupar.");
@@ -67,42 +86,87 @@ export default function OcuparHabitacion() {
         }
         
         setSelectedReservations(reservations);
-        setShowVerificationModal(true); // Mostrar modal de verificación (Resumen)
+        setShowVerificationModal(true);
     };
 
-    // 2. Flujo: Aceptar la verificación de la HABITACIÓN/FECHA
     const handleAcceptVerification = () => {
         setShowVerificationModal(false);
-        // Pasa a la búsqueda y selección de Huéspedes
         setStage(OCUPAR_STAGES.BUSQUEDA_HUESPED); 
     };
 
-    // 3. Flujo: El usuario selecciona los huéspedes (CRÍTICO: Nueva función)
-    const handleHuespedSelectionSubmit = (selectedHuespedes: HuespedSearchResult[]) => {
+    const handleHuespedSelectionSubmit = async (selectedHuespedes: HuespedDTOCompleto[]) => {
         if (selectedHuespedes.length === 0) {
             setErrorMessage("Debe seleccionar al menos un huésped para asociar a la ocupación.");
             setShowErrorModal(true);
             return;
         }
         
-        setOccupyingGuests(selectedHuespedes);
+        // Asumimos que la ocupación se hace sobre la primera selección de la grilla (ya que el DTO es singular)
+        const roomSelection = selectedReservations[0];
+        if (!roomSelection) {
+            setErrorMessage("Error: La habitación y fechas seleccionadas se perdieron.");
+            setShowErrorModal(true);
+            return;
+        }
+
+        // 1. CONSTRUIR EL PAYLOAD (OcupacionDTO)
+        const payload = {
+        "habitacion": { "numero": parseInt(roomSelection.roomId) },
+        "fechaInicio": roomSelection.fechaInicio,
+        "fechaFin": roomSelection.fechaFin,
+        "checkIn": "14:00:00", 
+        "checkOut": "10:00:00", 
         
-        // Aquí se realizaría la llamada final al Back-End (POST/PUT) para Ocupar.
-        
-        // Simulación de finalización exitosa:
-        console.log("Datos de Ocupación Final:", { rooms: selectedReservations, guests: selectedHuespedes });
-        setStage(OCUPAR_STAGES.FINALIZADO); 
+        // C. Array de Huéspedes: Usamos los objetos completos tal como fueron recibidos
+        "huespedes": selectedHuespedes.map(h => ({
+            // Mapeamos los campos que el Back-End espera, usando el objeto 'h' completo
+            "numeroDocumento": h.numeroDocumento,
+            "tipoDocumento": h.tipoDocumento,
+            "apellido": h.apellido,
+            "nombre": h.nombre,
+            "fechaNacimiento": h.fechaNacimiento,
+            "telefono": h.telefono,
+            "email": h.email,
+            "ocupacion": h.ocupacion,
+            "nacionalidad": h.nacionalidad,
+            "cuit": h.cuit,
+            "posicionIVA": h.posicionIVA,
+            "alojado": true,
+            "direccionHuesped": h.direccionHuesped, // Objeto anidado completo
+        }))
     };
-    
-    // Flujo: Rechazar la selección o volver
+        
+        const BASE_URL = 'http://localhost:8080';
+        const url = `${BASE_URL}/api/ocupaciones`; // Endpoint de Ocupación
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.status !== 201 && response.status !== 200) {
+                const errorText = await response.text();
+                throw new Error(errorText || 'Fallo al registrar la ocupación.');
+            }
+
+            // Éxito
+            setStage(OCUPAR_STAGES.FINALIZADO);
+            // Podrías usar setSuccessMessage aquí para mostrar el éxito en el modal de CU4/15
+            
+        } catch (error) {
+            setErrorMessage(`Error al registrar la ocupación: ${error.message}`);
+            setShowErrorModal(true);
+        }
+    };
+
     const handleRejectVerification = () => {
         setShowVerificationModal(false); 
         setSelectedReservations([]); 
     };
 
-    // Flujo: Cancelar el Caso de Uso (Desde cualquier etapa)
     const handleCancel = () => {
-        // En un CU real, esto debe usar el router.push('/') después de la confirmación
         alert("Caso de Uso CANCELADO. Se limpiarán los estados."); 
         setStage(OCUPAR_STAGES.GRILLA_DISPONIBILIDAD);
         setFechas({ desde: '', hasta: '' });
@@ -114,13 +178,14 @@ export default function OcuparHabitacion() {
     // --- RENDERIZADO (UI) ---
     return (
         <main className="main-container">
+            {(stage === OCUPAR_STAGES.GRILLA_DISPONIBILIDAD || stage === OCUPAR_STAGES.VERIFICACION) && (
             <div className="tittle_box">
                 <h1 className="main_title">Ocupar Habitación</h1>
             </div>
-
+            )}
             <div className="main_box" style={{ padding: '20px' }}>
                 
-                {/* 1. Etapa GRILLA DE DISPONIBILIDAD */}
+                {/*GRILLA DE DISPONIBILIDAD */}
                 {(stage === OCUPAR_STAGES.GRILLA_DISPONIBILIDAD || stage === OCUPAR_STAGES.VERIFICACION) && (
                     <div className="full-grid-view">
                         <FiltrosHabitacion 
@@ -156,7 +221,7 @@ export default function OcuparHabitacion() {
                     </div>
                 )}
                 
-                {/* 2. Etapa BÚSQUEDA Y SELECCIÓN DE HUÉSPEDES */}
+                {/* BÚSQUEDA Y SELECCIÓN DE HUÉSPEDES */}
                 {stage === OCUPAR_STAGES.BUSQUEDA_HUESPED && (
                     <HuespedSearchAndSelect 
                         onSelectionSubmit={handleHuespedSelectionSubmit} 
@@ -164,7 +229,7 @@ export default function OcuparHabitacion() {
                     />
                 )}
                 
-                {/* 3. Etapa FINALIZADO */}
+                {/* Etapa FINALIZADO */}
                 {stage === OCUPAR_STAGES.FINALIZADO && (
                     <div style={{ textAlign: 'center', padding: '50px' }}>
                         <h2 style={{ color: 'green' }}>✅ Ocupación Registrada con Éxito</h2>
