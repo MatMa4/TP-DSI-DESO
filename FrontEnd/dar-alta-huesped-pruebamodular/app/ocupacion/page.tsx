@@ -153,6 +153,7 @@ const handleSearch = async (tipo: string) => {
             "camaDoble": h.camaDoble,
             "tipoHabitacion": tipoHabitacionLimpio, 
         },
+        "tipoHabitacion": tipoHabitacionLimpio,
         "fechaInicio": toISODate(roomSelection.fechaInicio),
         "fechaFin": toISODate(roomSelection.fechaFin),
         "checkIn": "14:00:00", 

@@ -525,3 +525,11 @@ Caused by: java.lang.IllegalArgumentException: -12-01 14:30:00
 	at org.h2.util.DateTimeUtils.parseTime(DateTimeUtils.java:422)
 	at org.h2.value.ValueTime.parse(ValueTime.java:92)
 	... 55 more
+2025-12-09 18:40:09.672823-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "delete [*]* FROM OCUPACION"; se esperaba "identifier"
+Syntax error in SQL statement "delete [*]* FROM OCUPACION"; expected "identifier"; SQL statement:
+delete * FROM OCUPACION [42001-232]
+2025-12-09 18:54:05.463753-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SELECT * [*]FROMOCUPACION_HUESPEDES  OCUPACION"
+Syntax error in SQL statement "SELECT * [*]FROMOCUPACION_HUESPEDES  OCUPACION"; SQL statement:
+SELECT * FROMOCUPACION_HUESPEDES  OCUPACION [42000-232]

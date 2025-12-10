@@ -72,8 +72,8 @@ export const transformToGridData = (
 
             if (estado !== 'Fuera de servicio') {
                 for (const ocupacion of roomDto.ocupaciones) {
-                    const ocupacionStart = new Date(ocupacion.fechaInicio + 'T00:00:00');
-                    const ocupacionEnd = new Date(ocupacion.fechaFin + 'T00:00:00');
+                    const ocupacionStart = new Date(ocupacion.fechaInicio);
+                    const ocupacionEnd = new Date(ocupacion.fechaFin);
 
                     if (targetDate >= ocupacionStart && targetDate <= ocupacionEnd) {
                         estado = 'Ocupada';

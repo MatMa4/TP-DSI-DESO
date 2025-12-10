@@ -29,24 +29,10 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class ControladorOcupacion {
         private final GestorDeOcupaciones gestorOcupaciones;
-        private final repositorioHabitacion repoHab;
-        private final HabitacionMapper habMap;
-        private final repositorioOcupacion repoOcu;
     
     @PostMapping
     public boolean crearOcupacion(@RequestBody OcupacionDTO ocupacion) {
         gestorOcupaciones.crearOcupacion(ocupacion);
         return true;
-    }
-    
-    @PutMapping
-    public boolean crearHabitacion(@RequestBody HabitacionDTO hab) {
-        repoHab.save(habMap.toEntity(hab));
-        return true;
-    }
-    
-    @GetMapping
-    public List<Ocupacion> obtenerTodos() {
-        return repoOcu.findAll();
     }
 }

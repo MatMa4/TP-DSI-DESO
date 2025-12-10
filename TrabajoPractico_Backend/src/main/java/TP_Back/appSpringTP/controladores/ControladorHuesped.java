@@ -7,7 +7,6 @@ package TP_Back.appSpringTP.controladores;
 import TP_Back.appSpringTP.DTOs.HuespedDTO;
 import TP_Back.appSpringTP.excepciones.HuespedExistenteException;
 import TP_Back.appSpringTP.gestores.GestorHuespedes;
-import TP_Back.appSpringTP.modelo.direccion.Direccion;
 import TP_Back.appSpringTP.modelo.huesped.Huesped;
 import TP_Back.appSpringTP.repositorios.repositorioDireccion;
 import java.util.List;
@@ -22,11 +21,8 @@ public class ControladorHuesped {
 
     private final GestorHuespedes gestorHuespedes;
     
-    private final repositorioDireccion repoDir;
-
     public ControladorHuesped(GestorHuespedes gestorHuespedes, repositorioDireccion repoDir) {
         this.gestorHuespedes = gestorHuespedes;
-        this.repoDir = repoDir;
     }
     
     @PutMapping
@@ -60,11 +56,6 @@ public class ControladorHuesped {
         } catch (HuespedExistenteException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "CONFLICTO", "mensaje", e.getMessage()));
         }
-    }
-    @GetMapping("/direcciones")
-    public ResponseEntity<List<Direccion>> obtenerDirecciones() {
-
-        return ResponseEntity.ok(repoDir.findAll());
     }
 
 }
