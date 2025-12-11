@@ -11,9 +11,11 @@ package TP_Back.appSpringTP.repositorios;
 
 import TP_Back.appSpringTP.modelo.huesped.Huesped;
 import TP_Back.appSpringTP.modelo.huesped.HuespedId;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -28,5 +30,15 @@ public interface repositorioHuesped extends JpaRepository<Huesped, HuespedId> {
                                   @Param("apellido") String apellido,
                                   @Param("tipoDocumento") String tipoDocumento,
                                   @Param("numeroDocumento") String numeroDocumento);
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE HUESPED " +
+                   "SET numero_documento = :nuevoNumero, tipo_documento = :nuevoTipo " +
+                   "WHERE numero_documento = :viejoNumero AND tipo_documento = :viejoTipo",
+           nativeQuery = true)
+    int modificarHuespedId(@Param("viejoNumero") String viejoNumero,
+                        @Param("viejoTipo") String viejoTipo,
+                        @Param("nuevoNumero") String nuevoNumero,
+                        @Param("nuevoTipo") String nuevoTipo);
 }
 

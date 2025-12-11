@@ -29,6 +29,11 @@ public class ControladorHuesped {
     public ResponseEntity<?> registrarHuesped(@RequestBody HuespedDTO huesped) {
         return ResponseEntity.ok(gestorHuespedes.registrarHuesped(huesped));
     }
+    
+    @PostMapping
+    public ResponseEntity<?> modificarHuesped(@RequestBody List<HuespedDTO> huespedes) {
+        return ResponseEntity.ok(gestorHuespedes.modificarHuesped(huespedes));
+    }
 
     @GetMapping
     public List<HuespedDTO> obtenerTodos() {
@@ -52,6 +57,15 @@ public class ControladorHuesped {
     public ResponseEntity<?> consultarDocumento(@RequestParam String tipo, @RequestParam String numero) {
         try {
             gestorHuespedes.consultarDocumento(tipo, numero);
+            return ResponseEntity.status(HttpStatus.OK).body("Huesped no existe");
+        } catch (HuespedExistenteException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "CONFLICTO", "mensaje", e.getMessage()));
+        }
+    }
+    @GetMapping("/huespedExistente")
+    public ResponseEntity<?> huespedExistente(@RequestParam String tipoModificado, @RequestParam String numeroModificado, @RequestParam String tipoOriginal, @RequestParam String numeroOriginal) {
+        try {
+            gestorHuespedes.huespedExistente(tipoModificado, numeroModificado, tipoOriginal, numeroOriginal);
             return ResponseEntity.status(HttpStatus.OK).body("Huesped no existe");
         } catch (HuespedExistenteException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "CONFLICTO", "mensaje", e.getMessage()));

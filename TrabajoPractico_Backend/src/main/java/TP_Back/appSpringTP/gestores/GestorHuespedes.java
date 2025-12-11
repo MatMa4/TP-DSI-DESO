@@ -31,6 +31,7 @@ public class GestorHuespedes {
     private final DireccionDAO direccionDAO;
 
 
+
     public GestorHuespedes(HuespedDAOImpl huespedDAO, DireccionDAOImpl direccionDAO) {
         this.huespedDAO = huespedDAO;
         this.direccionDAO = direccionDAO;
@@ -61,6 +62,13 @@ public class GestorHuespedes {
         huespedDAO.save(huesped);
         return true;     
     }
+    
+    public Boolean modificarHuesped(List<HuespedDTO> huespedes){
+        huespedDAO.modificarIDHuesped(huespedes.get(0), huespedes.get(1));
+        huespedDAO.guardar(huespedes.get(0));
+        return true;
+    }
+    
     public List<HuespedDTO> obtenerTodos() {
         return huespedDAO.findAll();
     }
@@ -85,8 +93,19 @@ public class GestorHuespedes {
             return true;
         }else{
             throw new HuespedExistenteException("Huesped existente");
+        }   
+    }
+    public boolean huespedExistente(String tipoModificado, String numeroModificado, String tipoOriginal, String numeroOriginal){
+        if(tipoModificado.equals(tipoOriginal) && numeroModificado.equals(numeroOriginal)){
+            return true;
+        }else{
+            Optional<HuespedDTO> huesped = huespedDAO.consultarDocumento(tipoModificado, numeroModificado);
+            if(huesped.isEmpty()){
+                return true;
+            }else{
+                throw new HuespedExistenteException("Huesped existente");
+            }
         }
-        
     }
 }
 

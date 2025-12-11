@@ -7,6 +7,7 @@ package TP_Back.appSpringTP.modelo.direccion;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 /**
@@ -64,6 +65,21 @@ public class Direccion {
     public String getPais(){
         return this.id.getPais();
     }
+    public Boolean equals(Direccion otraDir){
+        if(this.getCalle().equals(otraDir.getCalle())){
+            if(Objects.equals(this.getNumero(), otraDir.getNumero())){
+                if(this.getLocalidad().equals(otraDir.getLocalidad())){
+                    if(this.getProvincia().equals(otraDir.getProvincia())){
+                        if(this.getPais().equals(otraDir.getPais())){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
     private Direccion(Builder builder) {
         this.id = builder.id;
         this.departamento = builder.departamento;

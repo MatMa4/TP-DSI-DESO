@@ -21,4 +21,7 @@ public interface HuespedDAO {
     public List<HuespedDTO> findAll();
     public List<HuespedDTO> buscarHuesped(HuespedDTO huesped);
     public Huesped obtenerHuesped(HuespedDTO huesped);
+    public HuespedDTO guardar(HuespedDTO huesp);
+    public void modificarIDHuesped(HuespedDTO huespedModificado, HuespedDTO huespedNuevo);
+    public void eliminar(HuespedDTO huesp);
 }
