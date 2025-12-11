@@ -30,14 +30,12 @@ public class GestorHuespedes {
     @Autowired
     private final DireccionDAO direccionDAO;
 
-
-
     public GestorHuespedes(HuespedDAOImpl huespedDAO, DireccionDAOImpl direccionDAO) {
         this.huespedDAO = huespedDAO;
         this.direccionDAO = direccionDAO;
     }
 
-    public Boolean registrarHuesped(HuespedDTO h) {
+    public HuespedDTO registrarHuesped(HuespedDTO h) {
         DireccionDTO direccionDto=h.getDireccionHuesped();
         Direccion direccion = new Direccion();
         direccion.setDepartamento(direccionDto.getDepartamento());
@@ -59,8 +57,45 @@ public class GestorHuespedes {
         huesped.setPosicionIVA(h.getPosicionIVA());
         huesped.setAlojado(h.getAlojado());
         huesped.setDireccionHuesped(direccion);
-        huespedDAO.save(huesped);
-        return true;     
+        Huesped resultado = huespedDAO.save(huesped);
+        
+        DireccionDTO dirResult = new DireccionDTO();
+        dirResult.setCalle(resultado.getDireccionHuesped().getCalle());
+        dirResult.setNumero(resultado.getDireccionHuesped().getNumero());
+        dirResult.setLocalidad(resultado.getDireccionHuesped().getLocalidad());
+        dirResult.setProvincia(resultado.getDireccionHuesped().getProvincia());
+        dirResult.setPais(resultado.getDireccionHuesped().getPais());
+        dirResult.setCodigo(resultado.getDireccionHuesped().getCodigo());
+        dirResult.setDepartamento(resultado.getDireccionHuesped().getDepartamento());
+        dirResult.setPiso(resultado.getDireccionHuesped().getPiso());
+        
+        HuespedDTO.Builder builder = HuespedDTO.builder()
+                .numeroDocumento(resultado.getNumeroDocumento())
+                .tipoDocumento(resultado.getTipoDocumento())
+                .apellido(resultado.getApellido())
+                .nombre(resultado.getNombre())
+                .fechaNacimiento(resultado.getFechaNacimiento())
+                .telefono(resultado.getTelefono())
+                .ocupacion(resultado.getOcupacion())
+                .nacionalidad(resultado.getNacionalidad())
+                .alojado(resultado.getAlojado())
+                .direccion(dirResult);
+
+        if (resultado.getEmail() != null && !resultado.getEmail().isBlank()) {
+            builder.email(resultado.getEmail());
+        }
+        if (resultado.getCuit() != null && !resultado.getCuit().isBlank()) {
+            builder.cuit(resultado.getCuit());
+        }
+        if (resultado.getPosicionIVA() != null && !resultado.getPosicionIVA().isBlank()) {
+            builder.posicionIVA(resultado.getPosicionIVA());
+        }
+
+        // Finalmente construís el objeto
+        HuespedDTO huespedCreado = builder.build();
+
+                
+        return huespedCreado;     
     }
     
     public Boolean modificarHuesped(List<HuespedDTO> huespedes){

@@ -65,6 +65,21 @@ public class Direccion {
     public String getPais(){
         return this.id.getPais();
     }
+        public void setCalle(String calle){
+        id.setCalle(calle);
+    }
+    public void setNumero(Integer numero){
+        id.setNumero(numero);
+    }
+    public void setLocalidad(String localidad){
+        id.setLocalidad(localidad);
+    }
+    public void setProvincia(String provincia){
+        id.setProvincia(provincia);
+    }
+    public void setPais(String pais){
+        id.setPais(pais);
+    }
     public Boolean equals(Direccion otraDir){
         if(this.getCalle().equals(otraDir.getCalle())){
             if(Objects.equals(this.getNumero(), otraDir.getNumero())){
