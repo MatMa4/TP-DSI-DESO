@@ -8,6 +8,7 @@ import TP_Back.appSpringTP.excepciones.UsuarioNoEncontradoException;
 import TP_Back.appSpringTP.modelo.usuario.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class GestorDeUsuario {
@@ -15,11 +16,14 @@ public class GestorDeUsuario {
     @Autowired
     private UsuarioDAO usuarioDAO;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public void autenticarUsuario(UsuarioDTO user) throws UsuarioNoEncontradoException, ContrasenaInvalidaException {
         Usuario usuario = usuarioDAO.findById(user.getUsername())
                 .orElseThrow(() -> new UsuarioNoEncontradoException("Usuario " + user.getUsername() + " no encontrado."));
 
-        if (!usuario.getContrasena().equals(user.getPassw())) {
+        if (!passwordEncoder.matches(user.getPassw(), usuario.getContrasena())) {
             throw new ContrasenaInvalidaException("La contraseña no es válida.");
         }
     }
@@ -30,7 +34,7 @@ public class GestorDeUsuario {
         }
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setUsuario(userDTO.getUsername());
-        nuevoUsuario.setContrasena(userDTO.getPassw());
+        nuevoUsuario.setContrasena(passwordEncoder.encode(userDTO.getPassw()));
         nuevoUsuario.setRol(userDTO.getRol());
         return usuarioDAO.save(nuevoUsuario);
     }
