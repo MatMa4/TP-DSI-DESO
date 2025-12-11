@@ -34,6 +34,11 @@ public class ControladorHuesped {
     public ResponseEntity<?> modificarHuesped(@RequestBody List<HuespedDTO> huespedes) {
         return ResponseEntity.ok(gestorHuespedes.modificarHuesped(huespedes));
     }
+    
+    @DeleteMapping
+    public ResponseEntity<?> eliminarHuesped(@RequestBody HuespedDTO huesped){
+        return ResponseEntity.ok(gestorHuespedes.eliminarHuesped(huesped));
+    }
 
     @GetMapping
     public List<HuespedDTO> obtenerTodos() {

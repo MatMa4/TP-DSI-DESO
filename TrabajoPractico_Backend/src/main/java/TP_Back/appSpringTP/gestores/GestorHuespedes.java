@@ -69,6 +69,11 @@ public class GestorHuespedes {
         return true;
     }
     
+    public Boolean eliminarHuesped(HuespedDTO hueped){
+        huespedDAO.eliminar(hueped);
+        return true;
+    }
+    
     public List<HuespedDTO> obtenerTodos() {
         return huespedDAO.findAll();
     }
