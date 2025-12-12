@@ -1,0 +1,290 @@
+
+/* 1. ESTRUCTURA PRINCIPAL */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #507393;
+    overflow: hidden; /* Evita scrolls innecesarios */
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+}
+
+.main-container-facturar {
+    display: flex;
+    width: 1440px; 
+    height: 1080px;  
+}
+.facturar-layout {
+    display: flex;
+    min-height: 900px;
+    width: 1440px;
+    flex-grow: 1;
+}
+.header-title-box {
+    margin-bottom: 40px;
+}
+.form-container-facturar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+/* 2. PANEL IZQUIERDO (Formulario) */
+.left-pane-facturar {
+    width: 500px; 
+    min-width: 500px;
+    background-color: white;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 60px;
+    padding-left: 40px;
+    padding-right: 40px;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 50; 
+    box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+    justify-content: center;
+}
+
+/*  PANEL DERECHO (Resultados) */
+.right-pane-facturar {
+    width: 940px; 
+    background-color: #507393;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    box-sizing: border-box;
+}
+
+.empty-state { width: 100%; height: 100%; }
+
+.results-box-facturar {
+    background-color: white;
+    width: 940px;
+    height: 800px;
+    border-radius: 40px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 10;
+}
+
+.results-header {
+    text-align: center;
+    font-weight: bold;
+    color: #444;
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+.table-scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+.header-title-box {
+    background-color: #6B99C3;
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 50px;
+    width: 350px;
+    margin-left: 35px;
+}
+.header-title-box h1 { margin: 0; font-size: inherit; line-height: 1.2; }
+
+/* Contenedor del formulario */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    width: 350px; /* Ancho FIJO */
+}
+
+/* 3. ESTILOS DE LOS INPUTS */
+.box1_simplebox { 
+    width: 200px; 
+}
+
+.box1_simplebox label, .boxDocumento label {
+    font-size: 14px;
+    color: #444;
+    margin-left: 15px;
+    margin-bottom: 5px;
+    display: block;
+    text-align: left;
+    font-weight: bold;
+}
+.form-actions-facturar {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+/* Input Normal (Nombre, Apellido) */
+.input_box {
+    background-color: #C2C3C5 ;
+    border: 1px solid #818283 ;
+    border-radius: 30px ;
+    height: 40px ;
+    width: 250px ;
+    padding-left: 20px ;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+input, select{
+    position: relative;
+    height: 40px;
+    border-radius: 30px;
+    width: 20px;
+    background-color: #C2C3C5;
+    border-color: #818283;
+    border-width: 1px;
+    left:20px;
+    z-index: 0;
+    
+}
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 120px;
+    width: 350px;
+}
+
+.btn-cancel {
+    background-color: #C2C3C5;
+    color: #555;
+    border: none;
+    width: 140px;
+    height: 40px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-search {
+    background-color: #022E66;
+    color: white;
+    border: none;
+    width: 140px;
+    height: 40px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+/* TABLA */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+.custom-table th {
+    text-align: left;
+    color: #999;
+    font-weight: normal;
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.custom-table td {
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+    cursor: pointer;
+}
+
+.custom-table tr:hover { background-color: #f5f9fc; }
+.selected-row { background-color: #e3f2fd; font-weight: 600; }
+
+.results-footer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-next {
+    background-color: #022E66;
+    color: white;
+    border: none;
+    width: 160px;
+    height: 45px;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    position: relative;
+    z-index: 9999 ;
+}
+/* Indicador visual cuando navegas con TAB */
+.custom-table tr:focus {
+    background-color: #f0f8ff;
+    outline: 2px solid #022E66;
+    outline-offset: -2px;
+}
+.error {
+    color: red;
+    font-size: 0.85rem;
+    height: 20px;
+    margin-bottom: -20px;
+    text-align: left;    
+    width: 100%;
+    max-width: 370px;
+}
+/* Fondo borroso */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10050; 
+}
+
+/* Caja del modal */
+.modal {
+  background: white;
+  border-radius: 12px;
+  padding: 30px 40px;
+  text-align: center;
+  width: 600px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  z-index: 10051;
+}
+
+.modal h2 {
+  margin-top: 10px;
+  font-size: 40px;
+  color: #333;
+}
+
+.modal p {
+  color: #555;
+  font-size: 20px;
+  margin: 10px 0 20px 0;
+  white-space: pre-wrap;
+}
+
+.modal-icon {
+  font-size: 40px;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
