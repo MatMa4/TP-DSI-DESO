@@ -71,6 +71,7 @@ export default function GenerarFactura() {
         
         const { numeroHabitacion, horaSalida } = formData;
         const numHabitacionLimpio = parseInt(numeroHabitacion);
+        console.log("Número enviado:", typeof numHabitacionLimpio, numHabitacionLimpio);
 
         if (isNaN(numHabitacionLimpio)) {
             setErrorMessage('El número de habitación debe ser un valor numérico válido.');
@@ -193,6 +194,7 @@ export default function GenerarFactura() {
                     </div>
                 </div>
             </div>
+            
             
             <ModalError
                 show={showErrorModal}
