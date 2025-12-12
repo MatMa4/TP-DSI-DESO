@@ -34,11 +34,6 @@ public class ControladorHuesped {
     public ResponseEntity<?> modificarHuesped(@RequestBody List<HuespedDTO> huespedes) {
         return ResponseEntity.ok(gestorHuespedes.modificarHuesped(huespedes));
     }
-
-    @GetMapping
-    public List<HuespedDTO> obtenerTodos() {
-        return gestorHuespedes.obtenerTodos();
-    }
     
     @GetMapping("/buscar")
     public ResponseEntity<List<HuespedDTO>> buscarHuespedes(
@@ -48,10 +43,6 @@ public class ControladorHuesped {
             @RequestParam(required = false) String numero) {
 
         return ResponseEntity.ok(gestorHuespedes.buscarHuesped(tipo, numero, nombre, apellido));
-    }
-    @GetMapping("/obtener")
-    public ResponseEntity<Huesped> obtenerHuespedes(@RequestParam String tipo, @RequestParam String numero) {
-        return ResponseEntity.ok(gestorHuespedes.obtenerHuesped(tipo, numero));
     }
     @GetMapping("/consultarDocumento")
     public ResponseEntity<?> consultarDocumento(@RequestParam String tipo, @RequestParam String numero) {
