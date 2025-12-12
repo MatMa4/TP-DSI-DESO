@@ -30,4 +30,5 @@ public class OcupacionDTO {
     private Time checkOut;
     private List<ConsumoDTO> consumos;
     private List<HuespedDTO> huespedes;
+    private Double precioTotal;
 }
