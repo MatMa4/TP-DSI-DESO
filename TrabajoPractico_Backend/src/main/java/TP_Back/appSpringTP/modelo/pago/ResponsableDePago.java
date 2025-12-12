@@ -4,6 +4,7 @@
  */
 package TP_Back.appSpringTP.modelo.pago;
 
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,9 +19,10 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "DTYPE")
 @Table(name = "responsable_de_pago")
 public abstract class ResponsableDePago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idResponsable;
+     Integer idResponsable;
 }
