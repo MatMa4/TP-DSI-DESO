@@ -24,4 +24,13 @@ public class OcupacionDAOImpl implements OcupacionDAO{
     public void crearOcupacion(Ocupacion ocupacion){
         repoOcupacion.save(ocupacion);
     }
+
+    @Override
+    public Ocupacion getOcupacionPorHabitacionYFecha(int numero, java.util.Date fecha) {
+        java.util.List<Ocupacion> ocupaciones = repoOcupacion.findOcupacionPorHabitacionYFecha(numero, fecha);
+        if (ocupaciones != null && !ocupaciones.isEmpty()) {
+            return ocupaciones.get(0);
+        }
+        return null;
+    }
 }

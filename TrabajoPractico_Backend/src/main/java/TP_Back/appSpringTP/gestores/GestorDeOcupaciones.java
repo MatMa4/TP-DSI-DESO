@@ -30,6 +30,9 @@ public class GestorDeOcupaciones {
     @Autowired
     private final HuespedMapper huespedMapper;
     
+    @Autowired
+    private final TP_Back.appSpringTP.mappers.OcupacionMapper ocupacionMapper;
+
     public void crearOcupacion(OcupacionDTO ocupacion){
         Ocupacion ocupacionNueva = new Ocupacion();
         ocupacionNueva.setHabitacion(habitacionMapper.toEntity(ocupacion.getHabitacion()));
@@ -39,5 +42,33 @@ public class GestorDeOcupaciones {
         ocupacionNueva.setCheckOut(ocupacion.getCheckOut());
         ocupacionNueva.setHuespedes(huespedMapper.toEntityList(ocupacion.getHuespedes()));
         ocupacionDAO.crearOcupacion(ocupacionNueva);
+    }
+
+    public OcupacionDTO obtenerOcupacionActual(int numeroHabitacion, java.time.LocalTime hora) {
+        // Assume 'today' is the current date
+        java.util.Date fechaActual = new java.util.Date();
+        Ocupacion ocupacion = ocupacionDAO.getOcupacionPorHabitacionYFecha(numeroHabitacion, fechaActual);
+        
+        if (ocupacion != null) {
+            OcupacionDTO dto = ocupacionMapper.toDTO(ocupacion);
+            
+            // Calculate total price
+            long diffInMillies = Math.abs(ocupacion.getFechaFin().getTime() - ocupacion.getFechaInicio().getTime());
+            long diff = java.util.concurrent.TimeUnit.DAYS.convert(diffInMillies, java.util.concurrent.TimeUnit.MILLISECONDS);
+            
+            double costoEstadia = diff * dto.getHabitacion().getCostoPorNoche();
+            
+            double totalConsumos = 0;
+            if (dto.getConsumos() != null) {
+                totalConsumos = dto.getConsumos().stream()
+                        .mapToDouble(TP_Back.appSpringTP.DTOs.ocupacion.ConsumoDTO::getMonto)
+                        .sum();
+            }
+            
+            dto.setPrecioTotal(costoEstadia + totalConsumos);
+            
+            return dto;
+        }
+        return null;
     }
 }

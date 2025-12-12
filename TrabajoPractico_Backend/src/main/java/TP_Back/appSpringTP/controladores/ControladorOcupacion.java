@@ -35,4 +35,13 @@ public class ControladorOcupacion {
         gestorOcupaciones.crearOcupacion(ocupacion);
         return true;
     }
+
+    @GetMapping
+    public org.springframework.http.ResponseEntity<OcupacionDTO> buscarOcupacion(@org.springframework.web.bind.annotation.RequestParam int numero, @org.springframework.web.bind.annotation.RequestParam java.time.LocalTime hora) {
+        OcupacionDTO occupied = gestorOcupaciones.obtenerOcupacionActual(numero, hora);
+        if (occupied != null) {
+            return org.springframework.http.ResponseEntity.ok(occupied);
+        }
+        return org.springframework.http.ResponseEntity.notFound().build();
+    }
 }
