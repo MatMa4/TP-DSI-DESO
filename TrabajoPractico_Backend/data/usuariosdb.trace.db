@@ -1,666 +1,192 @@
-2025-11-12 14:40:00.007796-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:41:00.003542-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:42:00.003092-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:43:00.001225-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:44:00.000987-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:45:00.002153-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:46:00.001247-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:47:00.001611-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:48:00.001902-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:49:00.002196-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:50:00.000481-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:51:00.002287-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:52:00.001079-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:53:00.001881-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:54:00.001559-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:55:00.001883-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:56:00.002060-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:57:00.002010-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:58:00.001402-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 14:59:00.003572-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:00:00.000892-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:01:00.001432-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:02:00.001711-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:03:00.002114-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:04:00.001758-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:05:00.001369-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:06:00.000509-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:07:00.001910-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:08:00.000263-03:00 jdbc[6]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:09:00.001078-03:00 jdbc[9]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:10:00.001262-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:11:00.001736-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:12:00.000509-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:13:00.002092-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:14:00.000725-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:15:00.003240-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:16:00.002111-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:17:00.001547-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:18:00.001254-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:19:00.002013-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:20:00.001682-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:21:00.001678-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:22:00.001154-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:23:00.001578-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:24:00.000672-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:25:00.002671-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:26:00.002920-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:27:00.001809-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:28:00.001267-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:29:00.001851-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:30:00.002936-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:31:00.002227-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:32:00.001932-03:00 jdbc[16]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:33:00.000919-03:00 jdbc[16]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:34:00.001988-03:00 jdbc[19]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:35:00.001343-03:00 jdbc[19]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:36:00.000976-03:00 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:37:00.002262-03:00 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:38:00.001933-03:00 jdbc[23]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:39:00.001363-03:00 jdbc[23]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:40:00.002508-03:00 jdbc[23]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:41:00.001476-03:00 jdbc[23]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:42:00.000963-03:00 jdbc[23]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 15:43:00.000343-03:00 jdbc[23]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 16:40:00.010313-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 16:41:00.002528-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-11-12 16:42:00.002367-03:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "SPRING_SESSION" no encontrada
-Table "SPRING_SESSION" not found; SQL statement:
-DELETE FROM SPRING_SESSION
-WHERE EXPIRY_TIME < ?
- [42102-232]
-2025-12-08 16:16:24.890063-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "INSERT INTO HABITACION (\000d\000a    CAMA_DOBLES,\000d\000a    CAMA_KINGSIZE,\000d\000a    CAMAS_INDIVIDUALES,\000d\000a    CAPACIDAD,\000d\000a    COSTO_POR_NOCHE,\000d\000a    NUMERO,\000d\000a    TIPO_HABITACION,\000d\000a    DESCRIPCION,\000d\000a    ESTADO\000d\000a) VALUES\000d\000a(1,\000d\000a 1,\000d\000a 0,\000d\000a 2,\000d\000a 90560.0\000d\000a [*]301,\000d\000a 'DobleSuperior',\000d\000a 'Habitación amplia con cama doble y mobiliario mejorado.',\000d\000a 'HABITABLE')"; se esperaba "[, ., ::, AT, FORMAT, *, /, %, +, -, ||, NOT, IS, ILIKE, REGEXP, AND, OR, ,, )"
-Syntax error in SQL statement "INSERT INTO HABITACION (\000d\000a    CAMA_DOBLES,\000d\000a    CAMA_KINGSIZE,\000d\000a    CAMAS_INDIVIDUALES,\000d\000a    CAPACIDAD,\000d\000a    COSTO_POR_NOCHE,\000d\000a    NUMERO,\000d\000a    TIPO_HABITACION,\000d\000a    DESCRIPCION,\000d\000a    ESTADO\000d\000a) VALUES\000d\000a(1,\000d\000a 1,\000d\000a 0,\000d\000a 2,\000d\000a 90560.0\000d\000a [*]301,\000d\000a 'DobleSuperior',\000d\000a 'Habitación amplia con cama doble y mobiliario mejorado.',\000d\000a 'HABITABLE')"; expected "[, ., ::, AT, FORMAT, *, /, %, +, -, ||, NOT, IS, ILIKE, REGEXP, AND, OR, ,, )"; SQL statement:
-INSERT INTO HABITACION (
-    CAMA_DOBLES,
-    CAMA_KINGSIZE,
-    CAMAS_INDIVIDUALES,
-    CAPACIDAD,
-    COSTO_POR_NOCHE,
-    NUMERO,
-    TIPO_HABITACION,
-    DESCRIPCION,
-    ESTADO
-) VALUES
-(1,
- 1,
- 0,
- 2,
- 90560.0
- 301,
- 'DobleSuperior',
- 'Habitación amplia con cama doble y mobiliario mejorado.',
- 'HABITABLE') [42001-232]
-2025-12-08 16:42:00.503293-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLDataException: Imposible interpretar la constante "TIME" "2025-12-01 14:30:00"
-Cannot parse "TIME" constant "2025-12-01 14:30:00"; SQL statement:
--- Script de generación de datos para la tabla OCUPACION
--- Rango de fechas: 01-Dic-2025 al 31-Dic-2025
-
-INSERT INTO OCUPACION (ID_OCUPACION, HABITACION_NUMERO, FECHA_INICIO, FECHA_FIN, CHECK_IN, CHECK_OUT) VALUES 
--- 1. Individual Estándar (Rango 101-110)
--- Huésped que ya se fue (Estancia completa)
-(1, 101, '2025-12-01', '2025-12-05', '2025-12-01 14:30:00', '2025-12-05 10:15:00'),
--- Huésped que llegó tarde (Check-in día 2)
-(2, 105, '2025-12-10', '2025-12-12', '2025-12-10 19:45:00', '2025-12-12 09:00:00'),
--- Huésped actual (Sin Check-out aún)
-(3, 110, '2025-12-28', '2025-12-31', '2025-12-28 15:00:00', NULL),
-
--- 2. Doble Estándar (Rango 201-218)
--- Estancia típica de semana
-(4, 201, '2025-12-05', '2025-12-10', '2025-12-05 13:00:00', '2025-12-10 11:00:00'),
--- Estancia de fin de semana
-(5, 210, '2025-12-12', '2025-12-14', '2025-12-12 16:20:00', '2025-12-14 12:30:00'),
--- Huésped que no ha hecho check-out (ej. late checkout o sigue en el hotel)
-(6, 218, '2025-12-30', '2025-12-31', '2025-12-30 14:10:00', NULL),
-
--- 3. Doble Superior (Rango 301-308)
--- Estancia de Navidad
-(7, 301, '2025-12-24', '2025-12-26', '2025-12-24 12:00:00', '2025-12-26 11:00:00'),
--- Estancia a principios de mes
-(8, 305, '2025-12-02', '2025-12-04', '2025-12-02 14:00:00', '2025-12-04 10:00:00'),
-
--- 4. Superior Family Plan (Rango 401-410)
--- Familia vacaciones largas
-(9, 401, '2025-12-15', '2025-12-22', '2025-12-15 15:30:00', '2025-12-22 10:45:00'),
--- Familia que acaba de llegar para año nuevo (Sin Check-out)
-(10, 410, '2025-12-30', '2025-12-31', '2025-12-30 13:00:00', NULL),
-
--- 5. Suite Doble (Rango 501-502)
--- VIP estancia corta
-(11, 501, '2025-12-20', '2025-12-21', '2025-12-20 20:00:00', '2025-12-2 [22007-232]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:518)
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
-	at org.h2.message.DbException.get(DbException.java:212)
-	at org.h2.value.ValueTime.parse(ValueTime.java:94)
-	at org.h2.value.Value.convertToTime(Value.java:1914)
-	at org.h2.value.Value.convertTo(Value.java:1175)
-	at org.h2.value.Value.convertForAssignTo(Value.java:1118)
-	at org.h2.table.Column.validateConvertUpdateSequence(Column.java:406)
-	at org.h2.table.Table.convertInsertRow(Table.java:963)
-	at org.h2.command.dml.Insert.insertRows(Insert.java:167)
-	at org.h2.command.dml.Insert.update(Insert.java:135)
-	at org.h2.command.dml.DataChangeStatement.update(DataChangeStatement.java:74)
-	at org.h2.command.CommandContainer.update(CommandContainer.java:139)
-	at org.h2.command.Command.executeUpdate(Command.java:304)
-	at org.h2.command.Command.executeUpdate(Command.java:248)
-	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:262)
-	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:231)
-	at org.h2.server.web.WebApp.getResult(WebApp.java:1344)
-	at org.h2.server.web.WebApp.query(WebApp.java:1142)
-	at org.h2.server.web.WebApp.query(WebApp.java:1118)
-	at org.h2.server.web.WebApp.process(WebApp.java:244)
-	at org.h2.server.web.WebApp.processRequest(WebApp.java:176)
-	at org.h2.server.web.JakartaWebServlet.doGet(JakartaWebServlet.java:129)
-	at org.h2.server.web.JakartaWebServlet.doPost(JakartaWebServlet.java:166)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1774)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:1447)
-Caused by: java.lang.IllegalArgumentException: -12-01 14:30:00
-	at org.h2.util.TimeZoneProvider.ofId(TimeZoneProvider.java:139)
-	at org.h2.util.DateTimeUtils.parseTime(DateTimeUtils.java:422)
-	at org.h2.value.ValueTime.parse(ValueTime.java:92)
-	... 55 more
-2025-12-09 18:40:09.672823-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "delete [*]* FROM OCUPACION"; se esperaba "identifier"
-Syntax error in SQL statement "delete [*]* FROM OCUPACION"; expected "identifier"; SQL statement:
-delete * FROM OCUPACION [42001-232]
-2025-12-09 18:54:05.463753-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SELECT * [*]FROMOCUPACION_HUESPEDES  OCUPACION"
-Syntax error in SQL statement "SELECT * [*]FROMOCUPACION_HUESPEDES  OCUPACION"; SQL statement:
-SELECT * FROMOCUPACION_HUESPEDES  OCUPACION [42000-232]
-2025-12-10 21:39:14.194704-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "show [*]create table CONSUMO"
-Syntax error in SQL statement "show [*]create table CONSUMO"; SQL statement:
-show create table CONSUMO [42000-232]
-2025-12-10 21:39:26.981213-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SHOW [*]CREATE TABLE CONSUMO"
-Syntax error in SQL statement "SHOW [*]CREATE TABLE CONSUMO"; SQL statement:
-SHOW CREATE TABLE CONSUMO [42000-232]
-2025-12-10 21:39:39.426595-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SHOW [*]CREATE TABLE CONSUMO"
-Syntax error in SQL statement "SHOW [*]CREATE TABLE CONSUMO"; SQL statement:
-SHOW CREATE TABLE CONSUMO [42000-232]
-2025-12-10 21:39:40.221812-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SHOW [*]CREATE TABLE CONSUMO"
-Syntax error in SQL statement "SHOW [*]CREATE TABLE CONSUMO"; SQL statement:
-SHOW CREATE TABLE CONSUMO [42000-232]
-2025-12-10 21:40:27.749853-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabla "CONSTRAINTS" no encontrada
-Table "CONSTRAINTS" not found; SQL statement:
-SELECT * FROM INFORMATION_SCHEMA.CONSTRAINTS WHERE TABLE_NAME = 'CONSUMO' [42102-232]
-2025-12-10 21:41:10.210574-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SHOW [*]CREATE TABLE CONSUMO"
-Syntax error in SQL statement "SHOW [*]CREATE TABLE CONSUMO"; SQL statement:
-SHOW CREATE TABLE CONSUMO [42000-232]
-2025-12-10 21:41:14.277012-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SHOW [*]CREATE TABLE CONSUMO"
-Syntax error in SQL statement "SHOW [*]CREATE TABLE CONSUMO"; SQL statement:
-SHOW CREATE TABLE CONSUMO [42000-232]
-2025-12-10 21:41:22.212540-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SHOW [*]CREATE TABLE ""CONSUMO"""
-Syntax error in SQL statement "SHOW [*]CREATE TABLE ""CONSUMO"""; SQL statement:
-SHOW CREATE TABLE "CONSUMO" [42000-232]
-2025-12-10 21:41:29.452665-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "SHOW [*]CREATE TABLE CONSUMO"
-Syntax error in SQL statement "SHOW [*]CREATE TABLE CONSUMO"; SQL statement:
-SHOW CREATE TABLE CONSUMO [42000-232]
-2025-12-10 21:41:51.377401-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Columna "TYPE_NAME" no encontrada
-Column "TYPE_NAME" not found; SQL statement:
-SELECT TABLE_NAME, COLUMN_NAME, TYPE_NAME, IS_NULLABLE
-FROM INFORMATION_SCHEMA.COLUMNS
-WHERE TABLE_NAME = 'CONSUMO' [42122-232]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:514)
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
-	at org.h2.message.DbException.get(DbException.java:223)
-	at org.h2.message.DbException.get(DbException.java:199)
-	at org.h2.expression.ExpressionColumn.getColumnException(ExpressionColumn.java:244)
-	at org.h2.expression.ExpressionColumn.optimizeOther(ExpressionColumn.java:226)
-	at org.h2.expression.ExpressionColumn.optimize(ExpressionColumn.java:213)
-	at org.h2.command.query.Select.prepareExpressions(Select.java:1228)
-	at org.h2.command.query.Query.prepare(Query.java:232)
-	at org.h2.command.Parser.prepareCommand(Parser.java:489)
-	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:645)
-	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:561)
-	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1164)
-	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:245)
-	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:231)
-	at org.h2.server.web.WebApp.getResult(WebApp.java:1344)
-	at org.h2.server.web.WebApp.query(WebApp.java:1142)
-	at org.h2.server.web.WebApp.query(WebApp.java:1118)
-	at org.h2.server.web.WebApp.process(WebApp.java:244)
-	at org.h2.server.web.WebApp.processRequest(WebApp.java:176)
-	at org.h2.server.web.JakartaWebServlet.doGet(JakartaWebServlet.java:129)
-	at org.h2.server.web.JakartaWebServlet.doPost(JakartaWebServlet.java:166)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
-	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
-	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
-	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
-	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
-	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
-	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88)
-	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
-	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)
-	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
-	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
-	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
-	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399)
-	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
-	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
-	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1774)
-	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
-	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
-	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
-	at java.base/java.lang.Thread.run(Thread.java:1474)
-2025-12-11 10:37:25.637121-03:00 jdbc[16]: null
-org.h2.message.DbException: La conexión no fue cerrada por la aplicación y esta siendo limpiada (garbage collected)
-The connection was not closed by the application and is garbage collected [90018-232]
-	at org.h2.message.DbException.get(DbException.java:223)
-	at org.h2.message.DbException.get(DbException.java:199)
-	at org.h2.message.DbException.get(DbException.java:188)
-	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:217)
-	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:134)
-	at org.h2.Driver.connect(Driver.java:59)
-	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)
-	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:370)
-	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:207)
-	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:488)
-	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:752)
-	at com.zaxxer.hikari.pool.HikariPool$PoolEntryCreator.call(HikariPool.java:731)
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:328)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
-	at java.base/java.lang.Thread.run(Thread.java:1447)
-Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: La conexión no fue cerrada por la aplicación y esta siendo limpiada (garbage collected)
-The connection was not closed by the application and is garbage collected [90018-232]
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:690)
-	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
-	... 16 more
-2025-12-12 21:01:12.732853-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "delete [*]* FROM HUESPED"; se esperaba "identifier"
-Syntax error in SQL statement "delete [*]* FROM HUESPED"; expected "identifier"; SQL statement:
-delete * FROM HUESPED [42001-232]
-2025-12-12 21:01:32.669214-03:00 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "delete [*]* FROM HUESPED"; se esperaba "identifier"
-Syntax error in SQL statement "delete [*]* FROM HUESPED"; expected "identifier"; SQL statement:
-delete * FROM HUESPED [42001-232]
+2025-12-13 14:41:57.825149-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 1, 1, 50800.0, 101, U&'IndividualEst\00e1ndar', U&'Habitaci\00f3n individual con servicios esenciales.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.830150-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 1, 1, 50800.0, 102, U&'IndividualEst\00e1ndar', U&'Habitaci\00f3n individual con servicios esenciales.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.833151-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 1, 1, 50800.0, 103, U&'IndividualEst\00e1ndar', U&'Habitaci\00f3n individual con servicios esenciales.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.835152-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 1, 1, 50800.0, 104, U&'IndividualEst\00e1ndar', U&'Habitaci\00f3n individual con servicios esenciales.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.837153-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 1, 1, 50800.0, 105, U&'IndividualEst\00e1ndar', U&'Habitaci\00f3n individual con servicios esenciales.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.838153-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 1, 1, 50800.0, 106, U&'IndividualEst\00e1ndar', U&'Habitaci\00f3n individual con servicios esenciales.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.839153-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 1, 1, 50800.0, 107, U&'IndividualEst\00e1ndar', U&'Habitaci\00f3n individual con servicios esenciales.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.840153-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 1, 1, 50800.0, 108, U&'IndividualEst\00e1ndar', U&'Habitaci\00f3n individual con servicios esenciales.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.841153-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 1, 1, 50800.0, 109, U&'IndividualEst\00e1ndar', U&'Habitaci\00f3n individual con servicios esenciales.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.842153-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'IndividualEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 1, 1, 50800.0, 110, U&'IndividualEst\00e1ndar', U&'Habitaci\00f3n individual con servicios esenciales.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.843153-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 2, 2, 70230.0, 201, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.843153-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 2, 2, 70230.0, 202, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.844154-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 2, 2, 70230.0, 203, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.845154-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 2, 2, 70230.0, 204, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.846155-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 2, 2, 70230.0, 205, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.847155-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 2, 2, 70230.0, 206, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.848155-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 2, 2, 70230.0, 207, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.848155-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 2, 2, 70230.0, 208, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.849155-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 0, 2, 2, 70230.0, 209, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.850155-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 0, 0, 2, 70230.0, 210, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.851155-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 0, 0, 2, 70230.0, 211, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'FUERA_DE_SERVICIO') [22018-232]
+2025-12-13 14:41:57.852156-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 0, 0, 2, 70230.0, 212, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.853156-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 0, 0, 2, 70230.0, 213, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.854156-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 0, 0, 2, 70230.0, 214, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.854939-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 0, 0, 2, 70230.0, 215, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.856495-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 0, 0, 2, 70230.0, 216, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.856495-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 0, 0, 2, 70230.0, 217, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'FUERA_DE_SERVICIO') [22018-232]
+2025-12-13 14:41:57.857492-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "U&'DobleEst\\00e1ndar' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 0, 0, 2, 70230.0, 218, U&'DobleEst\00e1ndar', U&'Habitaci\00f3n c\00f3moda con una cama doble y espacio b\00e1sico.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.858492-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'DobleSuperior' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'DobleSuperior' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 1, 0, 2, 90560.0, 301, 'DobleSuperior', U&'Habitaci\00f3n amplia con cama doble y mobiliario mejorado.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.859492-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'DobleSuperior' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'DobleSuperior' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 1, 0, 2, 90560.0, 302, 'DobleSuperior', U&'Habitaci\00f3n amplia con cama doble y mobiliario mejorado.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.860191-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'DobleSuperior' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'DobleSuperior' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 1, 0, 2, 90560.0, 303, 'DobleSuperior', U&'Habitaci\00f3n amplia con cama doble y mobiliario mejorado.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.861177-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'DobleSuperior' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'DobleSuperior' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 1, 0, 2, 90560.0, 304, 'DobleSuperior', U&'Habitaci\00f3n amplia con cama doble y mobiliario mejorado.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.862177-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'DobleSuperior' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'DobleSuperior' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 2, 2, 2, 90560.0, 305, 'DobleSuperior', U&'Habitaci\00f3n amplia con cama doble y mobiliario mejorado.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.863178-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'DobleSuperior' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'DobleSuperior' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 2, 2, 2, 90560.0, 306, 'DobleSuperior', U&'Habitaci\00f3n amplia con cama doble y mobiliario mejorado.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.864178-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'DobleSuperior' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'DobleSuperior' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 2, 2, 2, 90560.0, 307, 'DobleSuperior', U&'Habitaci\00f3n amplia con cama doble y mobiliario mejorado.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.865178-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'DobleSuperior' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'DobleSuperior' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(0, 2, 2, 2, 90560.0, 308, 'DobleSuperior', U&'Habitaci\00f3n amplia con cama doble y mobiliario mejorado.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.866179-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 0, 3, 5, 110500.0, 401, 'SuperiorFamilyPlan', U&'Habitaci\00f3n familiar.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.866179-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 0, 3, 5, 110500.0, 402, 'SuperiorFamilyPlan', U&'Habitaci\00f3n familiar.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.867179-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 0, 3, 5, 110500.0, 403, 'SuperiorFamilyPlan', U&'Habitaci\00f3n familiar.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.868179-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 0, 3, 5, 110500.0, 404, 'SuperiorFamilyPlan', U&'Habitaci\00f3n familiar.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.869179-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 0, 3, 5, 110500.0, 405, 'SuperiorFamilyPlan', U&'Habitaci\00f3n familiar.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.870179-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(2, 0, 1, 5, 110500.0, 406, 'SuperiorFamilyPlan', U&'Habitaci\00f3n familiar.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.871179-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(2, 0, 1, 5, 110500.0, 407, 'SuperiorFamilyPlan', U&'Habitaci\00f3n familiar.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.871179-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(2, 0, 1, 5, 110500.0, 408, 'SuperiorFamilyPlan', U&'Habitaci\00f3n familiar.', 'FUERA_DE_SERVICIO') [22018-232]
+2025-12-13 14:41:57.872180-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(2, 0, 1, 5, 110500.0, 409, 'SuperiorFamilyPlan', U&'Habitaci\00f3n familiar.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.873180-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'SuperiorFamilyPlan' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(2, 0, 1, 5, 110500.0, 410, 'SuperiorFamilyPlan', U&'Habitaci\00f3n familiar.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.873180-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'Suite' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'Suite' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 1, 0, 2, 128600.0, 501, 'Suite', U&'Una habitaci\00f3n asignada a una pareja.', 'HABITABLE') [22018-232]
+2025-12-13 14:41:57.874180-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLDataException: Conversión de datos fallida, convirtiendo "'Suite' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"
+Data conversion error converting "'Suite' (HABITACION: ""COSTO_POR_NOCHE"" FLOAT(24))"; SQL statement:
+INSERT INTO "PUBLIC"."HABITACION" VALUES(1, 1, 0, 2, 128600.0, 502, 'Suite', U&'Una habitaci\00f3n asignada a una pareja.', 'HABITABLE') [22018-232]
