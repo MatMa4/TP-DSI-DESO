@@ -23,6 +23,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OcupacionDTO {
+    private Integer id;
     private HabitacionDTO habitacion;
     private Date fechaInicio;
     private Date fechaFin;

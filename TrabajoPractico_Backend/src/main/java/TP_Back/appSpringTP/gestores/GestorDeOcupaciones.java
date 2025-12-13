@@ -58,14 +58,8 @@ public class GestorDeOcupaciones {
             
             double costoEstadia = diff * dto.getHabitacion().getCostoPorNoche();
             
-            double totalConsumos = 0;
-            if (dto.getConsumos() != null) {
-                totalConsumos = dto.getConsumos().stream()
-                        .mapToDouble(TP_Back.appSpringTP.DTOs.ocupacion.ConsumoDTO::getMonto)
-                        .sum();
-            }
-            
-            dto.setPrecioTotal(costoEstadia + totalConsumos);
+            dto.setPrecioTotal(costoEstadia);
+            dto.setId(ocupacion.getIdOcupacion());
             
             return dto;
         }
