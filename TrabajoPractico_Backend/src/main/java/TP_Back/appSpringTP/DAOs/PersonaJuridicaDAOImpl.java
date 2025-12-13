@@ -23,4 +23,9 @@ public class PersonaJuridicaDAOImpl implements PersonaJuridicaDAO {
     public PersonaJuridica save(PersonaJuridica personaJuridica) {
         return repositorioPersonaJuridica.save(personaJuridica);
     }
+
+    @Override
+    public java.util.Optional<PersonaJuridica> buscarPorCuit(String cuit) {
+        return repositorioPersonaJuridica.findByCuit(cuit);
+    }
 }

@@ -12,6 +12,7 @@ import TP_Back.appSpringTP.modelo.direccion.Direccion;
 import TP_Back.appSpringTP.repositorios.repositorioDireccion;
 import TP_Back.appSpringTP.modelo.direccion.DireccionId;
 import TP_Back.appSpringTP.modelo.pago.PersonaJuridica;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,5 +73,35 @@ public class GestorResponsableDePago {
         } catch (Exception e) {
              throw new RuntimeException("Error al guardar la persona jurídica", e);
         }
+    }
+    public PersonaJuridicaDTO buscarPersonaJuridica(String cuit) {
+        Optional<PersonaJuridica> pjOpt = personaJuridicaDAO.buscarPorCuit(cuit);
+        
+        if (pjOpt.isEmpty()) {
+            throw new EntityNotFoundException("No se encontró una persona jurídica con CUIT: " + cuit);
+        }
+        
+        PersonaJuridica pj = pjOpt.get();
+        PersonaJuridicaDTO dto = new PersonaJuridicaDTO();
+        dto.setRazonSocial(pj.getRazonSocial());
+        dto.setCuit(pj.getCuit());
+        dto.setTelefono(pj.getTelefono());
+        
+        if (pj.getDireccion() != null) {
+            Direccion dir = pj.getDireccion();
+            DireccionDTO dirDto = new DireccionDTO();
+            // Asumiendo que DireccionDTO tiene setters para estos campos o un constructor compatible
+            dirDto.setCalle(dir.getCalle());
+            dirDto.setNumero(dir.getNumero());
+            dirDto.setLocalidad(dir.getLocalidad());
+            dirDto.setProvincia(dir.getProvincia());
+            dirDto.setPais(dir.getPais());
+            dirDto.setDepartamento(dir.getDepartamento());
+            dirDto.setPiso(dir.getPiso());
+            dirDto.setCodigo(dir.getCodigo());
+            dto.setDireccion(dirDto);
+        }
+        
+        return dto;
     }
 }

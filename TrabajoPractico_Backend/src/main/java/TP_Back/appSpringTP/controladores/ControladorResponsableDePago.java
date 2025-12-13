@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import jakarta.persistence.EntityNotFoundException;
 
 /**
  *
@@ -33,6 +36,19 @@ public class ControladorResponsableDePago {
             e.printStackTrace(); // Log stack trace
             String causeMessage = e.getCause() != null ? e.getCause().getMessage() : e.getMessage();
             return ResponseEntity.internalServerError().body("Error al registrar persona jurídica: " + causeMessage);
+        }
+    }
+    
+    
+    @GetMapping("/juridica")
+    public ResponseEntity<?> getPersonaJuridica(@org.springframework.web.bind.annotation.RequestParam String cuit) {
+        try {
+            PersonaJuridicaDTO dto = gestorResponsableDePago.buscarPersonaJuridica(cuit);
+            return ResponseEntity.ok(dto);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error al buscar persona jurídica: " + e.getMessage());
         }
     }
 }

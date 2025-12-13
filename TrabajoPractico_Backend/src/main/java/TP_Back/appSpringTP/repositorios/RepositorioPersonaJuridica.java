@@ -14,5 +14,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface RepositorioPersonaJuridica extends JpaRepository<PersonaJuridica, Integer> {
-    
+    java.util.Optional<PersonaJuridica> findByCuit(String cuit);
 }
