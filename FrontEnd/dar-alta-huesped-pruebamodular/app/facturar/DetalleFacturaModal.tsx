@@ -1,19 +1,47 @@
 // src/components/DetalleFacturaModal.jsx
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import {OcupacionDTO,HuespedDTO,ItemConsumoDTO, ITEMS_CONSUMO_MOCK} from './interfaces';
 
-const IVA_PERCENTAGE = 0.30; // 30%
+interface DetalleFacturaModalProps {
+    show: boolean;
+    onClose: () => void;
+    responsable: HuespedDTO; // Usa la interfaz de huésped ya definida
+    itemsPendientes: ItemConsumoDTO[]; // La lista de consumos
+    onConfirmFactura: (itemIds: number[]) => void;
+}
+const IVA_PERCENTAGE = 0.30; 
 
-function DetalleFacturaModal({ huesped, itemsPendientes, onClose, onFacturar }) {
+const DetalleFacturaModal: React.FC<DetalleFacturaModalProps> = ({ 
+    show,
+    onClose,
+    responsable, 
+    itemsPendientes, // <--- LISTA RECIBIDA
+    onConfirmFactura, }) => {
     // Estado para manejar qué ítems se seleccionan para ESTA factura
-    const [itemsSeleccionados, setItemsSeleccionados] = useState(
-        itemsPendientes.map(item => ({ ...item, seleccionado: true })) // Por defecto, selecciona todos los pendientes
-    );
+    const [selectedItems, setSelectedItems] = useState(() => {
+        // Aseguramos que itemsPendientes sea un array antes de mapear
+        if (!Array.isArray(itemsPendientes)) return []; 
+        return itemsPendientes.map(item => ({ ...item, seleccionado: true }));
+    });
+    
+    const [itemsSeleccionados, setItemsSeleccionados] = useState<ItemConsumoDTO[]>(() => {
 
+    if (!Array.isArray(itemsPendientes)) {
+        return [];
+    }
+    // 2. Mapeo 'itemsPendientes'.
+    return itemsPendientes.map(item => ({ 
+        ...item, 
+        seleccionado: true
+    }));
+    
+});
+    
     // FUNCIÓN PARA CALCULAR EL TOTAL
     const totalConsumo = useMemo(() => {
         return itemsSeleccionados
             .filter(item => item.seleccionado)
-            .reduce((sum, item) => sum + item.valor, 0);
+            .reduce((sum, item) => sum + item.monto, 0);
     }, [itemsSeleccionados]);
     
     // Cálculo final
@@ -22,7 +50,7 @@ function DetalleFacturaModal({ huesped, itemsPendientes, onClose, onFacturar }) 
     const totalFinal = subtotal + iva;
 
     // Maneja el toggle de selección de un ítem
-    const handleToggleItem = (id) => {
+    const handleToggleItem = (id:number) => {
         setItemsSeleccionados(prevItems => 
             prevItems.map(item => 
                 item.id === id ? { ...item, seleccionado: !item.seleccionado } : item
@@ -30,8 +58,7 @@ function DetalleFacturaModal({ huesped, itemsPendientes, onClose, onFacturar }) 
         );
     };
 
-    // Al presionar ACEPTAR
-    const handleAceptar = () => {
+    const handleConfirm = () => {
         const idsAFacturar = itemsSeleccionados
             .filter(item => item.seleccionado)
             .map(item => item.id);
@@ -40,15 +67,14 @@ function DetalleFacturaModal({ huesped, itemsPendientes, onClose, onFacturar }) 
             alert("Debe seleccionar al menos un ítem para facturar.");
             return;
         }
-
-        onFacturar(idsAFacturar); // Llama a la función de FacturacionGeneral
+        onConfirmFactura(idsAFacturar);
     };
 
-
+    if (!show) return null;
     return (
         <div className="modal-overlay">
             <div className="modal-content">
-                <h3 className="modal-title">{huesped.nombre} {huesped.apellido}</h3>
+                <h3 className="modal-title">{responsable.nombre} {responsable.apellido}</h3>
                 
                 <table className="items-table">
                     <thead>
@@ -59,10 +85,13 @@ function DetalleFacturaModal({ huesped, itemsPendientes, onClose, onFacturar }) 
                         </tr>
                     </thead>
                     <tbody>
-                        {itemsSeleccionados.map(item => (
+
+                        {Array.isArray(itemsPendientes) && itemsPendientes.length > 0 ? (
+
+                        itemsSeleccionados.map(item => (
                             <tr key={item.id}>
                                 <td>{item.descripcion}</td>
-                                <td>$ {item.valor.toLocaleString('es-AR')}</td>
+                                <td>$ {item.monto.toLocaleString('es-AR')}</td>
                                 <td>
                                     <input 
                                         type="checkbox" 
@@ -71,7 +100,10 @@ function DetalleFacturaModal({ huesped, itemsPendientes, onClose, onFacturar }) 
                                     />
                                 </td>
                             </tr>
-                        ))}
+                        ))
+                    ) : (
+                        <p>No hay consumos pendientes para facturar.</p>
+                        )}
                     </tbody>
                 </table>
                 
@@ -82,11 +114,11 @@ function DetalleFacturaModal({ huesped, itemsPendientes, onClose, onFacturar }) 
                 <p style={{ textAlign:'left'}}>Tipo de factura: A</p>
                 <div className="modal-actions">
                     <button className="btn-cancel" onClick={onClose}>Atrás</button>
-                    <button className="btn-accept" onClick={handleAceptar}>ACEPTAR</button>
+                    <button className="btn-accept" onClick={handleConfirm}>ACEPTAR</button>
                 </div>
             </div>
         </div>
     );
-}
+};
 
 export default DetalleFacturaModal;

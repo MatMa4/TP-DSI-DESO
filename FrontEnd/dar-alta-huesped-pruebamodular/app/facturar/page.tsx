@@ -3,10 +3,19 @@ import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 
 // Componentes Reutilizables y específicos (Ajustar rutas según tu proyecto)
+import SeleccionHuespedes from './SeleccionHuespedes'; 
+import FacturacionGeneral from './FacturacionGeneral';
+import DetalleFacturaModal from './DetalleFacturaModal';
 import { InputField } from '../componentsCU4-5-15/InputField'; // Usaremos InputField si está disponible
 import ModalError from '../componentsCU4-5-15/ModalError'; 
 import '../styles/stylesFacturar.css'; // Asegúrate de crear este archivo CSS
+import {OcupacionDTO,HuespedDTO,ItemConsumoDTO, ITEMS_CONSUMO_MOCK} from './interfaces';
 
+// --- STAGES ---
+enum EtapaFacturacion {
+    BUSQUEDA = 'BUSQUEDA',
+    FACTURACION = 'FACTURACION'
+}
 
 // --- INTERFACES ---
 
@@ -15,29 +24,31 @@ interface SearchFormData {
     horaSalida: string; 
 }
 
-interface HuespedFacturacionDTO {
-    id: number;
-    nombre: string;
-    apellido: string;
-    dni: string;
-}
-
-
 // --- COMPONENTE PRINCIPAL ---
 export default function GenerarFactura() {
+    
+    const [etapa, setEtapa] = useState<'BUSQUEDA'>('BUSQUEDA');
+    // Datos de búsqueda
     const [formData, setFormData] = useState<SearchFormData>({
         numeroHabitacion: '',
         horaSalida: '10:00',
     });
-    
-    const [searchResults, setSearchResults] = useState<HuespedFacturacionDTO[]>([]);
-    const [busquedaRealizada, setBusquedaRealizada] = useState(false);
+    // Resultados de la búsqueda inicial
+    const [searchResults, setSearchResults] = useState<HuespedDTO[]>([]);
+    // El responsable seleccionado
+    const [responsableSeleccionado, setResponsableSeleccionado] = useState<HuespedDTO | null>(null);
+    // Estados de UI
     const [isLoading, setIsLoading] = useState(false);
-    
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-
     const router = useRouter();
+    //
+    const [busquedaRealizada, setBusquedaRealizada] = useState(false);
+    
+    //consumos
+    const [itemsConsumo, setItemsConsumo] = useState<ItemConsumoDTO[]>(ITEMS_CONSUMO_MOCK);
+    const [showDetalleModal, setShowDetalleModal] = useState(false);
+    const itemsPendientes = itemsConsumo.filter(item => !item.facturado);
 
 
     // --- MANEJADORES DE ESTADO ---
@@ -59,7 +70,7 @@ export default function GenerarFactura() {
     };
 
 
-    // --- LÓGICA DE BÚSQUEDA ---
+    // --- LÓGICA DE BÚSQUEDA (HANDLES)---
 
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -79,10 +90,11 @@ export default function GenerarFactura() {
         return;
         }
         const horaSalidaCompleta =`${horaSalida}:00`;
-        // Endpoints
+        // Endpoint
         const BASE_URL = 'http://localhost:8080';
         const url = `${BASE_URL}/ocupacion?numero=${numHabitacionLimpio}&hora=${horaSalidaCompleta}`;
         console.log("URL de búsqueda:", url);  
+        
         try {
 
             const response = await fetch(url);
@@ -91,15 +103,38 @@ export default function GenerarFactura() {
                 throw new Error(`Error ${response.status}: No se pudo buscar la ocupación.`);
             }
             
-            const data: HuespedFacturacionDTO[] = await response.json();
+            const data: OcupacionDTO = await response.json();
             
-            if (!Array.isArray(data) || data.length === 0) {
-                setErrorMessage("No se encontraron huéspedes en esa habitación con la hora de salida especificada.");
-                setShowErrorModal(true);
-            }
-            
-            setSearchResults(data);
+            if (data && Array.isArray(data.huespedes) && data.huespedes.length > 0) {
+        
+        // Aquí debes mapear data.huespedes a la interfaz que espera el estado
+                const huespedesMapeados:HuespedDTO[] = data.huespedes.map(huesped => ({
+                    numeroDocumento: huesped.numeroDocumento,
+                    tipoDocumento: huesped.tipoDocumento,
+                    nombre: huesped.nombre,
+                    apellido: huesped.apellido,
+                    fechaNacimiento: huesped.fechaNacimiento,
+                    telefono: huesped.telefono,
+                    email: huesped.email,
+                    ocupacion: huesped.ocupacion,
+                    nacionalidad: huesped.nacionalidad,
+                    cuit: huesped.cuit,
+                    posicionIVA: huesped.posicionIVA,
+                    alojado: huesped.alojado,
+                    direccionHuesped: huesped.direccionHuesped,
+                    
+                }));
+
+            setSearchResults(huespedesMapeados); 
             setBusquedaRealizada(true);
+            
+            } else {
+                // Manejo de caso vacío o no encontrado
+                setErrorMessage("No se encontraron huéspedes en esa habitación...");
+                setShowErrorModal(true);
+                setSearchResults([]); 
+                setBusquedaRealizada(true); 
+            }
 
         } catch (error) {
             setErrorMessage(`Error de conexión o API: ${error.message}`);
@@ -108,20 +143,51 @@ export default function GenerarFactura() {
             setIsLoading(false);
         }
     };
-
+    
     const handleCancelar = () => {
         // En una aplicación real, aquí podrías volver al menú principal
         router.push('/');
     };
 
-    const handleSeleccionarResponsable = (huesped: HuespedFacturacionDTO) => {
-        // Lógica para avanzar al formulario de facturación
-        // Por ahora, solo logueamos o navegamos
-        console.log('Responsable seleccionado para facturar:', huesped);
-        // router.push(`/facturar/detalle?huespedId=${huesped.id}`); // Ejemplo de navegación
+    const handleSeleccionarResponsable = (huesped: HuespedDTO) => {
+        console.log("Responsable seleccionado. Abriendo modal de detalle.");
+        setResponsableSeleccionado(huesped);
+        // Aquí podrías hacer un fetch real de los consumos si no los cargaste antes
+        setShowDetalleModal(true);
+    };
+    const handleVolverABusqueda = () => {
+        setResponsableSeleccionado(null);
+        setEtapa('BUSQUEDA');
+    };
+    
+    const handleCerrarModal = () => {
+    setShowDetalleModal(false);
+    setResponsableSeleccionado(null); 
     };
 
+    const handleGenerarFactura = (itemsSeleccionadosIds: number[]) => {
+        if (!responsableSeleccionado) return;
 
+        // Lógica de actualización de estado (simula el guardado)
+        const nuevosItems = itemsConsumo.map(item => {
+            if (itemsSeleccionadosIds.includes(item.id)) {
+                return { 
+                    ...item, 
+                    facturado: true, 
+                    responsable: responsableSeleccionado.numeroDocumento, // Usamos DNI como ID
+                };
+            }
+            return item;
+        });
+
+        setItemsConsumo(nuevosItems);
+        handleCerrarModal();
+    };
+    /*const itemsPendientes = useMemo(() => 
+        itemsConsumo.filter(item => !item.facturado)
+        , [itemsConsumo]
+    );
+    */
     // --- RENDERIZADO (UI) ---
 
     return (
@@ -138,8 +204,8 @@ export default function GenerarFactura() {
                             label="N° de Habitación" 
                             name="numeroHabitacion" 
                             value={formData.numeroHabitacion} 
-                            onChange={handleChange} 
-                            type="text"
+                            onChange={(e) => setFormData({...formData, numeroHabitacion: e.target.value})} 
+                            type="number"
                         />
                         
                         {/* Campo para la hora de salida */}
@@ -147,12 +213,12 @@ export default function GenerarFactura() {
                             label="Hora de Salida" 
                             name="horaSalida" 
                             value={formData.horaSalida} 
-                            onChange={handleChange} 
+                            onChange={(e) => setFormData({...formData, horaSalida: e.target.value})} 
                             type="time"
                         />
                         
                         <div className="form-actions-facturar">
-                            <button type="button" className="btn-cancel" onClick={handleCancelar}>
+                            <button type="button" className="btn-cancel" onClick={() => router.push('/')}>
                                 Cancelar
                             </button>
                             <button type="submit" className="btn-search" disabled={isLoading}>
@@ -165,42 +231,29 @@ export default function GenerarFactura() {
                 {/* PANEL DERECHO (RESULTADOS) */}
                 <div className="right-pane-facturar">
                     <div className="results-box-facturar">
-                        <h2 className="results-header">HUÉSPEDES</h2>
-                        {busquedaRealizada && searchResults.length === 0 && (
-                            <p style={{ textAlign: 'center', padding: '20px' }}>
-                                No se encontraron huéspedes en esta habitación.
-                            </p>
-                        )}
-                        
-                        {busquedaRealizada && searchResults.length > 0 && (
-                            <div className="huesped-list-container">
-                                <p className='instruction-text'>Seleccione un responsable de pago</p>
-                                {searchResults.map((huesped) => (
-                                    <div 
-                                        key={huesped.dni} 
-                                        className="huesped-card-facturar"
-                                        onClick={() => handleSeleccionarResponsable(huesped)}
-                                    >
-                                        <span>{huesped.nombre}</span>
-                                        <span>{huesped.apellido}</span>
-                                        <span>DNI</span>
-                                        <span>{huesped.dni}</span>
-                                        <button className="btn-select-huesped">➔</button>
-                                    </div>
-                                ))}
-                                <button className="btn-otro-responsable">Otro</button>
-                            </div>
-                        )}
+                        <SeleccionHuespedes 
+                            huespedes={searchResults} 
+                            onSelect={handleSeleccionarResponsable} 
+                        />
                     </div>
                 </div>
             </div>
-            
-            
             <ModalError
                 show={showErrorModal}
                 message={errorMessage}
                 onClose={() => setShowErrorModal(false)}
             />
+            {showDetalleModal && responsableSeleccionado && (
+            <DetalleFacturaModal
+                show={showDetalleModal}
+                onClose={handleCerrarModal}
+                habitacionNumero={formData.numeroHabitacion}
+                responsable={responsableSeleccionado}
+                itemsPendientes={itemsPendientes} // La lista de ítems sin facturar
+                onConfirmFactura={handleGenerarFactura}
+            />
+            
+            )}
         </main>
     );
 }
