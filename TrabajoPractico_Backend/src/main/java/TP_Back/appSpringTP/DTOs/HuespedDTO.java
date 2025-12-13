@@ -16,6 +16,7 @@ import lombok.Setter;
 @Setter
 public class HuespedDTO {
   
+  
     private String numeroDocumento;
     private String tipoDocumento;
     private String apellido;
