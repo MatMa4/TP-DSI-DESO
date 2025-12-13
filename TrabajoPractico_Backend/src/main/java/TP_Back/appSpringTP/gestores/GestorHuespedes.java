@@ -134,5 +134,9 @@ public class GestorHuespedes {
             }
         }
     }
+
+    public List<HuespedDTO> listarTodosHuespedes() {
+        return huespedDAO.findAll();
+    }
 }
 
