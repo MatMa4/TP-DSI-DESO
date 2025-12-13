@@ -4,13 +4,19 @@
  */
 package TP_Back.appSpringTP.DAOs;
 
+import TP_Back.appSpringTP.modelo.ocupacion.Consumo;
+import TP_Back.appSpringTP.repositorios.repositorioConsumo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author mateo
- */
 @Service
 public class ConsumoDAOImpl implements ConsumoDAO{
+    
+    @Autowired
+    private repositorioConsumo repoConsumo;
 
+    @Override
+    public Consumo save(Consumo consumo) {
+        return repoConsumo.save(consumo);
+    }
 }

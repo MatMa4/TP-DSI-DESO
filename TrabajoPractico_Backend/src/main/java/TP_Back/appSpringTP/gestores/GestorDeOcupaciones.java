@@ -65,4 +65,24 @@ public class GestorDeOcupaciones {
         }
         return null;
     }
+
+    public void agregarConsumo(TP_Back.appSpringTP.DTOs.ocupacion.SolicitudConsumoDTO solicitud) {
+        Ocupacion ocupacion = ocupacionDAO.getOcupacionById(solicitud.getIdOcupacion());
+        if (ocupacion != null) {
+            TP_Back.appSpringTP.modelo.ocupacion.Consumo consumo = new TP_Back.appSpringTP.modelo.ocupacion.Consumo();
+            consumo.setTipoServicio(solicitud.getConsumo().getTipoServicio());
+            consumo.setDetalle(solicitud.getConsumo().getDetalle());
+            consumo.setMonto(solicitud.getConsumo().getMonto());
+            
+            consumo = consumoDAO.save(consumo);
+            
+            if (ocupacion.getConsumos() == null) {
+                ocupacion.setConsumos(new java.util.ArrayList<>());
+            }
+            ocupacion.getConsumos().add(consumo);
+            ocupacionDAO.crearOcupacion(ocupacion); // Updating
+        } else {
+             throw new RuntimeException("Ocupacion no encontrada con ID: " + solicitud.getIdOcupacion());
+        }
+    }
 }

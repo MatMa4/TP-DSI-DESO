@@ -33,4 +33,9 @@ public class OcupacionDAOImpl implements OcupacionDAO{
         }
         return null;
     }
+
+    @Override
+    public Ocupacion getOcupacionById(int id) {
+        return repoOcupacion.findById(id).orElse(null);
+    }
 }

@@ -44,4 +44,14 @@ public class ControladorOcupacion {
         }
         return org.springframework.http.ResponseEntity.notFound().build();
     }
+
+    @PostMapping("/agregar_consumo")
+    public org.springframework.http.ResponseEntity<?> agregarConsumo(@RequestBody TP_Back.appSpringTP.DTOs.ocupacion.SolicitudConsumoDTO solicitud) {
+        try {
+            gestorOcupaciones.agregarConsumo(solicitud);
+            return org.springframework.http.ResponseEntity.ok("Consumo agregado correctamente");
+        } catch (Exception e) {
+            return org.springframework.http.ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
