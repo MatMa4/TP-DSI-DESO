@@ -4,15 +4,20 @@
  */
 package TP_Back.appSpringTP.DTOs.pago;
 
-import TP_Back.appSpringTP.modelo.direccion.Direccion;
+import TP_Back.appSpringTP.DTOs.DireccionDTO;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
  * @author mateo
  */
+@Getter
+@Setter
 public class PersonaJuridicaDTO {
     private String razonSocial;
     private String cuit;
-    private Direccion direccionJurídica;
     private String telefono;
+    private DireccionDTO direccion;
+    
 }

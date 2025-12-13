@@ -15,15 +15,23 @@ import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @Embeddable
 public class DireccionId implements Serializable {
+    @jakarta.persistence.Column(name = "calle")
     private String calle;
+
+    @jakarta.persistence.Column(name = "numero")
     private Integer numero;
+    
+    @jakarta.persistence.Column(name = "localidad")
     private String localidad;
+    
+    @jakarta.persistence.Column(name = "provincia")
     private String provincia;
+    
+    @jakarta.persistence.Column(name = "pais")
     private String pais;
 
     public DireccionId() {}

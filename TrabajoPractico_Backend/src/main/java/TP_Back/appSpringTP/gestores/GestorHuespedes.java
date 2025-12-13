@@ -23,6 +23,9 @@ import TP_Back.appSpringTP.DTOs.HuespedDTO;
 import TP_Back.appSpringTP.excepciones.HuespedNoEncontradoException;
 import TP_Back.appSpringTP.modelo.direccion.Direccion;
 import TP_Back.appSpringTP.modelo.huesped.Huesped;
+import TP_Back.appSpringTP.DAOs.PersonaFisicaDAO;
+import TP_Back.appSpringTP.DAOs.PersonaFisicaDAOImpl;
+import TP_Back.appSpringTP.modelo.pago.PersonaFisica;
 
 @Service
 public class GestorHuespedes {
@@ -30,10 +33,13 @@ public class GestorHuespedes {
     private final HuespedDAO huespedDAO;
     @Autowired
     private final DireccionDAO direccionDAO;
+    @Autowired
+    private final PersonaFisicaDAO personaFisicaDAO;
 
-    public GestorHuespedes(HuespedDAOImpl huespedDAO, DireccionDAOImpl direccionDAO) {
+    public GestorHuespedes(HuespedDAOImpl huespedDAO, DireccionDAOImpl direccionDAO, PersonaFisicaDAOImpl personaFisicaDAO) {
         this.huespedDAO = huespedDAO;
         this.direccionDAO = direccionDAO;
+        this.personaFisicaDAO = personaFisicaDAO;
     }
 
     public HuespedDTO registrarHuesped(HuespedDTO h) throws HuespedNoEncontradoException {
@@ -67,6 +73,14 @@ public class GestorHuespedes {
             huespedDAO.save(huesped);
         }catch(Exception e){
             throw new RuntimeException("Error inesperado al registrar huésped", e);
+        }
+        
+        PersonaFisica personaFisica = new PersonaFisica();
+        personaFisica.setHuesped(huesped);
+        try{
+            personaFisicaDAO.save(personaFisica);
+        }catch(Exception e){
+            throw new RuntimeException("Error inesperado al registrar el responsable de pago", e);
         }
         
         Optional <HuespedDTO> resultado = huespedDAO.consultarDocumento(huesped.getTipoDocumento(), huesped.getNumeroDocumento());   
