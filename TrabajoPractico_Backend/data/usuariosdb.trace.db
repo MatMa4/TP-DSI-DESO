@@ -656,3 +656,11 @@ The connection was not closed by the application and is garbage collected [90018
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:690)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	... 16 more
+2025-12-12 21:01:12.732853-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "delete [*]* FROM HUESPED"; se esperaba "identifier"
+Syntax error in SQL statement "delete [*]* FROM HUESPED"; expected "identifier"; SQL statement:
+delete * FROM HUESPED [42001-232]
+2025-12-12 21:01:32.669214-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "delete [*]* FROM HUESPED"; se esperaba "identifier"
+Syntax error in SQL statement "delete [*]* FROM HUESPED"; expected "identifier"; SQL statement:
+delete * FROM HUESPED [42001-232]
