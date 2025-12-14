@@ -1,7 +1,5 @@
-// src/components/DetalleFacturaModal.jsx
 import React, { useState, useMemo } from 'react';
 import {HuespedDTO,ItemConsumoDTO} from './interfaces';
-import './consumos'
 
 interface DetalleFacturaModalProps {
     show: boolean;
@@ -26,12 +24,6 @@ const DetalleFacturaModal: React.FC<DetalleFacturaModalProps> = ({
     itemsPendientes,
     onConfirmFactura, }) => {
     
-    // Estado para manejar qué ítems se seleccionan para ESTA factura
-    const [selectedItems, setSelectedItems] = useState(() => {
-        if (!Array.isArray(itemsPendientes)) return []; 
-        return itemsPendientes.map(item => ({ ...item, seleccionado: true }));
-    });
-
     const [isEstadiaSelected, setIsEstadiaSelected] = useState(true);
     const [itemsSeleccionados, setItemsSeleccionados] = useState<ItemConsumoLocal[]>(() => {
 

@@ -1,10 +1,9 @@
 'use client';
-import React, { useState, useMemo } from 'react';
+import React, { useState} from 'react';
 import { useRouter } from 'next/navigation';
 import SeleccionHuespedes from './SeleccionHuespedes'; 
 import DetalleFacturaModal from './DetalleFacturaModal';
 import { InputField } from '../componentsCU4-5-15/InputField'; 
-import ModalConfirmacion from '../componentsCU4-5-15/ModalConfirmacion'; 
 import ModalError from '../componentsCU4-5-15/ModalError';
 import CuitInputModal from './CuitImputModal';
 import RazonSocialConfirmModal from './RazonSocialConfirmModal';
@@ -30,19 +29,18 @@ export default function GenerarFactura() {
     const [datosOcupacion, setDatosOcupacion] = useState<OcupacionDTO | null>(null);
     // El responsable seleccionado
     const [responsableSeleccionado, setResponsableSeleccionado] = useState<HuespedDTO | null>(null);
+    const [esResponsableEmpresa, setEsResponsableEmpresa] = useState(false);
     // Estados de UI
     const [isLoading, setIsLoading] = useState(false);
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const router = useRouter();
-    //
     const [busquedaRealizada, setBusquedaRealizada] = useState(false);
     
     //CONSUMOS
     const [itemsConsumo, setItemsConsumo] = useState<ItemConsumoDTO[]>([]);
     const [showDetalleModal, setShowDetalleModal] = useState(false);
     const itemsPendientes = itemsConsumo.filter(item => !item.facturado);
-    const [isFetchingConsumos, setIsFetchingConsumos] = useState(false);
     const [estadiaFacturada, setEstadiaFacturada] = useState(false);
 
     //RAZON SOCIAL
@@ -159,6 +157,7 @@ export default function GenerarFactura() {
 
     const handleSeleccionarResponsable = (huesped: HuespedDTO) => {
         setResponsableSeleccionado(huesped);
+        setEsResponsableEmpresa(false);
         setShowDetalleModal(true);
     };
 
@@ -196,41 +195,57 @@ export default function GenerarFactura() {
     }
 
     // 3. PREPARAR EL OBJETO HUESPED/RESPONSABLE
-    const huespedPayload: HuespedDTO = {
-        numeroDocumento: responsableSeleccionado.numeroDocumento,
-        tipoDocumento: responsableSeleccionado.tipoDocumento || 'DNI', 
-        apellido: responsableSeleccionado.apellido,
-        nombre: responsableSeleccionado.nombre,
-        fechaNacimiento: responsableSeleccionado.fechaNacimiento,
-        telefono: responsableSeleccionado.telefono,
-        email: responsableSeleccionado.email,
-        ocupacion: responsableSeleccionado.ocupacion,
-        nacionalidad: responsableSeleccionado.nacionalidad,
-        cuit: responsableSeleccionado.cuit,
-        posicionIVA: responsableSeleccionado.posicionIVA,
-        alojado: responsableSeleccionado.alojado,
-        direccionHuesped: responsableSeleccionado.direccionHuesped    
+    let responsablePayload: any;
+    if (esResponsableEmpresa) {
+        responsablePayload = {
+            cuitResponsable: responsableSeleccionado.numeroDocumento 
+        };
+    } else {
+        responsablePayload = {
+            huesped:{
+            numeroDocumento: responsableSeleccionado.numeroDocumento,
+            tipoDocumento: responsableSeleccionado.tipoDocumento || 'DNI', 
+            apellido: responsableSeleccionado.apellido,
+            nombre: responsableSeleccionado.nombre,
+            fechaNacimiento: responsableSeleccionado.fechaNacimiento,
+            telefono: responsableSeleccionado.telefono,
+            email: responsableSeleccionado.email,
+            ocupacion: responsableSeleccionado.ocupacion,
+            nacionalidad: responsableSeleccionado.nacionalidad,
+            cuit: responsableSeleccionado.cuit,
+            posicionIVA: responsableSeleccionado.posicionIVA,
+            alojado: responsableSeleccionado.alojado,
+            direccionHuesped: responsableSeleccionado.direccionHuesped
+            }
+        }    
     };
+    //URL
+    const endpoint = esResponsableEmpresa 
+        ? '/generar/juridica' // Para empresas
+        : '/generar/fisica';  // Para huéspedes personales
 
+    const url = `${BASE_URL}/facturas${endpoint}`;
 
     // 4. PAYLOAD FINAL
     const payloadFactura = {
         idOcupacion: datosOcupacion.id, 
         listaConsumos: consumosSeleccionados, 
-        huesped: huespedPayload,
+        ...responsablePayload,
     };
-
-    console.log("📦 Payload Final a enviar:", payloadFactura);
 
     // 5. ENVIAR AL BACK-END
     try {
-        const response = await fetch(`${BASE_URL}/facturas/generar`, {
+        const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payloadFactura)
         });
 
-        if (!response.ok) throw new Error("Error al crear la factura");
+        if (!response.ok) {
+            // Manejar errores 400 u otros
+            const errorText = await response.text();
+            throw new Error(`Error ${response.status}: ${errorText}`);
+        }
 
         setItemsConsumo(prevItems => 
             prevItems.map(item => {
@@ -311,7 +326,7 @@ export default function GenerarFactura() {
             direccionHuesped: empresaEncontrada.direccion,
         };
         setResponsableSeleccionado(responsableEmpresa);
-
+        setEsResponsableEmpresa(true);
         setShowRazonSocialModal(false);
         setShowDetalleModal(true);
     };
