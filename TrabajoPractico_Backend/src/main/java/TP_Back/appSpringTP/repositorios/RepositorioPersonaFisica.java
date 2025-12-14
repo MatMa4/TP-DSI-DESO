@@ -15,4 +15,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RepositorioPersonaFisica extends JpaRepository<PersonaFisica, Integer> {
     
+    @org.springframework.data.jpa.repository.Query("SELECT p FROM PersonaFisica p WHERE p.huesped.id.numeroDocumento = :numeroDocumento AND p.huesped.id.tipoDocumento = :tipoDocumento")
+    java.util.Optional<PersonaFisica> findByHuespedDocumento(@org.springframework.data.repository.query.Param("numeroDocumento") String numeroDocumento, @org.springframework.data.repository.query.Param("tipoDocumento") String tipoDocumento);
 }

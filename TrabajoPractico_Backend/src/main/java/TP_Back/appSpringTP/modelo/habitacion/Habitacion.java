@@ -31,4 +31,5 @@ public abstract class Habitacion {
     private Integer numero;
     
     private String estado;
+    public abstract float getCostoPorNoche();
 }

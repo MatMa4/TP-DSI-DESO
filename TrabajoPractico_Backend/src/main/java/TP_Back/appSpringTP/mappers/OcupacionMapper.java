@@ -31,9 +31,11 @@ public class OcupacionMapper {
     private ConsumoDTO toConsumoDTO(Consumo consumo) {
         if (consumo == null) return null;
         ConsumoDTO dto = new ConsumoDTO();
+        dto.setIdConsumo(consumo.getConsumoId());
         dto.setTipoServicio(consumo.getTipoServicio());
         dto.setDetalle(consumo.getDetalle());
         dto.setMonto(consumo.getMonto());
+        dto.setFacturado(consumo.isFacturado());
         return dto;
     }
 

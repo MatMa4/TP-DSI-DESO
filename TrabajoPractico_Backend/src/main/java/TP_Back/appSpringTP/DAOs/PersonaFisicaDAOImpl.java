@@ -23,4 +23,9 @@ public class PersonaFisicaDAOImpl implements PersonaFisicaDAO {
     public PersonaFisica save(PersonaFisica personaFisica) {
         return repositorioPersonaFisica.save(personaFisica);
     }
+
+    @Override
+    public java.util.Optional<PersonaFisica> getByHuesped(String tipoDocumento, String numeroDocumento) {
+        return repositorioPersonaFisica.findByHuespedDocumento(numeroDocumento, tipoDocumento);
+    }
 }

@@ -14,7 +14,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ConsumoDTO {
+    private Integer idConsumo;
     private String tipoServicio;
     private String detalle;
     private float monto;
+    private boolean facturado;
 }

@@ -1,71 +1,87 @@
 'use client';
-import React from 'react';
-// En tu proyecto real usa: import Link from 'next/link';
-// Para la vista previa, usaremos una etiqueta <a> simple para evitar el error de resoluciónaaa . 
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; // Importamos el router
+import InputField from './components/InputField'; 
+import './styles/stylesCU1.css'; 
 
-export default function Dashboard() {
+export default function LoginPage() {
+  const router = useRouter(); // Hook para navegar
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [generalError, setGeneralError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({ username: '', password: '' });
+  const [loading, setLoading] = useState(false);
+
+  // Opcional: Si ya hay sesión, redirigir directo al menú al entrar a /
+  useEffect(() => {
+    if (sessionStorage.getItem('userSessionActive') === 'true') {
+        router.push('/menuCU1');
+    }
+  }, [router]);
+
+  const validateForm = () => {
+      let isValid = true;
+      const newErrors = { username: '', password: '' };
+
+      if (!username.trim()) { newErrors.username = 'El usuario es obligatorio.'; isValid = false; }
+      if (!password.trim()) { newErrors.password = 'La contraseña es obligatoria.'; isValid = false; }
+
+      setFieldErrors(newErrors);
+      return isValid;
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setGeneralError('');
+    if (!validateForm()) return;
+    setLoading(true);
+
+    try {
+      const res = await fetch('http://localhost:8080/usuario/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, passw: password }),
+      });
+
+      if (res.ok) { 
+        // 1. Guardamos sesión
+        sessionStorage.setItem('userSessionActive', 'true');
+        // 2. Redirigimos a la página del menú
+        router.push('/menuCU1');
+      } else if (res.status === 401) {
+        setGeneralError('El usuario o la contraseña no son válidos');
+      } else {
+        setGeneralError('Ocurrió un error inesperado en el servidor.');
+      }
+    } catch (err) {
+      console.error(err);
+      setGeneralError('Error de conexión con el backend.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <main style={{ 
-      backgroundColor: '#6B99C3', 
-      minHeight: '100vh', 
-      display: 'flex', 
-      flexDirection: 'column', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      fontFamily: 'sans-serif',
-      color: 'white'
-    }}>
-      <h1 style={{ fontSize: '3rem', marginBottom: '40px' }}>🏨 Hotel Premier</h1>
-      
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(2, 1fr)', 
-        gap: '20px',
-        maxWidth: '800px'
-      }}>
-        {/* CU 02 - Botón para ir a Buscar (y luego Alta) */}
-        {/* En tu código local usa <Link href="..."> ... </Link> */}
-        <a href="/buscarHuesped" style={cardStyle}>
-          <div style={{ fontSize: '40px' }}>🔍</div>
-          <h3>Buscar Huésped</h3>
-          <p>CU 02 - Buscar, modificar o dar de alta nuevos huéspedes.</p>
-        </a>
-
-        {/* CU 09 - Acceso directo (Opcional) */}
-        <a href="/darAltaHuesped" style={cardStyle}>
-          <div style={{ fontSize: '40px' }}>👤</div>
-          <h3>Nuevo Huésped</h3>
-          <p>CU 09 - Registro directo de pasajero.</p>
-        </a>
-
-        {/* CU 04 - Reservas (Futuro) */}
-        <a href="/reservarHabitacion" style={{...cardStyle}}>
-          <div style={{ fontSize: '40px' }}>📅</div>
-          <h3>Reservar</h3>
-          <p>CU 04</p>
-        </a>
-
-        {/* CU 05 - Estado (Futuro) */}
-        <a href="/ocupacion" style={{...cardStyle,}}>
-          <div style={{ fontSize: '40px' }}>🛏️</div>
-          <h3>Ocupar Habitaciones</h3>
-          <p>CU 15 </p>
-        </a>
+    <main className="mainContainer">
+      <div className="loginCard">
+        <h1 className="loginTitle">Iniciar Sesión</h1>
+        <form onSubmit={handleLogin} className="loginForm" noValidate>
+            <InputField 
+                label="Usuario" name="username" value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                error={fieldErrors.username} isRequired={true}
+            />
+            <InputField 
+                label="Contraseña" name="password" type="password" value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                error={fieldErrors.password} isRequired={true}
+            />
+            {generalError && <div className="errorMessage">⚠️ {generalError}</div>}
+            <button type="submit" className="loginButton" disabled={loading}>
+                {loading ? 'Verificando...' : 'INGRESAR'}
+            </button>
+        </form>
       </div>
     </main>
   );
 }
-
-// Definimos el tipo explícitamente para evitar errores de TypeScript
-const cardStyle: React.CSSProperties = {
-  backgroundColor: 'white',
-  color: '#022E66',
-  padding: '20px',
-  borderRadius: '15px',
-  textAlign: 'center',
-  textDecoration: 'none',
-  boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-  transition: 'transform 0.2s',
-  cursor: 'pointer',
-  display: 'block' // Importante para que el <a> se comporte como bloque
-};

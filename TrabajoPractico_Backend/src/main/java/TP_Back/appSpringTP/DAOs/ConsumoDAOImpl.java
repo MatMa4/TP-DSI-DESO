@@ -19,4 +19,9 @@ public class ConsumoDAOImpl implements ConsumoDAO{
     public Consumo save(Consumo consumo) {
         return repoConsumo.save(consumo);
     }
+
+    @Override
+    public java.util.Optional<Consumo> findById(int id) {
+        return repoConsumo.findById(id);
+    }
 }
