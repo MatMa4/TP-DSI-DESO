@@ -98,11 +98,21 @@ public class GestorDeFacturas {
         // Calculo de monto total
         float total = 0;
         
-        // Sumar ocupacion
         if (ocupacion != null) {
-             long diffInMillies = Math.abs(ocupacion.getFechaFin().getTime() - ocupacion.getFechaInicio().getTime());
-             long diff = java.util.concurrent.TimeUnit.DAYS.convert(diffInMillies, java.util.concurrent.TimeUnit.MILLISECONDS);
-             total += diff * ocupacion.getHabitacion().getCostoPorNoche();
+            factura.setOcupacion(ocupacion);
+        }
+        
+        // Sumar ocupacion si NO ha sido facturada
+        if (ocupacion != null) {
+             if (!ocupacion.isFacturada()) {
+                 long diffInMillies = Math.abs(ocupacion.getFechaFin().getTime() - ocupacion.getFechaInicio().getTime());
+                 long diff = java.util.concurrent.TimeUnit.DAYS.convert(diffInMillies, java.util.concurrent.TimeUnit.MILLISECONDS);
+                 total += diff * ocupacion.getHabitacion().getCostoPorNoche();
+                 
+                 ocupacion.setFacturada(true);
+                 ocupacionDAO.crearOcupacion(ocupacion); // Guardar cambio de estado
+             }
+             // Si ya fue facturada, no sumamos nada (el requerimiento es "solo facture si no fue facturada").
         }
         
         // Sumar consumos extra y marcarlos como facturados
