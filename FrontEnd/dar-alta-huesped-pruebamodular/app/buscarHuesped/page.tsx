@@ -155,7 +155,7 @@ const BuscarHuesped = () => {
             alert("Error: No se encontraron los datos en memoria.");
             return;
         }
-
+console.log("🔍 DATOS QUE LLEGARON DEL BACKEND:", huespedCompleto);
         console.log("Transfiriendo datos al CU10:", huespedCompleto);
 
         // 1. Guardamos el objeto completo en localStorage
@@ -173,7 +173,7 @@ const BuscarHuesped = () => {
   };
 
   const handleCancelar = () => {
-      window.location.href = '/';
+      window.location.href = '/menuCU1';
   };
 
   return (

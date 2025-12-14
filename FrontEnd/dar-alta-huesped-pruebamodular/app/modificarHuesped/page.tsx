@@ -260,7 +260,7 @@ export default function ModificarHuesped() {
   };
   const handleSuccessClose = () => {
       setShowSuccessModal(false);
-      router.push('/');
+      router.push('/menuCU1');
   };
 
   if (loading) return <div className="main_box"><p>Cargando datos...</p></div>;
