@@ -1,7 +1,6 @@
-// Asumo que estas interfaces están definidas en tu archivo de tipos
+
 import { RoomStatusDTO, RoomCellData, ROOM_TYPES } from '../types/indexCU4-5-15';
 
-// [getDatesInRange] y [formatToYMD] se mantienen sin cambios (asumiendo que funcionan)
 
 const formatToYMD = (dateStr: string): string => {
     // Usamos el constructor de Date para manejar ISO y extraemos solo la fecha.
@@ -13,11 +12,9 @@ const formatToYMD = (dateStr: string): string => {
 
 const getDatesInRange = (startStr: string, endStr: string): string[] => {
     const dates = [];
-    // Aseguramos que la fecha se interprete correctamente con YYYY-MM-DD
     const currentDate = new Date(startStr + 'T00:00:00'); 
     const endDate = new Date(endStr + 'T00:00:00');
     
-    // Si hay un error, el loop no iniciará. 
     if (isNaN(currentDate.getTime()) || isNaN(endDate.getTime())) return [];
 
     while (currentDate <= endDate) {
@@ -42,14 +39,11 @@ export const transformToGridData = (
 
     // 1. Filtrar las habitaciones por tipo
     const filteredRooms = rawData.filter(roomDto => {
-        // Normalizar el tipo recibido del Back-End (eliminar espacios)
         const normalizedBackendType = roomDto.habitacion.tipoHabitacion.replace(/\s/g, '');
         
-        // CRÍTICO: Comparar las cadenas normalizadas
         return normalizedBackendType === normalizedTargetType;
     });
 
-    // 2. Iterar sobre cada habitación y cada día dentro del rango
     for (const roomDto of filteredRooms) {
         const roomId = roomDto.habitacion.numero.toString();
         const roomType = roomDto.habitacion.tipoHabitacion;
@@ -61,7 +55,6 @@ export const transformToGridData = (
             if (roomDto.habitacion.estado === 'HABITABLE') {
                 estado = 'Disponible';
             } else {
-                // Mapear cualquier otro estado de Back-End al estado de Front-End
                 estado = 'Fuera de servicio'; 
             }
 

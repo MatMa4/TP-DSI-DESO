@@ -1,6 +1,7 @@
 // src/components/DetalleFacturaModal.jsx
 import React, { useState, useMemo, useEffect } from 'react';
-import {OcupacionDTO,HuespedDTO,ItemConsumoDTO, ITEMS_CONSUMO_MOCK} from './interfaces';
+import {OcupacionDTO,HuespedDTO,ItemConsumoDTO} from './interfaces';
+import './consumos'
 
 interface DetalleFacturaModalProps {
     show: boolean;

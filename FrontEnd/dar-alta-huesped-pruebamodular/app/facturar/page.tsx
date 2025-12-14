@@ -1,21 +1,14 @@
 'use client';
 import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-
-// Componentes Reutilizables y específicos (Ajustar rutas según tu proyecto)
 import SeleccionHuespedes from './SeleccionHuespedes'; 
-import FacturacionGeneral from './FacturacionGeneral';
 import DetalleFacturaModal from './DetalleFacturaModal';
-import { InputField } from '../componentsCU4-5-15/InputField'; // Usaremos InputField si está disponible
+import { InputField } from '../componentsCU4-5-15/InputField'; 
 import ModalError from '../componentsCU4-5-15/ModalError'; 
-import '../styles/stylesFacturar.css'; // Asegúrate de crear este archivo CSS
+import CuitInputModal from './CuitImputModal';
+import RazonSocialConfirmModal from './RazonSocialConfirmModal';
+import '../styles/stylesFacturar.css'; 
 import {OcupacionDTO,HuespedDTO,ItemConsumoDTO, ITEMS_CONSUMO_MOCK} from './interfaces';
-
-// --- STAGES ---
-enum EtapaFacturacion {
-    BUSQUEDA = 'BUSQUEDA',
-    FACTURACION = 'FACTURACION'
-}
 
 // --- INTERFACES ---
 
@@ -26,8 +19,6 @@ interface SearchFormData {
 
 // --- COMPONENTE PRINCIPAL ---
 export default function GenerarFactura() {
-    
-    const [etapa, setEtapa] = useState<'BUSQUEDA'>('BUSQUEDA');
     // Datos de búsqueda
     const [formData, setFormData] = useState<SearchFormData>({
         numeroHabitacion: '',
@@ -45,11 +36,15 @@ export default function GenerarFactura() {
     //
     const [busquedaRealizada, setBusquedaRealizada] = useState(false);
     
-    //consumos
+    //CONSUMOS
     const [itemsConsumo, setItemsConsumo] = useState<ItemConsumoDTO[]>(ITEMS_CONSUMO_MOCK);
     const [showDetalleModal, setShowDetalleModal] = useState(false);
     const itemsPendientes = itemsConsumo.filter(item => !item.facturado);
-
+    //RAZON SOCIAL
+    const [showCuitModal, setShowCuitModal] = useState(false);
+const [showRazonSocialModal, setShowRazonSocialModal] = useState(false);
+const [cuitIngresado, setCuitIngresado] = useState('');
+const [razonSocial, setRazonSocial] = useState('');
 
     // --- MANEJADORES DE ESTADO ---
 
@@ -150,16 +145,12 @@ export default function GenerarFactura() {
     };
 
     const handleSeleccionarResponsable = (huesped: HuespedDTO) => {
-        console.log("Responsable seleccionado. Abriendo modal de detalle.");
         setResponsableSeleccionado(huesped);
         // Aquí podrías hacer un fetch real de los consumos si no los cargaste antes
         setShowDetalleModal(true);
+        setShowCuitModal(true);
     };
-    const handleVolverABusqueda = () => {
-        setResponsableSeleccionado(null);
-        setEtapa('BUSQUEDA');
-    };
-    
+
     const handleCerrarModal = () => {
     setShowDetalleModal(false);
     setResponsableSeleccionado(null); 
@@ -183,11 +174,37 @@ export default function GenerarFactura() {
         setItemsConsumo(nuevosItems);
         handleCerrarModal();
     };
-    /*const itemsPendientes = useMemo(() => 
-        itemsConsumo.filter(item => !item.facturado)
-        , [itemsConsumo]
-    );
-    */
+    const handleSelectOtro = () => {
+    setShowCuitModal(true); 
+    };
+
+    const handleBuscarRazonSocial = async (cuit: string) => {
+    // Aquí iría la llamada a la API de AFIP/Facturación Electrónica para obtener Razón Social
+    // const response = await fetch(`/api/buscar-razon-social?cuit=${cuit}`);
+    // const data = await response.json();
+    
+    // Por ahora, usamos un Mock para simular la respuesta:
+    const razonSocialFalsa = `Empresa de Facturación S.A. CUIT ${cuit}`; 
+    
+    setCuitIngresado(cuit);
+    setRazonSocial(razonSocialFalsa);
+    setShowCuitModal(false);
+    setShowRazonSocialModal(true);
+    };
+
+    const handleConfirmarRazonSocial = () => {
+        setShowRazonSocialModal(false);
+        setShowDetalleModal(true);
+    };
+
+    const handleRechazarRazonSocial = () => {
+        setCuitIngresado('');
+        setRazonSocial('');
+        setShowRazonSocialModal(false);
+        setShowCuitModal(true);
+    };
+    
+
     // --- RENDERIZADO (UI) ---
 
     return (
@@ -234,26 +251,45 @@ export default function GenerarFactura() {
                         <SeleccionHuespedes 
                             huespedes={searchResults} 
                             onSelect={handleSeleccionarResponsable} 
+                            onSelectOtro={handleSelectOtro}
                         />
                     </div>
                 </div>
             </div>
+
+            {showCuitModal && (
+            <CuitInputModal 
+                show={showCuitModal}
+                onClose={() => setShowCuitModal(false)} // Vuelve a la selección de huésped
+                onNext={handleBuscarRazonSocial} // Llama a la simulación de búsqueda
+            />
+            )}
+
+            {showRazonSocialModal && (
+            <RazonSocialConfirmModal
+                show={showRazonSocialModal}
+                razonSocial={razonSocial}
+                onAccept={handleConfirmarRazonSocial} // Pasa al DetalleFacturaModal
+                onCancel={handleRechazarRazonSocial}  // Vuelve a CuitInputModal
+            />
+            )}
+
+            {showDetalleModal && responsableSeleccionado && (
+            <DetalleFacturaModal
+                show={showDetalleModal}
+                onClose={handleCerrarModal}
+                responsable={responsableSeleccionado}
+                itemsPendientes={itemsPendientes} // La lista de ítems sin facturar
+                onConfirmFactura={handleGenerarFactura}
+            />
+            )}
+
             <ModalError
                 show={showErrorModal}
                 message={errorMessage}
                 onClose={() => setShowErrorModal(false)}
             />
-            {showDetalleModal && responsableSeleccionado && (
-            <DetalleFacturaModal
-                show={showDetalleModal}
-                onClose={handleCerrarModal}
-                habitacionNumero={formData.numeroHabitacion}
-                responsable={responsableSeleccionado}
-                itemsPendientes={itemsPendientes} // La lista de ítems sin facturar
-                onConfirmFactura={handleGenerarFactura}
-            />
             
-            )}
         </main>
     );
 }

@@ -64,6 +64,9 @@ color: black;
 .items-table td:last-child {
     text-align: right; /* Checkbox a la derecha */
 }
+.modal-actions{
+    display: flex;
+}
 
 .modal-actions button {
     margin: 0 10px;

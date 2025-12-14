@@ -5,10 +5,11 @@ import './styles-facturacion.css'
 import {OcupacionDTO,HuespedDTO,ItemConsumoDTO, ITEMS_CONSUMO_MOCK} from './interfaces';
 
 interface SeleccionHuespedesProps {
-    huespedes: HuespedDTO[]; // Esto le dice que 'huespedes' es un arreglo de HuespedDTO
-    onSelect: (huesped: HuespedDTO) => void; // Esto le dice que es una función que recibe un HuespedDTO
+    huespedes: HuespedDTO[]; 
+    onSelect: (huesped: HuespedDTO) => void;
+    onSelectOtro: () => void; 
 }
-const SeleccionHuespedes: React.FC<SeleccionHuespedesProps> = ({ huespedes, onSelect }) => {
+const SeleccionHuespedes: React.FC<SeleccionHuespedesProps> = ({ huespedes, onSelect, onSelectOtro }) => {
     if (!huespedes || huespedes.length === 0) {
         return <p style={{textAlign:'center',color:'grey'}}>No se han encontrado huéspedes o no se ha realizado búsqueda.</p>;
     }
@@ -29,7 +30,7 @@ const SeleccionHuespedes: React.FC<SeleccionHuespedesProps> = ({ huespedes, onSe
                 
             ))}
             <div style={{display:'flex'}}>
-                <button className='btn-accept'>
+                <button className='btn-accept'onClick={onSelectOtro}>
                 otro
                 </button>
             </div>
