@@ -10,4 +10,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ConsumoDAO {
    public Consumo save(Consumo consumo);
+   public java.util.Optional<Consumo> findById(int id);
 }

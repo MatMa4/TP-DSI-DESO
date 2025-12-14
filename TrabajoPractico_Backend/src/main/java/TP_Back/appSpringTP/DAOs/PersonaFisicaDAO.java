@@ -10,4 +10,5 @@ package TP_Back.appSpringTP.DAOs;
  */
 public interface PersonaFisicaDAO {
     TP_Back.appSpringTP.modelo.pago.PersonaFisica save(TP_Back.appSpringTP.modelo.pago.PersonaFisica personaFisica);
+    java.util.Optional<TP_Back.appSpringTP.modelo.pago.PersonaFisica> getByHuesped(String tipoDocumento, String numeroDocumento);
 }
