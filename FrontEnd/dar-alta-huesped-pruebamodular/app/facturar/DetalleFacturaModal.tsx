@@ -1,31 +1,39 @@
 // src/components/DetalleFacturaModal.jsx
-import React, { useState, useMemo, useEffect } from 'react';
-import {OcupacionDTO,HuespedDTO,ItemConsumoDTO} from './interfaces';
+import React, { useState, useMemo } from 'react';
+import {HuespedDTO,ItemConsumoDTO} from './interfaces';
 import './consumos'
 
 interface DetalleFacturaModalProps {
     show: boolean;
     onClose: () => void;
-    responsable: HuespedDTO; // Usa la interfaz de huésped ya definida
-    itemsPendientes: ItemConsumoDTO[]; // La lista de consumos
-    onConfirmFactura: (itemIds: number[]) => void;
+    responsable: HuespedDTO; 
+    itemsPendientes: ItemConsumoDTO[]; 
+    onConfirmFactura: (itemConsumoIds: number[], incluirEstadia: boolean) => void;
+    precioEstadia: number;
+    estadiaYaFacturada: boolean;
+}
+interface ItemConsumoLocal extends ItemConsumoDTO {
+    seleccionado: boolean; 
 }
 const IVA_PERCENTAGE = 0.30; 
 
 const DetalleFacturaModal: React.FC<DetalleFacturaModalProps> = ({ 
     show,
     onClose,
+    precioEstadia,
+    estadiaYaFacturada,
     responsable, 
-    itemsPendientes, // <--- LISTA RECIBIDA
+    itemsPendientes,
     onConfirmFactura, }) => {
+    
     // Estado para manejar qué ítems se seleccionan para ESTA factura
     const [selectedItems, setSelectedItems] = useState(() => {
-        // Aseguramos que itemsPendientes sea un array antes de mapear
         if (!Array.isArray(itemsPendientes)) return []; 
         return itemsPendientes.map(item => ({ ...item, seleccionado: true }));
     });
-    
-    const [itemsSeleccionados, setItemsSeleccionados] = useState<ItemConsumoDTO[]>(() => {
+
+    const [isEstadiaSelected, setIsEstadiaSelected] = useState(true);
+    const [itemsSeleccionados, setItemsSeleccionados] = useState<ItemConsumoLocal[]>(() => {
 
     if (!Array.isArray(itemsPendientes)) {
         return [];
@@ -46,7 +54,8 @@ const DetalleFacturaModal: React.FC<DetalleFacturaModalProps> = ({
     }, [itemsSeleccionados]);
     
     // Cálculo final
-    const subtotal = totalConsumo;
+    const precioEstadiaCalculado = isEstadiaSelected ? precioEstadia : 0;
+    const subtotal = totalConsumo + precioEstadiaCalculado;
     const iva = subtotal * IVA_PERCENTAGE;
     const totalFinal = subtotal + iva;
 
@@ -54,21 +63,26 @@ const DetalleFacturaModal: React.FC<DetalleFacturaModalProps> = ({
     const handleToggleItem = (id:number) => {
         setItemsSeleccionados(prevItems => 
             prevItems.map(item => 
-                item.id === id ? { ...item, seleccionado: !item.seleccionado } : item
+                item.idConsumo === id ? { ...item, seleccionado: !item.seleccionado } : item
             )
         );
+    };
+    const handleToggleEstadia = () => {
+        setIsEstadiaSelected(prev => !prev);
     };
 
     const handleConfirm = () => {
         const idsAFacturar = itemsSeleccionados
             .filter(item => item.seleccionado)
-            .map(item => item.id);
+            .map(item => item.idConsumo);
+        
+        const hayAlgoSeleccionado = idsAFacturar.length > 0 || isEstadiaSelected;
             
-        if (idsAFacturar.length === 0) {
-            alert("Debe seleccionar al menos un ítem para facturar.");
-            return;
-        }
-        onConfirmFactura(idsAFacturar);
+        if (!hayAlgoSeleccionado) {
+        alert("Debe seleccionar al menos un ítem para facturar.");
+        return; 
+    }
+        onConfirmFactura(idsAFacturar,isEstadiaSelected);
     };
 
     if (!show) return null;
@@ -86,24 +100,41 @@ const DetalleFacturaModal: React.FC<DetalleFacturaModalProps> = ({
                         </tr>
                     </thead>
                     <tbody>
-
+                        {!estadiaYaFacturada && (
+                        <tr>
+                            <td>Estadía:</td>
+                            <td>$ {precioEstadia.toLocaleString('es-AR')}</td>
+                            <td>
+                                <input 
+                                    type="checkbox"
+                                    checked={isEstadiaSelected}
+                                    onChange={handleToggleEstadia}
+                                    style={{ marginRight: '10px' }}
+                                    />
+                            </td>
+                        </tr> 
+                        )}          
                         {Array.isArray(itemsPendientes) && itemsPendientes.length > 0 ? (
-
                         itemsSeleccionados.map(item => (
-                            <tr key={item.id}>
-                                <td>{item.descripcion}</td>
+                            <tr key={item.idConsumo}>
+                                <td>{item.detalle}</td>
                                 <td>$ {item.monto.toLocaleString('es-AR')}</td>
                                 <td>
                                     <input 
                                         type="checkbox" 
                                         checked={item.seleccionado} 
-                                        onChange={() => handleToggleItem(item.id)}
+                                        onChange={() => handleToggleItem(item.idConsumo)}
+                                        style={{ marginRight: '10px' }}
                                     />
                                 </td>
                             </tr>
                         ))
                     ) : (
-                        <p>No hay consumos pendientes para facturar.</p>
+                        <tr>
+                            <td>
+                                <p>No hay consumos pendientes para facturar.</p>
+                            </td>
+                        </tr>
                         )}
                     </tbody>
                 </table>

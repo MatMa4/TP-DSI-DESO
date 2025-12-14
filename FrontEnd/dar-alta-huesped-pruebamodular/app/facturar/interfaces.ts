@@ -20,7 +20,7 @@ export interface OcupacionDTO {
     fechaFin: string; 
     checkIn: string,
     checkOut: string,
-    consumos: consumoDTO[];
+    consumos: ItemConsumoDTO[];
     huespedes: HuespedDTO[]; 
     precioTotal: number;
 }
@@ -49,17 +49,17 @@ export interface consumoDTO{
 
 }
 export interface ItemConsumoDTO {
-    id: number;
-    descripcion: string;
+    idConsumo: number;
+    tipoServicio: string;
+    detalle: string;
     monto: number;
     facturado: boolean;
-    responsable: string | null; // DNI del huésped o null
-    seleccionado: boolean;
 }
 
-export const ITEMS_CONSUMO_MOCK: ItemConsumoDTO[] = [
-    { id: 1, descripcion: 'MiniBar - Agua', monto: 1.50, facturado: false, responsable: null,seleccionado:false },
-    { id: 2, descripcion: 'MiniBar - Cerveza', monto: 3.00, facturado: false, responsable: null,seleccionado:false },
-    { id: 3, descripcion: 'Lavandería - Camisa', monto: 5.00, facturado: false, responsable: null,seleccionado:false },
-    { id: 4, descripcion: 'MiniBar - Snacks', monto: 4.00, facturado: false, responsable: null,seleccionado: false},
-];
+export interface PersonaJuridicaDTO {
+    id: number;          
+    razonSocial: string; 
+    cuit: string;        
+    telefono: string;
+    direccion: Direccion;
+}

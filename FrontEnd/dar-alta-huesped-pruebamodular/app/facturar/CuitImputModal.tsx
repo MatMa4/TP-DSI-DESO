@@ -38,14 +38,12 @@ const CuitInputModal: React.FC<CuitInputModalProps> = ({ show, onClose, onNext }
                 <div className="input-group" style={{ marginBottom: '20px' }}>
                     <input 
                         id="cuit"
-                        // Usamos text para permitir que el usuario ingrese guiones si lo desea,
-                        // aunque la validación solo busca 11 números.
                         type="text" 
                         placeholder="XX-XXXXXXXX-X"
                         value={cuit}
-                        onChange={(e) => setCuit(e.target.value.replace(/[^0-9]/g, ''))} // Limpia no-dígitos al escribir
+                        onChange={(e) => setCuit(e.target.value.replace(/[^0-9|-]/g, ''))}
                         className="modal-input" 
-                        maxLength={11} // Limitamos la entrada a 11 dígitos
+                        maxLength={13} 
                     />
                     {error && <p className="error-message" style={{ color: 'red', fontSize: '0.9em' }}>{error}</p>}
                 </div>

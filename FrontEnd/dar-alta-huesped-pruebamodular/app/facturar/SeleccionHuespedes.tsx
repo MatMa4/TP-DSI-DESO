@@ -2,12 +2,13 @@
 import React from 'react';
 import '../styles/stylesCU4-5-15.css'
 import './styles-facturacion.css'
-import {OcupacionDTO,HuespedDTO,ItemConsumoDTO, ITEMS_CONSUMO_MOCK} from './interfaces';
+import {HuespedDTO } from './interfaces';
 
 interface SeleccionHuespedesProps {
     huespedes: HuespedDTO[]; 
     onSelect: (huesped: HuespedDTO) => void;
-    onSelectOtro: () => void; 
+    onSelectOtro: () => void;
+    itemsPendientesCount:number; 
 }
 const SeleccionHuespedes: React.FC<SeleccionHuespedesProps> = ({ huespedes, onSelect, onSelectOtro }) => {
     if (!huespedes || huespedes.length === 0) {

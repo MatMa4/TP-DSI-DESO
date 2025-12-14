@@ -4,11 +4,12 @@ import { useRouter } from 'next/navigation';
 import SeleccionHuespedes from './SeleccionHuespedes'; 
 import DetalleFacturaModal from './DetalleFacturaModal';
 import { InputField } from '../componentsCU4-5-15/InputField'; 
-import ModalError from '../componentsCU4-5-15/ModalError'; 
+import ModalConfirmacion from '../componentsCU4-5-15/ModalConfirmacion'; 
+import ModalError from '../componentsCU4-5-15/ModalError';
 import CuitInputModal from './CuitImputModal';
 import RazonSocialConfirmModal from './RazonSocialConfirmModal';
 import '../styles/stylesFacturar.css'; 
-import {OcupacionDTO,HuespedDTO,ItemConsumoDTO, ITEMS_CONSUMO_MOCK} from './interfaces';
+import {OcupacionDTO,HuespedDTO,ItemConsumoDTO,PersonaJuridicaDTO} from './interfaces';
 
 // --- INTERFACES ---
 
@@ -26,6 +27,7 @@ export default function GenerarFactura() {
     });
     // Resultados de la búsqueda inicial
     const [searchResults, setSearchResults] = useState<HuespedDTO[]>([]);
+    const [datosOcupacion, setDatosOcupacion] = useState<OcupacionDTO | null>(null);
     // El responsable seleccionado
     const [responsableSeleccionado, setResponsableSeleccionado] = useState<HuespedDTO | null>(null);
     // Estados de UI
@@ -37,14 +39,18 @@ export default function GenerarFactura() {
     const [busquedaRealizada, setBusquedaRealizada] = useState(false);
     
     //CONSUMOS
-    const [itemsConsumo, setItemsConsumo] = useState<ItemConsumoDTO[]>(ITEMS_CONSUMO_MOCK);
+    const [itemsConsumo, setItemsConsumo] = useState<ItemConsumoDTO[]>([]);
     const [showDetalleModal, setShowDetalleModal] = useState(false);
     const itemsPendientes = itemsConsumo.filter(item => !item.facturado);
+    const [isFetchingConsumos, setIsFetchingConsumos] = useState(false);
+    const [estadiaFacturada, setEstadiaFacturada] = useState(false);
+
     //RAZON SOCIAL
     const [showCuitModal, setShowCuitModal] = useState(false);
-const [showRazonSocialModal, setShowRazonSocialModal] = useState(false);
-const [cuitIngresado, setCuitIngresado] = useState('');
-const [razonSocial, setRazonSocial] = useState('');
+    const [showRazonSocialModal, setShowRazonSocialModal] = useState(false);
+    const [cuitIngresado, setCuitIngresado] = useState('');
+    const [razonSocial, setRazonSocial] = useState('');
+    const [empresaEncontrada, setEmpresaEncontrada] = useState<PersonaJuridicaDTO | null>(null);
 
     // --- MANEJADORES DE ESTADO ---
 
@@ -66,7 +72,7 @@ const [razonSocial, setRazonSocial] = useState('');
 
 
     // --- LÓGICA DE BÚSQUEDA (HANDLES)---
-
+    const BASE_URL = 'http://localhost:8080';
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!validateForm()) return;
@@ -74,6 +80,7 @@ const [razonSocial, setRazonSocial] = useState('');
         setIsLoading(true);
         setBusquedaRealizada(false);
         setSearchResults([]);
+        setItemsConsumo([]);
         
         const { numeroHabitacion, horaSalida } = formData;
         const numHabitacionLimpio = parseInt(numeroHabitacion);
@@ -85,8 +92,8 @@ const [razonSocial, setRazonSocial] = useState('');
         return;
         }
         const horaSalidaCompleta =`${horaSalida}:00`;
+        
         // Endpoint
-        const BASE_URL = 'http://localhost:8080';
         const url = `${BASE_URL}/ocupacion?numero=${numHabitacionLimpio}&hora=${horaSalidaCompleta}`;
         console.log("URL de búsqueda:", url);  
         
@@ -99,10 +106,11 @@ const [razonSocial, setRazonSocial] = useState('');
             }
             
             const data: OcupacionDTO = await response.json();
+            setDatosOcupacion(data);
             
             if (data && Array.isArray(data.huespedes) && data.huespedes.length > 0) {
         
-        // Aquí debes mapear data.huespedes a la interfaz que espera el estado
+                // Mapeo de huespedes
                 const huespedesMapeados:HuespedDTO[] = data.huespedes.map(huesped => ({
                     numeroDocumento: huesped.numeroDocumento,
                     tipoDocumento: huesped.tipoDocumento,
@@ -119,9 +127,15 @@ const [razonSocial, setRazonSocial] = useState('');
                     direccionHuesped: huesped.direccionHuesped,
                     
                 }));
-
-            setSearchResults(huespedesMapeados); 
-            setBusquedaRealizada(true);
+                setSearchResults(huespedesMapeados); 
+                // Mapeo de consumos
+                if (Array.isArray(data.consumos)) {
+                    setItemsConsumo(data.consumos);
+                } else {
+                    setItemsConsumo([]);
+                }
+                
+                setBusquedaRealizada(true);
             
             } else {
                 // Manejo de caso vacío o no encontrado
@@ -140,15 +154,12 @@ const [razonSocial, setRazonSocial] = useState('');
     };
     
     const handleCancelar = () => {
-        // En una aplicación real, aquí podrías volver al menú principal
-        router.push('/');
+        router.push('/menuCU1');
     };
 
     const handleSeleccionarResponsable = (huesped: HuespedDTO) => {
         setResponsableSeleccionado(huesped);
-        // Aquí podrías hacer un fetch real de los consumos si no los cargaste antes
         setShowDetalleModal(true);
-        setShowCuitModal(true);
     };
 
     const handleCerrarModal = () => {
@@ -156,43 +167,151 @@ const [razonSocial, setRazonSocial] = useState('');
     setResponsableSeleccionado(null); 
     };
 
-    const handleGenerarFactura = (itemsSeleccionadosIds: number[]) => {
-        if (!responsableSeleccionado) return;
+    const handleGenerarFactura = async (itemsConsumoIds: number[], incluirEstadia: boolean) => {
+    
+    // Verificaciones de seguridad
+    if (!responsableSeleccionado || !datosOcupacion) {
+        console.error("Faltan datos de responsable o ocupación.");
+        return;
+    }
 
-        // Lógica de actualización de estado (simula el guardado)
-        const nuevosItems = itemsConsumo.map(item => {
-            if (itemsSeleccionadosIds.includes(item.id)) {
-                return { 
-                    ...item, 
-                    facturado: true, 
-                    responsable: responsableSeleccionado.numeroDocumento, // Usamos DNI como ID
-                };
-            }
-            return item;
+    // 1. OBTENER LOS CONSUMOS SELECCIONADOS COMPLETOS
+    const consumosSeleccionados = itemsConsumo
+        .filter(item => itemsConsumoIds.includes(item.idConsumo))
+        .map(item => {
+            const { seleccionado, id, ...consumoOriginal } = item as any; 
+            return consumoOriginal; 
         });
 
-        setItemsConsumo(nuevosItems);
-        handleCerrarModal();
+    // 2. AÑADIR EL ÍTEM DE ESTADÍA (Si fue seleccionado)
+    if (incluirEstadia) {
+        const itemEstadia: ItemConsumoDTO = {
+            idConsumo: 0, 
+            tipoServicio: "Alojamiento",
+            detalle: `Estadía ${datosOcupacion.habitacion.tipoHabitacion} (${datosOcupacion.fechaInicio} a ${datosOcupacion.fechaFin})`,
+            monto: datosOcupacion.precioTotal, 
+            facturado: false,
+        };
+        consumosSeleccionados.push(itemEstadia);
+    }
+
+    // 3. PREPARAR EL OBJETO HUESPED/RESPONSABLE
+    const huespedPayload: HuespedDTO = {
+        numeroDocumento: responsableSeleccionado.numeroDocumento,
+        tipoDocumento: responsableSeleccionado.tipoDocumento || 'DNI', 
+        apellido: responsableSeleccionado.apellido,
+        nombre: responsableSeleccionado.nombre,
+        fechaNacimiento: responsableSeleccionado.fechaNacimiento,
+        telefono: responsableSeleccionado.telefono,
+        email: responsableSeleccionado.email,
+        ocupacion: responsableSeleccionado.ocupacion,
+        nacionalidad: responsableSeleccionado.nacionalidad,
+        cuit: responsableSeleccionado.cuit,
+        posicionIVA: responsableSeleccionado.posicionIVA,
+        alojado: responsableSeleccionado.alojado,
+        direccionHuesped: responsableSeleccionado.direccionHuesped    
     };
+
+
+    // 4. PAYLOAD FINAL
+    const payloadFactura = {
+        idOcupacion: datosOcupacion.id, 
+        listaConsumos: consumosSeleccionados, 
+        huesped: huespedPayload,
+    };
+
+    console.log("📦 Payload Final a enviar:", payloadFactura);
+
+    // 5. ENVIAR AL BACK-END
+    try {
+        const response = await fetch(`${BASE_URL}/facturas/generar`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payloadFactura)
+        });
+
+        if (!response.ok) throw new Error("Error al crear la factura");
+
+        setItemsConsumo(prevItems => 
+            prevItems.map(item => {
+                if (itemsConsumoIds.includes(item.idConsumo)) {
+                    return { ...item, facturado: true };
+                }
+                return item;
+            })
+
+        );
+        if (incluirEstadia) {
+            setEstadiaFacturada(true);
+        }
+        
+        alert("Factura creada con éxito!");
+        handleCerrarModal();
+
+    } catch (error) {
+        setErrorMessage("No se pudo generar la factura: " + (error instanceof Error ? error.message : 'Error desconocido'));
+        setShowErrorModal(true);
+    }
+};
+
     const handleSelectOtro = () => {
     setShowCuitModal(true); 
     };
 
     const handleBuscarRazonSocial = async (cuit: string) => {
-    // Aquí iría la llamada a la API de AFIP/Facturación Electrónica para obtener Razón Social
-    // const response = await fetch(`/api/buscar-razon-social?cuit=${cuit}`);
-    // const data = await response.json();
-    
-    // Por ahora, usamos un Mock para simular la respuesta:
-    const razonSocialFalsa = `Empresa de Facturación S.A. CUIT ${cuit}`; 
-    
-    setCuitIngresado(cuit);
-    setRazonSocial(razonSocialFalsa);
-    setShowCuitModal(false);
-    setShowRazonSocialModal(true);
-    };
+        setCuitIngresado(cuit);
+        setIsLoading(true); 
+
+        const url = `${BASE_URL}/responsable-pago/juridica?cuit=${cuit}`; 
+
+        try {
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                // Si da 404, significa que el cliente no existe
+                if (response.status === 404) {
+                    throw new Error("Cliente no encontrado. Verifique el CUIT.");
+                }
+                throw new Error("Error al buscar el cliente.");
+            }
+
+            const data: PersonaJuridicaDTO = await response.json();
+            
+            // ÉXITO 
+            setEmpresaEncontrada(data);
+            setRazonSocial(data.razonSocial); 
+            
+            setShowCuitModal(false);
+            setShowRazonSocialModal(true);
+
+        } catch (error) {
+            setErrorMessage(error instanceof Error ? error.message : 'Error desconocido');
+            setShowErrorModal(true);
+        } finally {
+            setIsLoading(false);
+        }
+};
 
     const handleConfirmarRazonSocial = () => {
+        if (!empresaEncontrada) return;
+
+        const responsableEmpresa: HuespedDTO = {
+            nombre: empresaEncontrada.razonSocial, 
+            apellido: '.', 
+            numeroDocumento: empresaEncontrada.cuit,
+            tipoDocumento: 'CUIT', 
+            telefono: empresaEncontrada.telefono || '',
+            fechaNacimiento: '',
+            email: '',
+            ocupacion: '',
+            nacionalidad: '',
+            cuit: empresaEncontrada.cuit,
+            posicionIVA: '',
+            alojado: true,
+            direccionHuesped: empresaEncontrada.direccion,
+        };
+        setResponsableSeleccionado(responsableEmpresa);
+
         setShowRazonSocialModal(false);
         setShowDetalleModal(true);
     };
@@ -203,7 +322,7 @@ const [razonSocial, setRazonSocial] = useState('');
         setShowRazonSocialModal(false);
         setShowCuitModal(true);
     };
-    
+
 
     // --- RENDERIZADO (UI) ---
 
@@ -235,7 +354,7 @@ const [razonSocial, setRazonSocial] = useState('');
                         />
                         
                         <div className="form-actions-facturar">
-                            <button type="button" className="btn-cancel" onClick={() => router.push('/')}>
+                            <button type="button" className="btn-cancel" onClick={handleCancelar}>
                                 Cancelar
                             </button>
                             <button type="submit" className="btn-search" disabled={isLoading}>
@@ -252,6 +371,7 @@ const [razonSocial, setRazonSocial] = useState('');
                             huespedes={searchResults} 
                             onSelect={handleSeleccionarResponsable} 
                             onSelectOtro={handleSelectOtro}
+                            itemsPendientesCount={itemsPendientes.length}
                         />
                     </div>
                 </div>
@@ -281,6 +401,8 @@ const [razonSocial, setRazonSocial] = useState('');
                 responsable={responsableSeleccionado}
                 itemsPendientes={itemsPendientes} // La lista de ítems sin facturar
                 onConfirmFactura={handleGenerarFactura}
+                precioEstadia={datosOcupacion.precioTotal}
+                estadiaYaFacturada={estadiaFacturada}
             />
             )}
 
