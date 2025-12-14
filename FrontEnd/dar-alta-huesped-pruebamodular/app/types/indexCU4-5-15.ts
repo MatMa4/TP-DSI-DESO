@@ -9,7 +9,7 @@ export interface Direccion {
     pais: string;
 }
 
-export interface HuespedDTOCompleto { 
+export interface HuespedDTO { 
     numeroDocumento: string;
     tipoDocumento: string; 
     apellido: string;
@@ -78,4 +78,36 @@ export interface RoomStatusDTO {
     habitacion: RoomDetail;
     ocupaciones: OcupacionDetail[];
     reservas: any[]; // Usamos 'any' si la estructura es desconocida o compleja
+}
+export interface HabitacionDTO {
+    numero: number;
+    costoPorNoche: number;
+    capacidad: number;
+    estado: string; 
+    descripcion: null;
+    camasIndividuales: number;
+    camaDoble: number;
+    camaKingsize: number;
+    tipoHabitacion: string;
+}
+export interface OcupacionDTO {
+    id: number;
+    habitacion: HabitacionDTO; 
+    fechaInicio: string; 
+    fechaFin: string; 
+    checkIn: string,
+    checkOut: string,
+    consumos: consumoDTO[];
+    huespedes: HuespedDTO[]; 
+    precioTotal: number;
+}
+export interface HuespedFacturacionDTO {
+    nombre: string;
+    apellido: string;
+    dni: string;
+    posicionIVA: string;
+}
+
+export interface consumoDTO{
+
 }

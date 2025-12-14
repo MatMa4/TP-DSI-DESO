@@ -63,4 +63,9 @@ public class ControladorHuesped {
         }
     }
 
+    @GetMapping("/listartodos")
+    public ResponseEntity<List<HuespedDTO>> listarTodos() {
+        return ResponseEntity.ok(gestorHuespedes.listarTodosHuespedes());
+    }
+
 }

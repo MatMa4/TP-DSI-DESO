@@ -1,0 +1,76 @@
+/* Puedes agregar esto a un archivo Facturacion.css o a tu hoja de estilos principal */
+body{
+color: black;
+}
+.flex-container {
+    display: flex;
+    height: 100vh;
+}
+
+.left-panel, .right-panel {
+    flex: 1;
+    padding: 30px;
+}
+
+/* --- Panel de Huéspedes (Derecha) --- */
+.right-panel {
+    background-color: #e0f0ff; /* Fondo azul claro */
+    text-align: center;
+}
+.huesped-card {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Modal (Pop-up) --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4); /* Fondo semi-transparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: rgb(255, 255, 255);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 350px; /* Tamaño similar al de la imagen */
+    text-align: center;
+}
+
+.items-table {
+    width: 100%;
+    margin: 15px 0;
+    border-collapse: collapse;
+}
+
+.items-table th, .items-table td {
+    padding: 8px;
+    text-align: left;
+}
+.items-table td:last-child {
+    text-align: right; /* Checkbox a la derecha */
+}
+
+.modal-actions button {
+    margin: 0 10px;
+}
+.total-summary{
+    display:contents; 
+}
+input{
+    max-width: 360px;
+}
