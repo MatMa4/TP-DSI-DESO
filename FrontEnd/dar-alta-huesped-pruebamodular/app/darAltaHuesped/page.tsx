@@ -74,6 +74,7 @@ export default function Home() {
      setFormData((prev) => ({
          ...prev,
          direccionHuesped: {
+
            ...prev.direccionHuesped,
            [field]: valorFinal, // Asignamos el valor ya en mayúscula
          },
@@ -232,12 +233,12 @@ export default function Home() {
   const handleConfirmCancel = () => {
     resetForm();
     setShowCancelModal(false);
-    window.location.href = '/';
+    window.location.href = '/menuCU1';
   };
 
   const handleSuccessClose = () => {
     setShowSuccessModal(false);
-    window.location.href = '/';
+    window.location.href = '/menuCU1';
   };
 
   const handleSuccessConfirm = () => {
