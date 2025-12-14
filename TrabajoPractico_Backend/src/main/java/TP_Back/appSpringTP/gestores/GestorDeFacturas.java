@@ -134,9 +134,14 @@ public class GestorDeFacturas {
             }
         }
         
-        factura.setMontoTotal(total);
-        factura.setIva(total * 0.30f); 
-        
+        if (total > 0) {
+            factura.setMontoTotal(total);
+            factura.setIva(total * 0.30f);
+            factura.setEstado("PENDIENTE_PAGO"); // Set state here as it's a valid factura
+        } else {
+             throw new IllegalArgumentException("El monto total de la factura debe ser mayor a 0. Revise si la ocupación o los consumos ya fueron facturados previamente.");
+        }
+
         return facturaDAO.save(factura);
     }
 
