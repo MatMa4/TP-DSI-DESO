@@ -26,45 +26,69 @@ public class GestorDeFacturas {
     @Autowired
     private TP_Back.appSpringTP.DAOs.PersonaFisicaDAO personaFisicaDAO;
     @Autowired
+    private TP_Back.appSpringTP.DAOs.PersonaJuridicaDAO personaJuridicaDAO;
+    @Autowired
     private TP_Back.appSpringTP.DAOs.ConsumoDAO consumoDAO;
 
-    public Factura generarFactura(TP_Back.appSpringTP.DTOs.SolicitudFacturacionDTO solicitud) {
-        // Validaciones
-        if ((solicitud.getIdOcupacion() == null || solicitud.getIdOcupacion() == 0) && 
-            (solicitud.getListaConsumos() == null || solicitud.getListaConsumos().isEmpty())) {
+    public Factura generarFacturaFisica(TP_Back.appSpringTP.DTOs.SolicitudFacturacionDTO solicitud) {
+         // Validar inputs comunes
+         validarSolicitud(solicitud.getIdOcupacion(), solicitud.getListaConsumos());
+
+         if (solicitud.getHuesped() == null) {
+              throw new RuntimeException("El huesped responsable de pago es obligatorio para Factura Física.");
+         }
+
+         // Buscar Responsable de Pago (PersonaFisica)
+         java.util.Optional<TP_Back.appSpringTP.modelo.pago.PersonaFisica> responsableOpt = personaFisicaDAO.getByHuesped(
+                 solicitud.getHuesped().getTipoDocumento(), 
+                 solicitud.getHuesped().getNumeroDocumento());
+         
+         if (responsableOpt.isEmpty()) {
+             throw new RuntimeException("No se encontró una Persona Física asociada al Huésped. Valide que el Huésped esté registrado.");
+         }
+         
+         return procesarFactura(solicitud.getIdOcupacion(), solicitud.getListaConsumos(), responsableOpt.get());
+    }
+
+    public Factura generarFacturaJuridica(TP_Back.appSpringTP.DTOs.SolicitudFacturacionJuridicaDTO solicitud) {
+         // Validar inputs comunes
+         validarSolicitud(solicitud.getIdOcupacion(), solicitud.getListaConsumos());
+
+         if (solicitud.getCuitResponsable() == null || solicitud.getCuitResponsable().isEmpty()) {
+              throw new RuntimeException("El CUIT del responsable de pago es obligatorio para Factura Jurídica.");
+         }
+
+         // Buscar Responsable de Pago (PersonaJuridica)
+         java.util.Optional<TP_Back.appSpringTP.modelo.pago.PersonaJuridica> responsableOpt = personaJuridicaDAO.buscarPorCuit(solicitud.getCuitResponsable());
+         
+         if (responsableOpt.isEmpty()) {
+             throw new RuntimeException("No se encontró una Persona Jurídica con el CUIT proporcionado: " + solicitud.getCuitResponsable());
+         }
+         
+         return procesarFactura(solicitud.getIdOcupacion(), solicitud.getListaConsumos(), responsableOpt.get());
+    }
+
+    private void validarSolicitud(Long idOcupacion, java.util.List<TP_Back.appSpringTP.DTOs.ocupacion.ConsumoDTO> listaConsumos) {
+        if ((idOcupacion == null || idOcupacion == 0) && 
+            (listaConsumos == null || listaConsumos.isEmpty())) {
             throw new RuntimeException("Debe existir al menos un item para facturar (Ocupación o Consumos).");
         }
+    }
 
-        if (solicitud.getHuesped() == null) {
-             throw new RuntimeException("El huesped responsable de pago es obligatorio.");
-        }
-
+    private Factura procesarFactura(Long idOcupacion, java.util.List<TP_Back.appSpringTP.DTOs.ocupacion.ConsumoDTO> listaConsumos, TP_Back.appSpringTP.modelo.pago.ResponsableDePago responsable) {
         // Buscar Ocupacion
         TP_Back.appSpringTP.modelo.ocupacion.Ocupacion ocupacion = null;
-        if (solicitud.getIdOcupacion() != null && solicitud.getIdOcupacion() != 0) {
-            ocupacion = ocupacionDAO.getOcupacionById(solicitud.getIdOcupacion().intValue());
+        if (idOcupacion != null && idOcupacion != 0) {
+            ocupacion = ocupacionDAO.getOcupacionById(idOcupacion.intValue());
             if (ocupacion == null) {
-                 // Si se paso ID pero no existe, puede ser error. El requerimiento dice "Si el id es vacio... no se genera con ocupacion".
-                 // Pero si viene ID y no existe, mejor fallar.
-                 throw new RuntimeException("Ocupacion no encontrada con ID: " + solicitud.getIdOcupacion());
+                 throw new RuntimeException("Ocupacion no encontrada con ID: " + idOcupacion);
             }
         }
-
-        // Buscar Responsable de Pago (PersonaFisica) asociado al Huesped
-        java.util.Optional<TP_Back.appSpringTP.modelo.pago.PersonaFisica> responsableOpt = personaFisicaDAO.getByHuesped(
-                solicitud.getHuesped().getTipoDocumento(), 
-                solicitud.getHuesped().getNumeroDocumento());
-        
-        if (responsableOpt.isEmpty()) {
-            throw new RuntimeException("No se encontró una Persona Física asociada al Huésped (Responsable de Pago). Valide que el Huésped esté registrado correctamente como cliente.");
-        }
-        
-        TP_Back.appSpringTP.modelo.pago.PersonaFisica responsable = responsableOpt.get();
 
         // Crear Factura
         Factura factura = new Factura();
         factura.setFechaEmision(new java.util.Date());
-        factura.setEstado("PENDIENTE_PAGO"); // Estado inicial
+        factura.setEstado("PENDIENTE_PAGO"); 
         factura.setResponsableDePago(responsable);
         
         if (ocupacion != null) {
@@ -74,17 +98,26 @@ public class GestorDeFacturas {
         // Calculo de monto total
         float total = 0;
         
-        // Sumar ocupacion
         if (ocupacion != null) {
-             long diffInMillies = Math.abs(ocupacion.getFechaFin().getTime() - ocupacion.getFechaInicio().getTime());
-             long diff = java.util.concurrent.TimeUnit.DAYS.convert(diffInMillies, java.util.concurrent.TimeUnit.MILLISECONDS);
-             total += diff * ocupacion.getHabitacion().getCostoPorNoche();
+            factura.setOcupacion(ocupacion);
         }
         
-        // Sumar consumos extra pasados en la lista y marcarlos como facturados
-        if (solicitud.getListaConsumos() != null) {
-            for (TP_Back.appSpringTP.DTOs.ocupacion.ConsumoDTO cDTO : solicitud.getListaConsumos()) {
-                // Si el DTO tiene ID, buscamos el consumo existente para marcarlo
+        // Sumar ocupacion si NO ha sido facturada
+        if (ocupacion != null) {
+             if (!ocupacion.isFacturada()) {
+                 long diffInMillies = Math.abs(ocupacion.getFechaFin().getTime() - ocupacion.getFechaInicio().getTime());
+                 long diff = java.util.concurrent.TimeUnit.DAYS.convert(diffInMillies, java.util.concurrent.TimeUnit.MILLISECONDS);
+                 total += diff * ocupacion.getHabitacion().getCostoPorNoche();
+                 
+                 ocupacion.setFacturada(true);
+                 ocupacionDAO.crearOcupacion(ocupacion); // Guardar cambio de estado
+             }
+             // Si ya fue facturada, no sumamos nada (el requerimiento es "solo facture si no fue facturada").
+        }
+        
+        // Sumar consumos extra y marcarlos como facturados
+        if (listaConsumos != null) {
+            for (TP_Back.appSpringTP.DTOs.ocupacion.ConsumoDTO cDTO : listaConsumos) {
                 if (cDTO.getIdConsumo() != null && cDTO.getIdConsumo() != 0) {
                      java.util.Optional<TP_Back.appSpringTP.modelo.ocupacion.Consumo> consumoOpt = consumoDAO.findById(cDTO.getIdConsumo());
                      if (consumoOpt.isPresent()) {
@@ -96,16 +129,19 @@ public class GestorDeFacturas {
                          } 
                      }
                 } else {
-                    // Si no tiene ID, asumimos que es un consumo "volatil" que solo se cobra pero no se persiste como item individual o se debería crear?
-                    // Asumiré que se cobra el monto.
                     total += cDTO.getMonto();
                 }
             }
         }
         
-        factura.setMontoTotal(total);
-        factura.setIva(total * 0.30f); // 30% IVA
-        
+        if (total > 0) {
+            factura.setMontoTotal(total);
+            factura.setIva(total * 0.30f);
+            factura.setEstado("PENDIENTE_PAGO"); // Set state here as it's a valid factura
+        } else {
+             throw new IllegalArgumentException("El monto total de la factura debe ser mayor a 0. Revise si la ocupación o los consumos ya fueron facturados previamente.");
+        }
+
         return facturaDAO.save(factura);
     }
 

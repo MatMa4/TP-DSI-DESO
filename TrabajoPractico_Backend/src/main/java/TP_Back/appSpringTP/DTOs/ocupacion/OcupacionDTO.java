@@ -32,4 +32,5 @@ public class OcupacionDTO {
     private List<ConsumoDTO> consumos;
     private List<HuespedDTO> huespedes;
     private Double precioTotal;
+    private boolean facturada;
 }

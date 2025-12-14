@@ -17,11 +17,21 @@ public class ControladorFactura {
     @Autowired
     private GestorDeFacturas gestorDeFacturas;
 
-    @PostMapping("/generar")
-    public ResponseEntity<?> generarFactura(@RequestBody SolicitudFacturacionDTO solicitud) {
+    @PostMapping("/generar/fisica")
+    public ResponseEntity<?> generarFacturaFisica(@RequestBody SolicitudFacturacionDTO solicitud) {
         try {
-            Factura factura = gestorDeFacturas.generarFactura(solicitud);
-            return ResponseEntity.ok(factura.getNumero()); // Return generated Invoice number or object
+            Factura factura = gestorDeFacturas.generarFacturaFisica(solicitud);
+            return ResponseEntity.ok(factura.getNumero()); 
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/generar/juridica")
+    public ResponseEntity<?> generarFacturaJuridica(@RequestBody TP_Back.appSpringTP.DTOs.SolicitudFacturacionJuridicaDTO solicitud) {
+        try {
+            Factura factura = gestorDeFacturas.generarFacturaJuridica(solicitud);
+            return ResponseEntity.ok(factura.getNumero()); 
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

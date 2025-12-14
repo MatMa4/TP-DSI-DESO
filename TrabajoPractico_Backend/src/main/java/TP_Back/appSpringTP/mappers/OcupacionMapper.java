@@ -62,6 +62,7 @@ public class OcupacionMapper {
         if (ocupacion.getHabitacion() != null) {
             dto.setHabitacion(habitacionMapper.toDTO(ocupacion.getHabitacion()));
         }
+        dto.setFacturada(ocupacion.isFacturada());
 
         // Consumos
         if (ocupacion.getConsumos() != null) {
