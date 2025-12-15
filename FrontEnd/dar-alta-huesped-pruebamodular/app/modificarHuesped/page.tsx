@@ -211,35 +211,55 @@ export default function ModificarHuesped() {
   };
 
   // --- LÓGICA BORRAR (CU11) ---
-  const handleBorrarClick = async () => {
-    // @ts-ignore
-    const id = formData.id; 
-    if (!id) return alert("Error: No hay ID de huésped cargado.");
-
-    try {
-        const res = await fetch(`http://localhost:8080/huespedes/${id}/historial`);
-        if (res.status === 409) {
-             setDeleteMessage("El huésped no puede ser eliminado pues se ha alojado en el Hotel en alguna oportunidad.");
-             setCanDelete(false);
-             setShowDeleteModal(true);
-        } else {
-             setDeleteMessage(`Los datos del huésped ${formData.nombre} ${formData.apellido}, ${formData.tipoDocumento} ${formData.numeroDocumento} serán eliminados del sistema.`);
-             setCanDelete(true);
-             setShowDeleteModal(true);
-        }
-    } catch (e) {
-        alert("Error al verificar historial.");
-    }
+ const handleBorrarClick = () => {
+    // 1. Como no tenemos ID fiable para consultar historial antes,
+    // asumimos inicialmente que se puede borrar y pedimos confirmación.
+    setDeleteMessage(`¿Está seguro que desea eliminar del sistema al huésped ${formData.nombre} ${formData.apellido}?`);
+    setCanDelete(true); // Habilita el botón rojo de eliminar en el modal
+    setShowDeleteModal(true);
   };
 
   const confirmDelete = async () => {
-      // @ts-ignore
-      const id = formData.id;
-      await fetch(`http://localhost:8080/huespedes/${id}`, { method: 'DELETE' });
-      localStorage.removeItem('datosHuespedModificar');
-      setShowDeleteModal(false);
-      alert("Huésped eliminado.");
-      router.push('/');
+      try {
+          console.log("🗑️ Enviando DELETE con body:", formData);
+          
+          // 2. Hacemos la petición DELETE pasando el DTO completo en el body
+          const res = await fetch('http://localhost:8080/huespedes', { 
+              method: 'DELETE',
+              headers: { 
+                  'Content-Type': 'application/json' 
+              },
+              body: JSON.stringify(formData) // <--- Aquí va el DTO del CU2
+          });
+
+          if (res.ok) {
+              // CASO ÉXITO (200 OK o 204 No Content)
+              localStorage.removeItem('datosHuespedModificar');
+              setShowDeleteModal(false);
+              alert("Huésped eliminado correctamente.");
+              router.push('/menuCU1'); // Volvemos al menú o buscador
+          } 
+          else if (res.status === 409) {
+              // CASO ERROR: CONFLICTO (Tiene reservas/historial)
+              setShowDeleteModal(false); // Cerramos el modal de "Confirmar"
+              
+              // Reabrimos el modal pero en modo "Error/Aviso"
+              setTimeout(() => {
+                  setDeleteMessage("El huésped NO puede ser eliminado pues se ha alojado en el Hotel en alguna oportunidad (Restricción de Integridad).");
+                  setCanDelete(false); // Esto cambia el icono y oculta el botón de borrar en tu modal
+                  setShowDeleteModal(true);
+              }, 100);
+          } 
+          else {
+              // OTROS ERRORES
+              console.error("Error al eliminar:", res.status);
+              alert(`Ocurrió un error al intentar eliminar. Código: ${res.status}`);
+          }
+
+      } catch (e) {
+          console.error(e);
+          alert("Error de conexión con el servidor.");
+      }
   };
 
   // --- CIERRES MODALES ---
