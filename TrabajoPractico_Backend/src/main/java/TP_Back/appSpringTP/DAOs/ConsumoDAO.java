@@ -4,11 +4,13 @@
  */
 package TP_Back.appSpringTP.DAOs;
 
-import TP_Back.appSpringTP.modelo.ocupacion.Consumo;
 import org.springframework.stereotype.Service;
 
+/**
+ *
+ * @author mateo
+ */
 @Service
 public interface ConsumoDAO {
-   public Consumo save(Consumo consumo);
-   public java.util.Optional<Consumo> findById(int id);
+   
 }

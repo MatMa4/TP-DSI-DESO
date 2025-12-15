@@ -47,6 +47,4 @@ public class Ocupacion {
     private List<Consumo> consumos;
     @ManyToMany
     private List<Huesped> huespedes;
-    
-    private boolean facturada;
 }

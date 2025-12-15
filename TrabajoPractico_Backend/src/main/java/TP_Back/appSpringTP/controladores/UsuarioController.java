@@ -22,8 +22,10 @@ public class UsuarioController {
         try {
             gestorDeUsuario.autenticarUsuario(usuarioDTO);
             return ResponseEntity.ok("Login exitoso");
-        } catch (UsuarioNoEncontradoException | ContrasenaInvalidaException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
+        } catch (UsuarioNoEncontradoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (ContrasenaInvalidaException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
 

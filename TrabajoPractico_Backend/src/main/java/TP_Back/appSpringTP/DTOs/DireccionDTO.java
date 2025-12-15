@@ -56,13 +56,13 @@ public class DireccionDTO {
 
     public static class Builder {
         private String calle;
-        private String localidad;
         private Integer numero;
-        private String pais;   
-        private String provincia; 
         private String departamento;
         private Integer piso;
         private Integer codigo;
+        private String localidad;
+        private String provincia;
+        private String pais;
 
         public Builder calle(String calle) { this.calle = calle; return this; }
         public Builder numero(Integer numero) { this.numero = numero; return this; }

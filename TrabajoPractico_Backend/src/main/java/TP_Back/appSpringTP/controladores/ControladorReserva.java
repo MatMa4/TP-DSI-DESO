@@ -24,18 +24,4 @@ public class ControladorReserva {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-    @GetMapping("/buscar")
-    public ResponseEntity<?> buscarReservas(
-            @RequestParam(required = false) String nombre,
-            @RequestParam String apellido) {
-        try {
-            List<Reserva> reservas = gestorDeReservas.buscarReservas(nombre.toUpperCase(), apellido.toUpperCase());
-            return ResponseEntity.ok(reservas);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Error al buscar reservas: " + e.getMessage());
-        }
-    }
 }

@@ -15,9 +15,4 @@ public interface repositorioOcupacion extends JpaRepository<Ocupacion, Integer>{
     List<Ocupacion> buscarPorListaHabitaciones(@Param("habitaciones") List<Habitacion> habitaciones, 
                                              @Param("fechaInicio") Date fechaInicio, 
                                              @Param("fechaFin") Date fechaFin);
-
-    @Query("SELECT o FROM Ocupacion o WHERE o.habitacion.numero = :numero " +
-           "AND :fecha BETWEEN o.fechaInicio AND o.fechaFin")
-    List<Ocupacion> findOcupacionPorHabitacionYFecha(@Param("numero") int numero, 
-                                                   @Param("fecha") Date fecha);
 }

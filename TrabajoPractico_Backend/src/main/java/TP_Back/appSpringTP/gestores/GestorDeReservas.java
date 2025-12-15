@@ -28,8 +28,8 @@ public class GestorDeReservas {
             reserva.setFechaInicio(dto.getFechaInicio());
             reserva.setFechaFin(dto.getFechaFin());
             reserva.setEstado(dto.getEstado());
-            reserva.setNombre(dto.getNombre().toUpperCase());
-            reserva.setApellido(dto.getApellido().toUpperCase());
+            reserva.setNombre(dto.getNombre());
+            reserva.setApellido(dto.getApellido());
             reserva.setTelefono(dto.getTelefono());
 
             if (dto.getHabitacionNumero() != null) {
@@ -51,17 +51,5 @@ public class GestorDeReservas {
 
     public List<Reserva> buscarReservas() {
         return reservaDAO.findAll();
-    }
-
-    public List<Reserva> buscarReservas(String nombre, String apellido) {
-        if (apellido == null || apellido.trim().isEmpty()) {
-            throw new IllegalArgumentException("El apellido es obligatorio.");
-        }
-        
-        if (nombre == null || nombre.trim().isEmpty()) {
-            return reservaDAO.findByApellidoContainingIgnoreCase(apellido);
-        } else {
-            return reservaDAO.findByNombreContainingIgnoreCaseOrApellidoContainingIgnoreCase(nombre, apellido);
-        }
     }
 }

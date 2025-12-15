@@ -5,7 +5,6 @@
 package TP_Back.appSpringTP.DAOs;
 
 import TP_Back.appSpringTP.DTOs.HuespedDTO;
-import TP_Back.appSpringTP.excepciones.HuespedNoEncontradoException;
 import TP_Back.appSpringTP.mappers.HuespedMapper;
 import TP_Back.appSpringTP.modelo.huesped.Huesped;
 import TP_Back.appSpringTP.repositorios.repositorioHuesped;
@@ -44,28 +43,22 @@ public class HuespedDAOImpl implements HuespedDAO {
     }
     @Override
     public List<HuespedDTO> buscarHuesped(HuespedDTO h){
-        List<Huesped> huespedes;
-        huespedes = repoHuesped.buscarHuespedes(h.getNombre(), h.getApellido(), h.getTipoDocumento(), h.getNumeroDocumento());
-        if(huespedes.isEmpty()){
-            throw new HuespedNoEncontradoException("No hay ningún guesped que cumpla con los requisitos de búsqueda: " + h.getNombre() + " " + h.getApellido() + " " + h.getTipoDocumento() + " " + h.getNumeroDocumento());
-        }
-        return huespedMapper.toDTOList(huespedes);
+        return huespedMapper.toDTOList(repoHuesped.buscarHuespedes(h.getNombre(), h.getApellido(), h.getTipoDocumento(), h.getNumeroDocumento()));
+    }
+    @Override
+    public Huesped obtenerHuesped(HuespedDTO huesped){
+        return repoHuesped.findByIdTipoDocumentoAndIdNumeroDocumento(huesped.getTipoDocumento(), huesped.getNumeroDocumento()).get();
     }
     @Override
     public HuespedDTO guardar(HuespedDTO huesp){
         return huespedMapper.toDTO(repoHuesped.save(huespedMapper.toEntity(huesp)));
     }
     @Override
-    public void modificarIDHuesped(HuespedDTO huespedModificado, HuespedDTO huespedOriginal){
+    public void modificarIDHuesped(HuespedDTO huespedModificado, HuespedDTO huespedNuevo){
         String sql = "UPDATE HUESPED " +
                      "SET NUMERO_DOCUMENTO = ?, TIPO_DOCUMENTO = ? " +
                      "WHERE NUMERO_DOCUMENTO = ? AND TIPO_DOCUMENTO = ?";
-        int filasAfectadas = jdbcTemplate.update(sql, huespedModificado.getNumeroDocumento(), huespedModificado.getTipoDocumento(), huespedOriginal.getNumeroDocumento(), huespedOriginal.getTipoDocumento());
-        if (filasAfectadas == 0) {
-            throw new HuespedNoEncontradoException("No se encontró huésped con documento "
-                    + huespedOriginal.getTipoDocumento() + " " + huespedOriginal.getNumeroDocumento());
-        }
-
+        jdbcTemplate.update(sql, huespedModificado.getNumeroDocumento(), huespedModificado.getTipoDocumento(), huespedNuevo.getNumeroDocumento(), huespedNuevo.getTipoDocumento());
     }
 
     @Override
