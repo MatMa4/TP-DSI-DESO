@@ -7,6 +7,7 @@ package TP_Back.appSpringTP.DAOs;
 import TP_Back.appSpringTP.DTOs.DireccionDTO;
 import TP_Back.appSpringTP.mappers.HuespedMapper;
 import TP_Back.appSpringTP.modelo.direccion.Direccion;
+import TP_Back.appSpringTP.modelo.direccion.DireccionId;
 import TP_Back.appSpringTP.repositorios.repositorioDireccion;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,8 @@ public class DireccionDAOImpl implements DireccionDAO {
         this.huespedMapper = huespedMapper;
     }
     @Override
-    public Optional<DireccionDTO> findByCalleAndNumero(String calle, Integer numero){
-        return repoDireccion.findByIdCalleAndIdNumero(calle, numero).map(huespedMapper::toDTO);
+    public Optional<DireccionDTO> findById(DireccionId id){
+        return repoDireccion.findById(id).map(huespedMapper::toDTO);
     }
     @Override
     public Direccion save(Direccion dir){
