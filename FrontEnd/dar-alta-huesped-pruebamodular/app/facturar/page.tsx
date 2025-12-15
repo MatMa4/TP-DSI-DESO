@@ -52,13 +52,6 @@ export default function GenerarFactura() {
 
     // --- MANEJADORES DE ESTADO ---
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-        // Limpieza básica de errores al escribir
-        setErrorMessage('');
-    };
-
     const validateForm = (): boolean => {
         if (!formData.numeroHabitacion.trim()) {
             setErrorMessage('Debe ingresar el número de habitación.');
