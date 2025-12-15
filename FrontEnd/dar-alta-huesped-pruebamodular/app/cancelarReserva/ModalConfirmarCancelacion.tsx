@@ -6,7 +6,7 @@ interface ModalConfirmarCancelacionProps {
     show: boolean;
     reservas: ReservaDTO[]; 
     onClose: () => void; 
-    onConfirm: (idReserva: number) => void; 
+    onConfirm: () => void; 
     isLoading: boolean;
 }
 

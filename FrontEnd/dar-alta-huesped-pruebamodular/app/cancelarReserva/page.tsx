@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { InputField } from '../componentsCU4-5-15/InputField'; 
 import ModalError from '../componentsCU4-5-15/ModalError';
 import ModalConfirmarCancelacion from './ModalConfirmarCancelacion';
+import ModalFin from '../componentsCU4-5-15/ModalFinalizacion';
 
 // Importa los nuevos creados para este CU
 import ListaReservas from './Listareservas';
@@ -27,19 +28,19 @@ export default function CancelarReservaPage() {
     
     //Confirmación
     const [showConfirmModal, setShowConfirmModal] = useState(false);
-    const [reservaAConfirmar, setReservaAConfirmar] = useState<ReservaDTO | null>(null);
-    
+    const [selectedReservas, setSelectedReservas] = useState<ReservaDTO[]>([]);
     // Estados para errores
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
-    //Lista seleccionada
-    const [selectedReservas, setSelectedReservas] = useState<ReservaDTO[]>([]);
+    //Finalizado
+    const [showExitoModal, setShowExitoModal] = useState(false);
+    const [exitoMessage, setExitoMessage] = useState('');
 
 
     // --- HANDLERS ---
     const BASE_URL = 'http://localhost:8080';
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<any>) => {
         const { name, value } = e.target;
         setCriterios(prev => ({ ...prev, [name]: value }));
     };
@@ -67,8 +68,15 @@ export default function CancelarReservaPage() {
         try {
             const params = new URLSearchParams();
             
-            if (criterios.apellido) params.append('apellido', criterios.apellido);
-            if (criterios.nombre) params.append('dni', criterios.nombre);
+            if (criterios.apellido) {
+            params.append('apellido', criterios.apellido.trim());
+            }
+            if (criterios.nombre !== undefined) { 
+            params.append('nombre', criterios.nombre.trim());
+            }
+            if (params.toString() === '' && !criterios.apellido ) {
+                throw new Error("Por favor ingrese al menos el apellido.");
+            }
 
             const url = `${BASE_URL}/reservas/buscar?${params.toString()}`;
             
@@ -100,7 +108,7 @@ export default function CancelarReservaPage() {
         } finally {
             setIsLoading(false);
         }
-};
+    };
 
     const handleIniciarCancelacion = () => {
         if (selectedReservas.length === 0) return;
@@ -128,7 +136,8 @@ export default function CancelarReservaPage() {
 
             setSelectedReservas([]);
             setShowConfirmModal(false);
-            alert(`${idsCancelados.length} reservas canceladas correctamente.`);
+            setExitoMessage(`${idsCancelados.length} reservas canceladas correctamente.\nPresione cualquer tecla para continuar...`);
+            setShowExitoModal(true);
 
         } catch (error) {
             setErrorMessage("No se pudo cancelar la/s reserva/s: " + (error instanceof Error ? error.message : 'Error desconocido'));
@@ -147,6 +156,11 @@ export default function CancelarReservaPage() {
                 return [...prev, reserva]; 
             }
         });
+    };
+
+    const handleCerrarExitoModal = () => {
+    setShowExitoModal(false);
+    router.push('/menuCU1');
     };
 
     return (
@@ -176,7 +190,7 @@ export default function CancelarReservaPage() {
                             type="text"
                         />
                         <div className="form-actions-cancelar">
-                            <button type="button" className="btn-cancel" onClick={() => router.push('/')}>
+                            <button type="button" className="btn-cancel" onClick={() => router.push('/menuCU1')}>
                                 Volver
                             </button>
                             <button type="submit" className="btn-search" disabled={isLoading}>
@@ -217,6 +231,12 @@ export default function CancelarReservaPage() {
                 show={showErrorModal}
                 message={errorMessage}
                 onClose={() => setShowErrorModal(false)}
+            />
+            <ModalFin
+                show={showExitoModal}
+                message={exitoMessage}
+                onClose={handleCerrarExitoModal}
+                onConfirm={handleCerrarExitoModal} 
             />
         </main>
     );
