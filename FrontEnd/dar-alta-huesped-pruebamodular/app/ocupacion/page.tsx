@@ -8,7 +8,7 @@ import HuespedSearchAndSelect from '../componentsCU4-5-15/HuespedSearchAndSelect
 import ModalConfirmacion from '../componentsCU4-5-15/ModalConfirmacion';
 import FlowDecisionModal from '../componentsCU4-5-15/FlowDecisionModal';
 import { transformToGridData } from '../reservarHabitacion/transformToGridData';
-import { RoomCellData, SelectedReservation, HuespedDTOCompleto,RoomStatusDTO } from '../types/indexCU4-5-15'; 
+import { RoomCellData, SelectedReservation, HuespedDTO,RoomStatusDTO } from '../types/indexCU4-5-15'; 
 import { useRouter } from 'next/navigation';
 import '../styles/stylesCU4-5-15.css';
 
@@ -26,7 +26,7 @@ export default function OcuparHabitacion() {
     const [gridData, setGridData] = useState<RoomCellData[]>([]);
     const [selectedRoomType, setSelectedRoomType] = useState<string>(''); 
     const [selectedReservations, setSelectedReservations] = useState<SelectedReservation[]>([]);
-    const [occupyingGuests, setOccupyingGuests] = useState<HuespedDTOCompleto[]>([]); 
+    const [occupyingGuests, setOccupyingGuests] = useState<HuespedDTO[]>([]); 
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [showCancelModal, setShowCancelModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -58,6 +58,7 @@ const handleSearch = async (tipo: string) => {
         }
 
         const rawData: RoomStatusDTO[] = await response.json(); 
+        
         setRawRoomData(rawData);
 
         const processedGridData = transformToGridData(
@@ -115,7 +116,7 @@ const handleSearch = async (tipo: string) => {
     setSuccessMessage('');
     };
 
-    const handleHuespedSelectionSubmit = async (selectedHuespedes: HuespedDTOCompleto[]) => {
+    const handleHuespedSelectionSubmit = async (selectedHuespedes: HuespedDTO[]) => {
         if (selectedHuespedes.length === 0) {
             setErrorMessage("Debe seleccionar al menos un huésped para asociar a la ocupación.");
             setShowErrorModal(true);
@@ -205,6 +206,7 @@ const handleSearch = async (tipo: string) => {
             setShowErrorModal(true);
         }
     };
+
     const resetStageForNewSearch = () => {
     setFechas({ desde: '', hasta: '' });
     setGridData([]);
@@ -213,7 +215,7 @@ const handleSearch = async (tipo: string) => {
     setSuccessMessage('');
     setShowSuccessModal(false);
     setStage(OCUPAR_STAGES.GRILLA_DISPONIBILIDAD);
-};
+    };
 
 
     const handleContinueLoading = () => {
@@ -248,6 +250,7 @@ const handleSearch = async (tipo: string) => {
         setSelectedReservations([]);
         setOccupyingGuests([]);
     };
+
     const handleConfirmCancel = () => {
     setShowCancelModal(false);
     router.push('/');
@@ -272,7 +275,7 @@ const handleSearch = async (tipo: string) => {
                             onSearch={handleSearch} 
                             onCancel={handleCancel}
                             error={''} 
-                            searchButtonText="Mostrar Disponibilidad"
+                            
                         />
                         <div className='grid-container' style={{ 
                             border: gridData.length > 0 ? 'none' : '1px solid #ccc', 
@@ -285,7 +288,6 @@ const handleSearch = async (tipo: string) => {
                                     gridData={gridData}
                                     onGridSubmit={handleGridSubmit} 
                                     onCancel={handleCancel}
-                                    isReadOnly={false} 
                                 />
                             ) : (
                                 <p style={{ textAlign: 'center', padding: '100px', color: '#666' }}>

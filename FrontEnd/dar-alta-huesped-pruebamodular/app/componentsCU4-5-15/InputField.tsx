@@ -1,7 +1,6 @@
 'use client'
 import React from 'react';
 
-// Definimos los tipos para las props del componentes
 interface InputFieldProps {
   label: string;
   name: string;

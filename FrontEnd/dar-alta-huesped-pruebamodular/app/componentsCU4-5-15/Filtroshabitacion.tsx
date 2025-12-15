@@ -5,7 +5,7 @@ import { ROOM_TYPES } from '../types/indexCU4-5-15';
 
 interface FiltrosHabitacionProps {
     fechas: { desde: string, hasta: string };
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange: (e: React.ChangeEvent<any>) => void;
     onSearch: (tipo: string) => void; 
     onCancel: () => void;
     error?: string;
@@ -63,7 +63,7 @@ const FiltrosHabitacion: React.FC<FiltrosHabitacionProps> = ({ fechas, onChange,
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0' }}>
                     <label className="type-label-button">Tipo</label>
                     <select
-                        className="btn-accept" // Reutilizamos estilos de botón para el select
+                        className="btn-accept" 
                         value={selectedType}
                         onChange={(e) => setSelectedType(e.target.value)}
                     >

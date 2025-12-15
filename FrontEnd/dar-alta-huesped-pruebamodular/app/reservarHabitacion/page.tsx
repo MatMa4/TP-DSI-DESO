@@ -16,7 +16,6 @@ import {
     SelectedReservation, 
     EventualHuesped,
     RoomStatusDTO,
-    ROOM_TYPES, 
 } from '../types/indexCU4-5-15'; 
 
 const RESERVA_STAGES = {
@@ -219,8 +218,6 @@ const handleHuespedSubmit = async (huespedData: EventualHuesped) => {
     setShowCancelModal(false);
     router.push('/');
   };
-
-  const currentStageName = Object.keys(RESERVA_STAGES).find(key => RESERVA_STAGES[key as keyof typeof RESERVA_STAGES] === stage);
 
   // --- RENDERIZADO (UI) ---
   return (

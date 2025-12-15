@@ -5,7 +5,7 @@ import DocumentoField from '../components/DocumentoFieldCU2';
 import ModalError from './ModalError';
 import { validateBuscarForm } from '../buscarHuesped/ValidacionDatosCU2'; 
 import ModalConfirmacion from '../componentsCU4-5-15/ModalConfirmacion';
-import { HuespedDTOCompleto } from '../types/indexCU4-5-15'; 
+import { HuespedDTO } from '../types/indexCU4-5-15'; 
 import { useRouter } from 'next/navigation';
 import '../styles/stylesCU15_busqueda.css'; 
 
@@ -13,20 +13,20 @@ import '../styles/stylesCU15_busqueda.css';
 
 // Props que recibe del componente padre (ocupar/page.tsx)
 interface HuespedSearchAndSelectProps {
-  onSelectionSubmit: (selectedHuespedes: HuespedDTOCompleto[]) => void;
+  onSelectionSubmit: (selectedHuespedes: HuespedDTO[]) => void;
   onCancel: () => void;
 }
 
 // Interfaz para el estado de ordenamiento
 interface SortConfig {
-    key: keyof HuespedDTOCompleto;
+    key: keyof HuespedDTO;
     direction: 'asc' | 'desc';
 }
 
 
 const HuespedSearchAndSelect: React.FC<HuespedSearchAndSelectProps> = ({ onSelectionSubmit, onCancel }) => {
     
-   const [huespedData, setHuespedData] = useState<HuespedDTOCompleto>({
+   const [huespedData, setHuespedData] = useState<HuespedDTO>({
     nombre: '',
     apellido: '',
     tipoDocumento: '', 
@@ -50,7 +50,7 @@ const HuespedSearchAndSelect: React.FC<HuespedSearchAndSelectProps> = ({ onSelec
     const [busquedaRealizada, setBusquedaRealizada] = useState(false);
     
     // --- ESTADOS ADAPTADOS PARA SELECCIÓN MÚLTIPLE (Panel Derecho) ---
-    const [searchResults, setSearchResults] = useState<HuespedDTOCompleto[]>([]); // Resultados de la búsqueda
+    const [searchResults, setSearchResults] = useState<HuespedDTO[]>([]); // Resultados de la búsqueda
     const [selectedHuespedes, setSelectedHuespedes] = useState<Set<string>>(new Set()); // Guarda NroDocumento de los seleccionados
     const [sortConfig, setSortConfig] = useState<SortConfig | null>(null); 
     const [seleccionadoId, setSeleccionadoId] = useState<string | null>(null);
@@ -79,7 +79,7 @@ const HuespedSearchAndSelect: React.FC<HuespedSearchAndSelectProps> = ({ onSelec
         }
     };
 
-    const validateBuscarForm = (data: HuespedDTOCompleto): Record<string, string> => {
+    const validateBuscarForm = (data: HuespedDTO): Record<string, string> => {
         const validationErrors: Record<string, string> = {};
         return validationErrors;
     };
@@ -146,7 +146,7 @@ const handleConfirmCancel = () => {
     };
     
     // --- LÓGICA DE ORDENAMIENTO (Copiada de BuscarHuesped) ---
-    const handleSort = (key: keyof HuespedDTOCompleto) => {
+    const handleSort = (key: keyof HuespedDTO) => {
         let direction: 'asc' | 'desc' = 'asc'; 
         if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
             direction = 'desc'; 
@@ -158,7 +158,7 @@ const handleConfirmCancel = () => {
         let sortedData = [...searchResults];
         if (sortConfig !== null) {
             sortedData.sort((a, b) => {
-                const key = sortConfig.key as keyof HuespedDTOCompleto;
+                const key = sortConfig.key as keyof HuespedDTO;
                 if (a[key] < b[key]) {
                     return sortConfig.direction === 'asc' ? -1 : 1;
                 }
@@ -171,7 +171,7 @@ const handleConfirmCancel = () => {
         return sortedData;
     }, [searchResults, sortConfig]);
     
-    const getSortIcon = (key: keyof HuespedDTOCompleto) => {
+    const getSortIcon = (key: keyof HuespedDTO) => {
         if (!sortConfig || sortConfig.key !== key) return null; 
         return sortConfig.direction === 'asc' ? ' ▲' : ' ▼';
     };

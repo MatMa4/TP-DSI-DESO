@@ -1,9 +1,9 @@
-// --- Archivo: app/components/DisponibilidadGrid.tsx ---
 'use client';
 import React, { useState, useMemo } from 'react';
 import ModalError from './ModalError';
 import ModalConfirmacion from './ModalConfirmacion';
-import { RoomCellData, SelectedReservation, ROOM_TYPES } from '../types/indexCU4-5-15'; 
+import { RoomCellData, SelectedReservation } from '../types/indexCU4-5-15'; 
+import { HabitacionDTO } from '../facturar/interfaces';
 
 interface DisponibilidadGridProps {
     fechas: { desde: string, hasta: string };
@@ -220,7 +220,7 @@ const DisponibilidadGrid: React.FC<DisponibilidadGridProps> = ({ fechas, gridDat
                 <strong style={{ display: 'block' }}>Habitación {c.roomId}</strong>
                 
                 <p style={{ margin: '2px 0', fontSize: '14px' }}>
-                    Fecha: {c.date} | Reservada por: <strong style={{ fontWeight: 'bold' }}>{c.huesped}</strong>
+                    Fecha: {c.date} | Reservada.
                 </p>
             </div>
         ))}

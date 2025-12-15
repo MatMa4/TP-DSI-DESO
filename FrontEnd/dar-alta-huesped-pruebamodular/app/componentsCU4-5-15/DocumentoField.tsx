@@ -1,7 +1,6 @@
 'use client'
 import React from 'react';
 
-// Tipos para las propss
 interface DocumentoFieldProps {
   tipoDocumento: string;
   numeroDocumento: string;

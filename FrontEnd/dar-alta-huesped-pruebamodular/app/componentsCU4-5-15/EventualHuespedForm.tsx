@@ -1,4 +1,3 @@
-
 'use client';
 import React, { useState } from 'react';
 import { InputField } from './InputField';
@@ -13,7 +12,7 @@ interface EventualHuespedFormProps {
     const EventualHuespedForm: React.FC<EventualHuespedFormProps> = ({ onSubmit, onCancel, errors }) => {
         const [data, setData] = useState<EventualHuesped>({ nombre: '', apellido: '', telefono: '' });
 
-        const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const handleChange = (e: React.ChangeEvent<any>) => {
         const { name, value } = e.target;
 
         let processedValue = value;
