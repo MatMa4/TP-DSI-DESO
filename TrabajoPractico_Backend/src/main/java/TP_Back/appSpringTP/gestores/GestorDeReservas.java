@@ -34,7 +34,8 @@ public class GestorDeReservas {
 
             if (dto.getHabitacionNumero() != null) {
                 Habitacion habitacion = habitacionDAO.findById(dto.getHabitacionNumero())
-                        .orElseThrow(() -> new RuntimeException("Habitación no encontrada con número: " + dto.getHabitacionNumero()));
+                        .orElseThrow(() -> new RuntimeException(
+                                "Habitación no encontrada con número: " + dto.getHabitacionNumero()));
                 reserva.setHabitacion(habitacion);
             }
 
@@ -44,9 +45,20 @@ public class GestorDeReservas {
         return reservaDAO.saveAll(reservas);
     }
 
-
     public void cancelarReserva(Integer idReserva) {
-        reservaDAO.deleteById(idReserva);
+        Reserva reserva = reservaDAO.findById(idReserva)
+                .orElseThrow(() -> new RuntimeException("Reserva no encontrada con id: " + idReserva));
+        reserva.setEstado("CANCELADA");
+        reservaDAO.save(reserva);
+    }
+
+    public void cancelarReservas(List<Reserva> reservas) {
+        for (Reserva reserva : reservas) {
+            if (reserva.getIdReserva() == null) {
+                throw new IllegalArgumentException("El ID de la reserva es obligatorio para todas las reservas.");
+            }
+            cancelarReserva(reserva.getIdReserva());
+        }
     }
 
     public List<Reserva> buscarReservas() {
@@ -57,7 +69,7 @@ public class GestorDeReservas {
         if (apellido == null || apellido.trim().isEmpty()) {
             throw new IllegalArgumentException("El apellido es obligatorio.");
         }
-        
+
         if (nombre == null || nombre.trim().isEmpty()) {
             return reservaDAO.findByApellidoContainingIgnoreCase(apellido);
         } else {

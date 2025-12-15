@@ -56,9 +56,6 @@ export default function ModificarHuesped() {
     if (datosGuardados) {
         try {
             const data = JSON.parse(datosGuardados);
-            // Comenté este log para evitar ruido, descoméntalo si necesitas depurar la carga inicial
-            // console.log("📥 Datos originales cargados:", data); 
-
             const dataFormateada = {
                 ...data,
                 // Asegurar formato fecha para el input date (YYYY-MM-DD)
@@ -67,7 +64,7 @@ export default function ModificarHuesped() {
             };
 
             setFormData(dataFormateada);
-            setOriginalData(dataFormateada); 
+            setOriginalData(dataFormateada); // Guardamos el estado inicial exacto para el backend
         } catch (error) {
             console.error("Error al leer datos del storage", error);
             alert("Error al cargar los datos transferidos.");
@@ -81,7 +78,7 @@ export default function ModificarHuesped() {
   }, [router]);
 
   // --- MANEJADORES ---
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const { name, value, type } = e.target;
       // @ts-ignore
       const checked = e.target.checked; 
@@ -111,23 +108,33 @@ export default function ModificarHuesped() {
           setHighlightDocumento(false);
         }
       }
-    };
+  };
 
   const handleCancelClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setShowCancelModal(true);
   };
 
-  // --- GUARDAR (PUT) ---
+  // --- GUARDAR (CU10 - ACTUALIZAR) ---
+  // AHORA ES METODO POST Y RECIBE UN ARRAY DE 2 OBJETOS
   const guardarHuespedDirecto = async (dataAGuardar: any) => {
-      // ---> ESTE ES EL ÚNICO LOG QUE VERÁS AL GUARDAR <---
-      console.log("📡 Enviando PUT al Backend con estos datos:", dataAGuardar);
+      
+      // Construimos el body como indicaste: [Original, Nuevo]
+      // originalData sirve como la "Clave Primaria Compuesta" original para buscar en BD
+      const bodyPayload = [originalData, dataAGuardar];
+
+      console.log("📡 --- INICIO PETICIÓN POST (CU10 Actualizar) ---");
+      console.log("1️⃣ Huésped Original (Para identificar):", originalData);
+      console.log("2️⃣ Huésped Modificado (Nuevos datos):", dataAGuardar);
+      console.log("📦 Body enviado (Array):", JSON.stringify(bodyPayload));
+      console.log("-----------------------------------------------");
 
       try {
+          // Cambiado a POST según tu instrucción
           const res = await fetch('http://localhost:8080/huespedes', {
-            method: 'PUT',
+            method: 'POST', 
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dataAGuardar),
+            body: JSON.stringify(bodyPayload),
           });
 
           if (res.ok) {
@@ -137,9 +144,10 @@ export default function ModificarHuesped() {
             localStorage.removeItem('datosHuespedModificar');
           } else {
             console.error("Error Backend:", res.status);
-            alert("No se pudo actualizar el huésped. (Verifique si el DNI duplicado es permitido por el sistema)");
+            alert("No se pudo actualizar el huésped.");
           }
       } catch (e) {
+          console.error(e);
           alert("Error de red.");
       }
   };
@@ -150,7 +158,7 @@ export default function ModificarHuesped() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      // 1. Preparar datos (Trim/Upper)
+      // 1. Preparar datos (Trim/Upper) - SIN ID
       const transformedData = {
         ...formData, 
         nombre: formData.nombre.trim(),
@@ -164,8 +172,8 @@ export default function ModificarHuesped() {
         cuit: formData.cuit.trim(),
         posicionIVA: formData.posicionIVA.trim() ? formData.posicionIVA.trim() : "CONSUMIDOR FINAL",
         fechaNacimiento: formData.fechaNacimiento,
-        // @ts-ignore
-        id: formData.id, 
+        
+        // ELIMINADO: id: formData.id (Ya no se usa ID, la PK es Tipo+Numero)
         
         direccionHuesped: {
           calle: formData.direccionHuesped.calle.trim(),
@@ -179,10 +187,11 @@ export default function ModificarHuesped() {
         }
       };
 
-      // 2. LÓGICA DE CAMBIO DE DNI
+      // 2. LÓGICA DE CAMBIO DE PK (Documento)
+      // Comparamos contra originalData para ver si tocó la clave compuesta
       const documentoCambio = 
-         transformedData.tipoDocumento !== originalData.tipoDocumento || 
-         transformedData.numeroDocumento !== originalData.numeroDocumento;
+          transformedData.tipoDocumento !== originalData.tipoDocumento || 
+          transformedData.numeroDocumento !== originalData.numeroDocumento;
 
       if (documentoCambio) {
           try {
@@ -190,12 +199,15 @@ export default function ModificarHuesped() {
             params.append('tipo', transformedData.tipoDocumento);
             params.append('numero', transformedData.numeroDocumento);
             
+            // Verificamos si la NUEVA clave ya existe en otro lado
             const checkRes = await fetch(`http://localhost:8080/huespedes/consultarDocumento?${params.toString()}`);
 
             if (checkRes.ok) {
+                // Si está libre (OK), procedemos a actualizar
                 await guardarHuespedDirecto(transformedData);
             } 
             else if (checkRes.status === 409) {
+                // Conflicto: Ya existe alguien MÁS con ese DNI nuevo
                 setPendingFinalData(transformedData); 
                 setModalMessage(`¡CUIDADO! El tipo y número de documento ya existen en el sistema.`);
                 setShowModal(true);
@@ -205,41 +217,59 @@ export default function ModificarHuesped() {
             alert("Error conectando con servidor para validar documento.");
           }
       } else {
+          // No cambió la clave primaria, actualización directa
           await guardarHuespedDirecto(transformedData);
       }
     } 
   };
 
   // --- LÓGICA BORRAR (CU11) ---
-  const handleBorrarClick = async () => {
-    // @ts-ignore
-    const id = formData.id; 
-    if (!id) return alert("Error: No hay ID de huésped cargado.");
+  const handleBorrarClick = () => {
+    // Protección extra: Si está alojado, no hace nada
+    if (formData.alojado) return;
 
-    try {
-        const res = await fetch(`http://localhost:8080/huespedes/${id}/historial`);
-        if (res.status === 409) {
-             setDeleteMessage("El huésped no puede ser eliminado pues se ha alojado en el Hotel en alguna oportunidad.");
-             setCanDelete(false);
-             setShowDeleteModal(true);
-        } else {
-             setDeleteMessage(`Los datos del huésped ${formData.nombre} ${formData.apellido}, ${formData.tipoDocumento} ${formData.numeroDocumento} serán eliminados del sistema.`);
-             setCanDelete(true);
-             setShowDeleteModal(true);
-        }
-    } catch (e) {
-        alert("Error al verificar historial.");
-    }
+    setDeleteMessage(`¿Está seguro que desea eliminar del sistema al huésped ${formData.nombre} ${formData.apellido}?`);
+    setCanDelete(true); 
+    setShowDeleteModal(true);
   };
 
   const confirmDelete = async () => {
-      // @ts-ignore
-      const id = formData.id;
-      await fetch(`http://localhost:8080/huespedes/${id}`, { method: 'DELETE' });
-      localStorage.removeItem('datosHuespedModificar');
-      setShowDeleteModal(false);
-      alert("Huésped eliminado.");
-      router.push('/');
+      try {
+          console.log("🗑️ Enviando DELETE con BODY:", formData);
+          
+          const res = await fetch('http://localhost:8080/huespedes', { 
+              method: 'DELETE',
+              headers: { 
+                  'Content-Type': 'application/json' 
+              },
+              // En DELETE solemos mandar el objeto para identificar la PK compuesta
+              body: JSON.stringify(formData) 
+          });
+
+          if (res.ok) {
+              localStorage.removeItem('datosHuespedModificar');
+              setShowDeleteModal(false);
+              alert("Huésped eliminado correctamente.");
+              router.push('/menuCU1'); 
+          } 
+          else if (res.status === 409) {
+              // ERROR 409: Conflicto por historial
+              setShowDeleteModal(false); 
+              setTimeout(() => {
+                  setDeleteMessage("El huésped NO puede ser eliminado pues se ha alojado en el Hotel en alguna oportunidad (Integridad Referencial).");
+                  setCanDelete(false); 
+                  setShowDeleteModal(true);
+              }, 100);
+          } 
+          else {
+              console.error("Error al eliminar:", res.status);
+              alert(`Ocurrió un error al intentar eliminar. Código: ${res.status}`);
+          }
+
+      } catch (e) {
+          console.error(e);
+          alert("Error de conexión con el servidor.");
+      }
   };
 
   // --- CIERRES MODALES ---
@@ -300,7 +330,24 @@ export default function ModificarHuesped() {
 
         <div className="container" style={{ justifyContent: 'space-between', marginTop: '20px' }}>
           <div className="box1" style={{ flex: 0 }}>
-             <button className="button2 red" type="button" onClick={handleBorrarClick} style={{backgroundColor: '#d9534f', borderColor: '#d43f3a'}}>BORRAR</button>
+             
+             {/* BOTÓN BORRAR */}
+             <button 
+                className="button2 red" 
+                type="button" 
+                onClick={handleBorrarClick}
+                disabled={formData.alojado}
+                title={formData.alojado ? "No se puede borrar un huésped alojado." : "Eliminar huésped"}
+                style={{
+                    backgroundColor: formData.alojado ? '#555555' : undefined,
+                    borderColor: formData.alojado ? '#444444' : undefined,
+                    cursor: formData.alojado ? 'not-allowed' : 'pointer',
+                    opacity: formData.alojado ? 0.7 : 1
+                }}
+             >
+                BORRAR
+             </button>
+
           </div>
           <div className="box1" style={{ display: 'flex', gap: '15px' }}>
             <button className="button2" type="button" onClick={handleCancelClick}>CANCELAR</button>
@@ -309,6 +356,7 @@ export default function ModificarHuesped() {
         </div>
       </form>
 
+      {/* --- MODALES --- */}
           <ModalConfirmacion 
               show={showModal} 
               title="¡CUIDADO!" 

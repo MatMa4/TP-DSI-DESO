@@ -239,3 +239,40 @@ input:focus,select:focus{
   font-family: sans-serif;
   z-index: 10060;
 }
+.button2.red {
+    background-color: #d9534f; /* Rojo */
+    border: 1px solid #d43f3a;
+}
+.button2.red:hover {
+    background-color: #c9302c;
+}
+
+/* --- BOTÓN ROJO EN EL MODAL DE CONFIRMACIÓN --- */
+.btn-accept.red {
+    background-color: #d9534f; 
+    color: white;
+}
+.btn-accept.red:hover {
+    background-color: #c9302c; 
+}
+
+/* --- ESTILOS PARA BOTONES DESHABILITADOS (Mantener al final) --- */
+.button2:disabled,
+.button2.red:disabled {
+    background-color: #555555 !important;
+    border-color: #444444 !important;
+    color: #a0a0a0 !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important; 
+    transform: none !important; 
+    opacity: 0.8;
+}
+
+.button2:disabled:hover,
+.button2.red:disabled:hover {
+    background-color: #555555 !important;
+    border-color: #444444 !important;
+    color: #a0a0a0 !important;
+    transform: none !important;
+    filter: none !important;
+}

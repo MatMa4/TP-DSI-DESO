@@ -4,9 +4,7 @@
  */
 package TP_Back.appSpringTP.gestores;
 
-import TP_Back.appSpringTP.DAOs.DireccionDAO;
 import TP_Back.appSpringTP.DAOs.DireccionDAOImpl;
-import TP_Back.appSpringTP.DAOs.HuespedDAO;
 import TP_Back.appSpringTP.DAOs.HuespedDAOImpl;
 import TP_Back.appSpringTP.DTOs.DireccionDTO;
 import TP_Back.appSpringTP.DTOs.HuespedDTO;

@@ -6,9 +6,10 @@ package TP_Back.appSpringTP.controladores;
 
 import TP_Back.appSpringTP.DTOs.HuespedDTO;
 import TP_Back.appSpringTP.excepciones.HuespedExistenteException;
+import TP_Back.appSpringTP.excepciones.HuespedNoEncontradoException;
 import TP_Back.appSpringTP.gestores.GestorHuespedes;
-import TP_Back.appSpringTP.modelo.huesped.Huesped;
 import TP_Back.appSpringTP.repositorios.repositorioDireccion;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -41,8 +42,14 @@ public class ControladorHuesped {
             @RequestParam(required = false) String apellido,
             @RequestParam(required = false) String tipo,
             @RequestParam(required = false) String numero) {
+        
+        try{
+            return ResponseEntity.ok(gestorHuespedes.buscarHuesped(tipo, numero, nombre, apellido));
+        }catch(HuespedNoEncontradoException e){
+            return ResponseEntity.ok(new ArrayList<>());
+        }
 
-        return ResponseEntity.ok(gestorHuespedes.buscarHuesped(tipo, numero, nombre, apellido));
+        
     }
     @GetMapping("/consultarDocumento")
     public ResponseEntity<?> consultarDocumento(@RequestParam String tipo, @RequestParam String numero) {
