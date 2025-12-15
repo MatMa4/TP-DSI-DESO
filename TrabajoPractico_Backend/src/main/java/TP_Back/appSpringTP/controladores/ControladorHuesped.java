@@ -7,7 +7,6 @@ package TP_Back.appSpringTP.controladores;
 import TP_Back.appSpringTP.DTOs.HuespedDTO;
 import TP_Back.appSpringTP.excepciones.HuespedExistenteException;
 import TP_Back.appSpringTP.gestores.GestorHuespedes;
-import TP_Back.appSpringTP.modelo.huesped.Huesped;
 import TP_Back.appSpringTP.repositorios.repositorioDireccion;
 import java.util.List;
 import java.util.Map;
@@ -39,11 +38,6 @@ public class ControladorHuesped {
     public ResponseEntity<?> eliminarHuesped(@RequestBody HuespedDTO huesped){
         return ResponseEntity.ok(gestorHuespedes.eliminarHuesped(huesped));
     }
-
-    @GetMapping
-    public List<HuespedDTO> obtenerTodos() {
-        return gestorHuespedes.obtenerTodos();
-    }
     
     @GetMapping("/buscar")
     public ResponseEntity<List<HuespedDTO>> buscarHuespedes(
@@ -53,10 +47,6 @@ public class ControladorHuesped {
             @RequestParam(required = false) String numero) {
 
         return ResponseEntity.ok(gestorHuespedes.buscarHuesped(tipo, numero, nombre, apellido));
-    }
-    @GetMapping("/obtener")
-    public ResponseEntity<Huesped> obtenerHuespedes(@RequestParam String tipo, @RequestParam String numero) {
-        return ResponseEntity.ok(gestorHuespedes.obtenerHuesped(tipo, numero));
     }
     @GetMapping("/consultarDocumento")
     public ResponseEntity<?> consultarDocumento(@RequestParam String tipo, @RequestParam String numero) {
@@ -75,6 +65,11 @@ public class ControladorHuesped {
         } catch (HuespedExistenteException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", "CONFLICTO", "mensaje", e.getMessage()));
         }
+    }
+
+    @GetMapping("/listartodos")
+    public ResponseEntity<List<HuespedDTO>> listarTodos() {
+        return ResponseEntity.ok(gestorHuespedes.listarTodosHuespedes());
     }
 
 }

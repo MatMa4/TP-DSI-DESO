@@ -20,8 +20,10 @@ import lombok.Setter;
 @Setter
 public class Consumo {
     @Id
+    @jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private int consumoId;
     private String tipoServicio;
     private String detalle;
     private float monto;
+    private boolean facturado;
 }

@@ -58,25 +58,35 @@ export default function Home() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
+    // @ts-ignore
     const checked = e.target.checked; 
+    
+    // LÓGICA DE MAYÚSCULAS:
+    // Si es checkbox usa 'checked'.
+    // Si es fecha (date), usa el valor original.
+    // Para todo lo demás (text, email, tel), lo convierte a UpperCase inmediatamente.
+    const valorFinal = type === 'checkbox' 
+        ? checked 
+        : (type === 'date' ? value : value.toUpperCase());
 
     if (name.startsWith('direccionHuesped.')) {
       const field = name.split('.')[1];
-      setFormData((prev) => ({
-        ...prev,
-        direccionHuesped: {
-          ...prev.direccionHuesped,
-          [field]: value,
-        },
+     setFormData((prev) => ({
+         ...prev,
+         direccionHuesped: {
+
+           ...prev.direccionHuesped,
+           [field]: valorFinal, // Asignamos el valor ya en mayúscula
+         },
       }));
       setErrors((prev) => ({ ...prev, [name]: '' })); 
     } else {
       setFormData({
         ...formData,
-        [name]: type === 'checkbox' ? checked : value,
+        [name]: valorFinal, // Asignamos el valor ya en mayúscula
       });
       setErrors((prev) => ({ ...prev, [name]: '' }));
-      
+
       if (name === 'numeroDocumento' || name === 'tipoDocumento') {
         setHighlightDocumento(false);
       }
@@ -223,12 +233,12 @@ export default function Home() {
   const handleConfirmCancel = () => {
     resetForm();
     setShowCancelModal(false);
-    window.location.href = '/';
+    window.location.href = '/menuCU1';
   };
 
   const handleSuccessClose = () => {
     setShowSuccessModal(false);
-    window.location.href = '/';
+    window.location.href = '/menuCU1';
   };
 
   const handleSuccessConfirm = () => {

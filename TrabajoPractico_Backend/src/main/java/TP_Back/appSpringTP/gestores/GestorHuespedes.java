@@ -20,8 +20,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import TP_Back.appSpringTP.DTOs.DireccionDTO;
 import TP_Back.appSpringTP.DTOs.HuespedDTO;
+import TP_Back.appSpringTP.excepciones.HuespedNoEncontradoException;
 import TP_Back.appSpringTP.modelo.direccion.Direccion;
 import TP_Back.appSpringTP.modelo.huesped.Huesped;
+import TP_Back.appSpringTP.DAOs.PersonaFisicaDAO;
+import TP_Back.appSpringTP.DAOs.PersonaFisicaDAOImpl;
+import TP_Back.appSpringTP.modelo.pago.PersonaFisica;
 
 @Service
 public class GestorHuespedes {
@@ -29,22 +33,28 @@ public class GestorHuespedes {
     private final HuespedDAO huespedDAO;
     @Autowired
     private final DireccionDAO direccionDAO;
+    @Autowired
+    private final PersonaFisicaDAO personaFisicaDAO;
 
-
-
-    public GestorHuespedes(HuespedDAOImpl huespedDAO, DireccionDAOImpl direccionDAO) {
+    public GestorHuespedes(HuespedDAOImpl huespedDAO, DireccionDAOImpl direccionDAO, PersonaFisicaDAOImpl personaFisicaDAO) {
         this.huespedDAO = huespedDAO;
         this.direccionDAO = direccionDAO;
+        this.personaFisicaDAO = personaFisicaDAO;
     }
 
-    public Boolean registrarHuesped(HuespedDTO h) {
+    public HuespedDTO registrarHuesped(HuespedDTO h) throws HuespedNoEncontradoException {
         DireccionDTO direccionDto=h.getDireccionHuesped();
         Direccion direccion = new Direccion();
         direccion.setDepartamento(direccionDto.getDepartamento());
         direccion.setCodigo(direccionDto.getCodigo());
         direccion.setPiso(direccionDto.getPiso());
         direccion.setId(direccionDto.getCalle(), direccionDto.getNumero(), direccionDto.getLocalidad(), direccionDto.getProvincia(), direccionDto.getPais());
-        direccionDAO.save(direccion);
+        try{
+            direccionDAO.save(direccion);
+        }catch(Exception e){
+            throw new RuntimeException("Error inesperado al registrar huésped", e);
+        }
+        
         Huesped huesped = new Huesped();
         huesped.setNombre(h.getNombre());
         huesped.setApellido(h.getApellido());
@@ -59,23 +69,46 @@ public class GestorHuespedes {
         huesped.setPosicionIVA(h.getPosicionIVA());
         huesped.setAlojado(h.getAlojado());
         huesped.setDireccionHuesped(direccion);
-        huespedDAO.save(huesped);
-        return true;     
+        try{
+            huespedDAO.save(huesped);
+        }catch(Exception e){
+            throw new RuntimeException("Error inesperado al registrar huésped", e);
+        }
+        
+        PersonaFisica personaFisica = new PersonaFisica();
+        personaFisica.setHuesped(huesped);
+        try{
+            personaFisicaDAO.save(personaFisica);
+        }catch(Exception e){
+            throw new RuntimeException("Error inesperado al registrar el responsable de pago", e);
+        }
+        
+        Optional <HuespedDTO> resultado = huespedDAO.consultarDocumento(huesped.getTipoDocumento(), huesped.getNumeroDocumento());   
+        if(resultado.isPresent()){
+            return resultado.get();
+        }else{
+            throw new HuespedNoEncontradoException("No se encontró huésped con documento " + huesped.getNumeroDocumento());
+        }     
     }
     
-    public Boolean modificarHuesped(List<HuespedDTO> huespedes){
+    public HuespedDTO modificarHuesped(List<HuespedDTO> huespedes) throws HuespedNoEncontradoException{
         huespedDAO.modificarIDHuesped(huespedes.get(0), huespedes.get(1));
-        huespedDAO.guardar(huespedes.get(0));
-        return true;
+        try{
+            huespedDAO.guardar(huespedes.get(0));
+        }catch(Exception e){
+            throw new RuntimeException("Error inesperado al guardar el huésped modificado", e);
+        }
+        Optional <HuespedDTO> resultado = huespedDAO.consultarDocumento(huespedes.get(0).getTipoDocumento(), huespedes.get(0).getNumeroDocumento());   
+        if(resultado.isPresent()){
+            return resultado.get();
+        }else{
+            throw new HuespedNoEncontradoException("No se encontró huésped con documento " + huespedes.get(0).getNumeroDocumento());
+        } 
     }
     
     public Boolean eliminarHuesped(HuespedDTO hueped){
         huespedDAO.eliminar(hueped);
         return true;
-    }
-    
-    public List<HuespedDTO> obtenerTodos() {
-        return huespedDAO.findAll();
     }
     
     public List<HuespedDTO> buscarHuesped(String tipo, String numero, String nombre, String apellido){
@@ -84,33 +117,31 @@ public class GestorHuespedes {
         huesped.setNumeroDocumento(numero);
         huesped.setApellido(apellido);
         huesped.setNombre(nombre);
-        return huespedDAO.buscarHuesped(huesped);
+        List<HuespedDTO> huespedes;
+        try{
+            huespedes = huespedDAO.buscarHuesped(huesped);
+        }catch(HuespedNoEncontradoException e){
+            throw e;
+        }
+        return huespedes;
     }
-    public Huesped obtenerHuesped(String tipo, String numero){
-        HuespedDTO huesped = new HuespedDTO();
-        huesped.setTipoDocumento(tipo);
-        huesped.setNumeroDocumento(numero);
-        return huespedDAO.obtenerHuesped(huesped);
-    }
-    public boolean consultarDocumento(String tipoDocumento, String numeroDocumento){
+    public void consultarDocumento(String tipoDocumento, String numeroDocumento){
         Optional<HuespedDTO> huesped = huespedDAO.consultarDocumento(tipoDocumento, numeroDocumento);
-        if(huesped.isEmpty()){
-            return true;
-        }else{
+        if(huesped.isPresent()){
             throw new HuespedExistenteException("Huesped existente");
-        }   
+        }
     }
-    public boolean huespedExistente(String tipoModificado, String numeroModificado, String tipoOriginal, String numeroOriginal){
-        if(tipoModificado.equals(tipoOriginal) && numeroModificado.equals(numeroOriginal)){
-            return true;
-        }else{
+    public void huespedExistente(String tipoModificado, String numeroModificado, String tipoOriginal, String numeroOriginal){
+        if(!tipoModificado.equals(tipoOriginal) || !numeroModificado.equals(numeroOriginal)){
             Optional<HuespedDTO> huesped = huespedDAO.consultarDocumento(tipoModificado, numeroModificado);
-            if(huesped.isEmpty()){
-                return true;
-            }else{
+            if(huesped.isPresent()){
                 throw new HuespedExistenteException("Huesped existente");
             }
         }
+    }
+
+    public List<HuespedDTO> listarTodosHuespedes() {
+        return huespedDAO.findAll();
     }
 }
 

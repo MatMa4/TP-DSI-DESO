@@ -13,7 +13,17 @@ export const validateHuespedForm = (formData: FormData): Record<string, string> 
   if (!formData.apellido.trim()) newErrors.apellido = 'Campo obligatorio';
   else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.apellido)) newErrors.apellido = 'Solo se permiten letras';
 
-  if (!formData.fechaNacimiento) newErrors.fechaNacimiento = 'Campo obligatorio';
+  // Validación Fecha
+  if (!formData.fechaNacimiento) {
+      newErrors.fechaNacimiento = 'Campo obligatorio';
+  } else {
+      const fechaIngresada = new Date(formData.fechaNacimiento);
+      const fechaActual = new Date();
+      fechaActual.setHours(0, 0, 0, 0); 
+      if (fechaIngresada > fechaActual) {
+          newErrors.fechaNacimiento = 'La fecha no puede ser futura';
+      }
+  }
 
   if (!formData.telefono.trim()) newErrors.telefono = 'Campo obligatorio';
   else if (!/^\d+$/.test(formData.telefono)) newErrors.telefono = 'Solo se permiten números';
@@ -21,9 +31,8 @@ export const validateHuespedForm = (formData: FormData): Record<string, string> 
   if (!formData.ocupacion.trim()) newErrors.ocupacion = 'Campo obligatorio';
   else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.ocupacion)) newErrors.ocupacion = 'Solo se permiten letras';
 
-  // Validación IVAAA
   if (formData.posicionIVA.trim() && !opcionesIVA.includes(formData.posicionIVA.toUpperCase())) {
-    newErrors.posicionIVA = 'Debe ser una de: RESPONSABLE INSCRIPTO, MONOTRIBUTISTA, EXENTO o CONSUMIDOR FINAL';
+    newErrors.posicionIVA = 'Posición IVA inválida';
   }
 
   if (!formData.nacionalidad.trim()) newErrors.nacionalidad = 'Campo obligatorio';
@@ -35,29 +44,19 @@ export const validateHuespedForm = (formData: FormData): Record<string, string> 
   } else {
     switch (formData.tipoDocumento) {
       case 'DNI':
-        if (!/^\d+$/.test(formData.numeroDocumento)) {
-          newErrors.numeroDocumento = 'El DNI solo debe contener números';
-        }
+        if (!/^\d+$/.test(formData.numeroDocumento)) newErrors.numeroDocumento = 'El DNI solo debe contener números';
         break;
       case 'LC':
-        if (!/^[Ff]\d+$/.test(formData.numeroDocumento)) {
-          newErrors.numeroDocumento = 'Debe comenzar con F seguida de números';
-        }
+        if (!/^[Ff]\d+$/.test(formData.numeroDocumento)) newErrors.numeroDocumento = 'Debe comenzar con F seguida de números';
         break;
       case 'LE':
-        if (!/^[Mm]\d+$/.test(formData.numeroDocumento)) {
-          newErrors.numeroDocumento = 'Debe comenzar con M seguida de números';
-        }
+        if (!/^[Mm]\d+$/.test(formData.numeroDocumento)) newErrors.numeroDocumento = 'Debe comenzar con M seguida de números';
         break;
       case 'pasaporte':
-        if (!/^[A-Za-z0-9]+$/.test(formData.numeroDocumento)) {
-          newErrors.numeroDocumento = 'El pasaporte solo puede contener letras y números';
-        }
+        if (!/^[A-Za-z0-9]+$/.test(formData.numeroDocumento)) newErrors.numeroDocumento = 'Caracteres inválidos';
         break;
       default:
-        if (formData.numeroDocumento.length < 3) {
-          newErrors.numeroDocumento = 'Documento inválido';
-        }
+        if (formData.numeroDocumento.length < 3) newErrors.numeroDocumento = 'Documento inválido';
         break;
     }
   }
@@ -71,14 +70,35 @@ export const validateHuespedForm = (formData: FormData): Record<string, string> 
   }
 
   // --- Validaciones Dirección ---
+  
   if (!formData.direccionHuesped.calle.trim()) newErrors['direccionHuesped.calle'] = 'Campo obligatorio';
   
-  if (!formData.direccionHuesped.numero.trim()) newErrors['direccionHuesped.numero'] = 'Campo obligatorio';
-  else if (!/^\d+$/.test(formData.direccionHuesped.numero)) newErrors['direccionHuesped.numero'] = 'Solo se permiten números';
+  // --- VALIDACIÓN INTELIGENTE DE NÚMEROS (Numero, Piso, Codigo) ---
+  // Acepta 'number' (valido) o 'string' (se valida contenido)
   
-  if (!formData.direccionHuesped.piso.trim()) newErrors['direccionHuesped.piso'] = 'Campo obligatorio';
-  else if (!/^\d+$/.test(formData.direccionHuesped.piso)) newErrors['direccionHuesped.piso'] = 'Solo se permiten números';
+  // 1. Numero
+  const valNumero = formData.direccionHuesped.numero;
+  if (valNumero === null || valNumero === undefined || (typeof valNumero === 'string' && !valNumero.trim())) {
+      newErrors['direccionHuesped.numero'] = 'Campo obligatorio';
+  } else if (typeof valNumero === 'string' && !/^\d+$/.test(valNumero)) {
+      newErrors['direccionHuesped.numero'] = 'Solo se permiten números';
+  }
+
+  // 2. Piso
+  const valPiso = formData.direccionHuesped.piso;
+  if (valPiso === null || valPiso === undefined || (typeof valPiso === 'string' && !valPiso.trim())) {
+      newErrors['direccionHuesped.piso'] = 'Campo obligatorio';
+  } else if (typeof valPiso === 'string' && !/^\d+$/.test(valPiso)) {
+      newErrors['direccionHuesped.piso'] = 'Solo se permiten números';
+  }
   
+  // 3. Codigo Postal (Opcional en null, pero si viene string debe ser numérico)
+  const valCodigo = formData.direccionHuesped.codigo;
+  if (typeof valCodigo === 'string' && valCodigo.trim() !== '' && !/^\d+$/.test(valCodigo)) {
+      newErrors['direccionHuesped.codigo'] = 'Solo se permiten números';
+  }
+
+  // Resto de campos de texto
   if (!formData.direccionHuesped.localidad.trim()) newErrors['direccionHuesped.localidad'] = 'Campo obligatorio';
   else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.direccionHuesped.localidad)) newErrors['direccionHuesped.localidad'] = 'Solo se permiten letras';
   
@@ -90,8 +110,6 @@ export const validateHuespedForm = (formData: FormData): Record<string, string> 
   
   if (!formData.direccionHuesped.pais.trim()) newErrors['direccionHuesped.pais'] = 'Campo obligatorio';
   else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.direccionHuesped.pais)) newErrors['direccionHuesped.pais'] = 'Solo se permiten letras';
-  
-  if (formData.direccionHuesped.codigo && !/^\d+$/.test(formData.direccionHuesped.codigo)) newErrors['direccionHuesped.codigo'] = 'Solo se permiten números';
 
   return newErrors;
 };
