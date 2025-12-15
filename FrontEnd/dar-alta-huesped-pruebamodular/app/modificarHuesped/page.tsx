@@ -56,9 +56,6 @@ export default function ModificarHuesped() {
     if (datosGuardados) {
         try {
             const data = JSON.parse(datosGuardados);
-            // Comenté este log para evitar ruido, descoméntalo si necesitas depurar la carga inicial
-            // console.log("📥 Datos originales cargados:", data); 
-
             const dataFormateada = {
                 ...data,
                 // Asegurar formato fecha para el input date (YYYY-MM-DD)
@@ -81,7 +78,7 @@ export default function ModificarHuesped() {
   }, [router]);
 
   // --- MANEJADORES ---
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
       const { name, value, type } = e.target;
       // @ts-ignore
       const checked = e.target.checked; 
@@ -111,16 +108,15 @@ export default function ModificarHuesped() {
           setHighlightDocumento(false);
         }
       }
-    };
+  };
 
   const handleCancelClick = (e: React.MouseEvent) => {
     e.preventDefault();
     setShowCancelModal(true);
   };
 
-  // --- GUARDAR (PUT) ---
+  // --- GUARDAR (PUT - CU10) ---
   const guardarHuespedDirecto = async (dataAGuardar: any) => {
-      // ---> ESTE ES EL ÚNICO LOG QUE VERÁS AL GUARDAR <---
       console.log("📡 Enviando PUT al Backend con estos datos:", dataAGuardar);
 
       try {
@@ -137,7 +133,7 @@ export default function ModificarHuesped() {
             localStorage.removeItem('datosHuespedModificar');
           } else {
             console.error("Error Backend:", res.status);
-            alert("No se pudo actualizar el huésped. (Verifique si el DNI duplicado es permitido por el sistema)");
+            alert("No se pudo actualizar el huésped.");
           }
       } catch (e) {
           alert("Error de red.");
@@ -181,8 +177,8 @@ export default function ModificarHuesped() {
 
       // 2. LÓGICA DE CAMBIO DE DNI
       const documentoCambio = 
-         transformedData.tipoDocumento !== originalData.tipoDocumento || 
-         transformedData.numeroDocumento !== originalData.numeroDocumento;
+          transformedData.tipoDocumento !== originalData.tipoDocumento || 
+          transformedData.numeroDocumento !== originalData.numeroDocumento;
 
       if (documentoCambio) {
           try {
@@ -211,47 +207,44 @@ export default function ModificarHuesped() {
   };
 
   // --- LÓGICA BORRAR (CU11) ---
- const handleBorrarClick = () => {
-    // 1. Como no tenemos ID fiable para consultar historial antes,
-    // asumimos inicialmente que se puede borrar y pedimos confirmación.
+  const handleBorrarClick = () => {
+    // Protección extra: Si está alojado, no hace nada
+    if (formData.alojado) return;
+
     setDeleteMessage(`¿Está seguro que desea eliminar del sistema al huésped ${formData.nombre} ${formData.apellido}?`);
-    setCanDelete(true); // Habilita el botón rojo de eliminar en el modal
+    setCanDelete(true); 
     setShowDeleteModal(true);
   };
 
   const confirmDelete = async () => {
       try {
-          console.log("🗑️ Enviando DELETE con body:", formData);
+          console.log("🗑️ Enviando DELETE con BODY:", formData);
           
-          // 2. Hacemos la petición DELETE pasando el DTO completo en el body
+          // --- VERSIÓN CON BODY (RESTAURADA) ---
           const res = await fetch('http://localhost:8080/huespedes', { 
               method: 'DELETE',
               headers: { 
                   'Content-Type': 'application/json' 
               },
-              body: JSON.stringify(formData) // <--- Aquí va el DTO del CU2
+              body: JSON.stringify(formData) // <--- Se envía el DTO
           });
 
           if (res.ok) {
-              // CASO ÉXITO (200 OK o 204 No Content)
               localStorage.removeItem('datosHuespedModificar');
               setShowDeleteModal(false);
               alert("Huésped eliminado correctamente.");
-              router.push('/menuCU1'); // Volvemos al menú o buscador
+              router.push('/menuCU1'); 
           } 
           else if (res.status === 409) {
-              // CASO ERROR: CONFLICTO (Tiene reservas/historial)
-              setShowDeleteModal(false); // Cerramos el modal de "Confirmar"
-              
-              // Reabrimos el modal pero en modo "Error/Aviso"
+              // ERROR 409: Conflicto por historial
+              setShowDeleteModal(false); 
               setTimeout(() => {
-                  setDeleteMessage("El huésped NO puede ser eliminado pues se ha alojado en el Hotel en alguna oportunidad (Restricción de Integridad).");
-                  setCanDelete(false); // Esto cambia el icono y oculta el botón de borrar en tu modal
+                  setDeleteMessage("El huésped NO puede ser eliminado pues se ha alojado en el Hotel en alguna oportunidad (Integridad Referencial).");
+                  setCanDelete(false); 
                   setShowDeleteModal(true);
               }, 100);
           } 
           else {
-              // OTROS ERRORES
               console.error("Error al eliminar:", res.status);
               alert(`Ocurrió un error al intentar eliminar. Código: ${res.status}`);
           }
@@ -320,7 +313,25 @@ export default function ModificarHuesped() {
 
         <div className="container" style={{ justifyContent: 'space-between', marginTop: '20px' }}>
           <div className="box1" style={{ flex: 0 }}>
-             <button className="button2 red" type="button" onClick={handleBorrarClick} style={{backgroundColor: '#d9534f', borderColor: '#d43f3a'}}>BORRAR</button>
+             
+             {/* BOTÓN BORRAR ACTUALIZADO */}
+             <button 
+                className="button2 red" 
+                type="button" 
+                onClick={handleBorrarClick}
+                disabled={formData.alojado} // <--- Bloquea la acción
+                title={formData.alojado ? "No se puede borrar un huésped alojado." : "Eliminar huésped"}
+                style={{
+                    // Estilos dinámicos para Gris vs Rojo
+                    backgroundColor: formData.alojado ? '#555555' : undefined,
+                    borderColor: formData.alojado ? '#444444' : undefined,
+                    cursor: formData.alojado ? 'not-allowed' : 'pointer',
+                    opacity: formData.alojado ? 0.7 : 1
+                }}
+             >
+                BORRAR
+             </button>
+
           </div>
           <div className="box1" style={{ display: 'flex', gap: '15px' }}>
             <button className="button2" type="button" onClick={handleCancelClick}>CANCELAR</button>
@@ -329,6 +340,7 @@ export default function ModificarHuesped() {
         </div>
       </form>
 
+      {/* --- MODALES --- */}
           <ModalConfirmacion 
               show={showModal} 
               title="¡CUIDADO!" 
