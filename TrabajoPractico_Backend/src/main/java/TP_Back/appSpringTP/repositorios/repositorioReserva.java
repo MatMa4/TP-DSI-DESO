@@ -9,10 +9,10 @@ import java.util.Date;
 import java.util.List;
 
 public interface repositorioReserva extends JpaRepository<Reserva, Integer> {
-    
-    @Query("SELECT r FROM Reserva r WHERE r.habitacion IN :habitaciones " +
-           "AND (r.fechaInicio <= :fechaFin AND r.fechaFin >= :fechaInicio)")
-    List<Reserva> buscarPorListaHabitaciones(@Param("habitaciones") List<Habitacion> habitaciones, 
-                                             @Param("fechaInicio") Date fechaInicio, 
-                                             @Param("fechaFin") Date fechaFin);
+
+       @Query("SELECT r FROM Reserva r WHERE r.habitacion IN :habitaciones " +
+                     "AND (r.fechaInicio <= :fechaFin AND r.fechaFin >= :fechaInicio) AND r.estado <> 'CANCELADA'")
+       List<Reserva> buscarPorListaHabitaciones(@Param("habitaciones") List<Habitacion> habitaciones,
+                     @Param("fechaInicio") Date fechaInicio,
+                     @Param("fechaFin") Date fechaFin);
 }

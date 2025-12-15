@@ -26,17 +26,16 @@ public class ControladorReserva {
     }
 
     @PutMapping("/cancelar")
-    public ResponseEntity<?> cancelarReserva(@RequestBody Reserva reserva) {
+    public ResponseEntity<?> cancelarReserva(@RequestBody List<Reserva> reservas) {
         try {
-            if (reserva.getIdReserva() == null) {
-                return ResponseEntity.badRequest().body("El ID de la reserva es obligatorio.");
-            }
-            gestorDeReservas.cancelarReserva(reserva.getIdReserva());
-            return ResponseEntity.ok("Reserva cancelada exitosamente.");
+            gestorDeReservas.cancelarReservas(reservas);
+            return ResponseEntity.ok("Reservas canceladas exitosamente.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Error al cancelar la reserva: " + e.getMessage());
+            return ResponseEntity.internalServerError().body("Error al cancelar las reservas: " + e.getMessage());
         }
     }
 

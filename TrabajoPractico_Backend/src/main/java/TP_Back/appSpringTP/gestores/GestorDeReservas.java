@@ -52,6 +52,15 @@ public class GestorDeReservas {
         reservaDAO.save(reserva);
     }
 
+    public void cancelarReservas(List<Reserva> reservas) {
+        for (Reserva reserva : reservas) {
+            if (reserva.getIdReserva() == null) {
+                throw new IllegalArgumentException("El ID de la reserva es obligatorio para todas las reservas.");
+            }
+            cancelarReserva(reserva.getIdReserva());
+        }
+    }
+
     public List<Reserva> buscarReservas() {
         return reservaDAO.findAll();
     }
