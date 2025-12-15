@@ -64,7 +64,7 @@ export default function ModificarHuesped() {
             };
 
             setFormData(dataFormateada);
-            setOriginalData(dataFormateada); 
+            setOriginalData(dataFormateada); // Guardamos el estado inicial exacto para el backend
         } catch (error) {
             console.error("Error al leer datos del storage", error);
             alert("Error al cargar los datos transferidos.");
@@ -115,15 +115,26 @@ export default function ModificarHuesped() {
     setShowCancelModal(true);
   };
 
-  // --- GUARDAR (PUT - CU10) ---
+  // --- GUARDAR (CU10 - ACTUALIZAR) ---
+  // AHORA ES METODO POST Y RECIBE UN ARRAY DE 2 OBJETOS
   const guardarHuespedDirecto = async (dataAGuardar: any) => {
-      console.log("📡 Enviando PUT al Backend con estos datos:", dataAGuardar);
+      
+      // Construimos el body como indicaste: [Original, Nuevo]
+      // originalData sirve como la "Clave Primaria Compuesta" original para buscar en BD
+      const bodyPayload = [originalData, dataAGuardar];
+
+      console.log("📡 --- INICIO PETICIÓN POST (CU10 Actualizar) ---");
+      console.log("1️⃣ Huésped Original (Para identificar):", originalData);
+      console.log("2️⃣ Huésped Modificado (Nuevos datos):", dataAGuardar);
+      console.log("📦 Body enviado (Array):", JSON.stringify(bodyPayload));
+      console.log("-----------------------------------------------");
 
       try {
+          // Cambiado a POST según tu instrucción
           const res = await fetch('http://localhost:8080/huespedes', {
-            method: 'PUT',
+            method: 'POST', 
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dataAGuardar),
+            body: JSON.stringify(bodyPayload),
           });
 
           if (res.ok) {
@@ -136,6 +147,7 @@ export default function ModificarHuesped() {
             alert("No se pudo actualizar el huésped.");
           }
       } catch (e) {
+          console.error(e);
           alert("Error de red.");
       }
   };
@@ -146,7 +158,7 @@ export default function ModificarHuesped() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      // 1. Preparar datos (Trim/Upper)
+      // 1. Preparar datos (Trim/Upper) - SIN ID
       const transformedData = {
         ...formData, 
         nombre: formData.nombre.trim(),
@@ -160,8 +172,8 @@ export default function ModificarHuesped() {
         cuit: formData.cuit.trim(),
         posicionIVA: formData.posicionIVA.trim() ? formData.posicionIVA.trim() : "CONSUMIDOR FINAL",
         fechaNacimiento: formData.fechaNacimiento,
-        // @ts-ignore
-        id: formData.id, 
+        
+        // ELIMINADO: id: formData.id (Ya no se usa ID, la PK es Tipo+Numero)
         
         direccionHuesped: {
           calle: formData.direccionHuesped.calle.trim(),
@@ -175,7 +187,8 @@ export default function ModificarHuesped() {
         }
       };
 
-      // 2. LÓGICA DE CAMBIO DE DNI
+      // 2. LÓGICA DE CAMBIO DE PK (Documento)
+      // Comparamos contra originalData para ver si tocó la clave compuesta
       const documentoCambio = 
           transformedData.tipoDocumento !== originalData.tipoDocumento || 
           transformedData.numeroDocumento !== originalData.numeroDocumento;
@@ -186,12 +199,15 @@ export default function ModificarHuesped() {
             params.append('tipo', transformedData.tipoDocumento);
             params.append('numero', transformedData.numeroDocumento);
             
+            // Verificamos si la NUEVA clave ya existe en otro lado
             const checkRes = await fetch(`http://localhost:8080/huespedes/consultarDocumento?${params.toString()}`);
 
             if (checkRes.ok) {
+                // Si está libre (OK), procedemos a actualizar
                 await guardarHuespedDirecto(transformedData);
             } 
             else if (checkRes.status === 409) {
+                // Conflicto: Ya existe alguien MÁS con ese DNI nuevo
                 setPendingFinalData(transformedData); 
                 setModalMessage(`¡CUIDADO! El tipo y número de documento ya existen en el sistema.`);
                 setShowModal(true);
@@ -201,6 +217,7 @@ export default function ModificarHuesped() {
             alert("Error conectando con servidor para validar documento.");
           }
       } else {
+          // No cambió la clave primaria, actualización directa
           await guardarHuespedDirecto(transformedData);
       }
     } 
@@ -220,13 +237,13 @@ export default function ModificarHuesped() {
       try {
           console.log("🗑️ Enviando DELETE con BODY:", formData);
           
-          // --- VERSIÓN CON BODY (RESTAURADA) ---
           const res = await fetch('http://localhost:8080/huespedes', { 
               method: 'DELETE',
               headers: { 
                   'Content-Type': 'application/json' 
               },
-              body: JSON.stringify(formData) // <--- Se envía el DTO
+              // En DELETE solemos mandar el objeto para identificar la PK compuesta
+              body: JSON.stringify(formData) 
           });
 
           if (res.ok) {
@@ -314,15 +331,14 @@ export default function ModificarHuesped() {
         <div className="container" style={{ justifyContent: 'space-between', marginTop: '20px' }}>
           <div className="box1" style={{ flex: 0 }}>
              
-             {/* BOTÓN BORRAR ACTUALIZADO */}
+             {/* BOTÓN BORRAR */}
              <button 
                 className="button2 red" 
                 type="button" 
                 onClick={handleBorrarClick}
-                disabled={formData.alojado} // <--- Bloquea la acción
+                disabled={formData.alojado}
                 title={formData.alojado ? "No se puede borrar un huésped alojado." : "Eliminar huésped"}
                 style={{
-                    // Estilos dinámicos para Gris vs Rojo
                     backgroundColor: formData.alojado ? '#555555' : undefined,
                     borderColor: formData.alojado ? '#444444' : undefined,
                     cursor: formData.alojado ? 'not-allowed' : 'pointer',
