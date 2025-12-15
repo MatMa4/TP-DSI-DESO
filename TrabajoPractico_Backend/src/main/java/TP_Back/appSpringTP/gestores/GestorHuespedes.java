@@ -25,6 +25,7 @@ import TP_Back.appSpringTP.modelo.direccion.Direccion;
 import TP_Back.appSpringTP.modelo.huesped.Huesped;
 import TP_Back.appSpringTP.DAOs.PersonaFisicaDAO;
 import TP_Back.appSpringTP.DAOs.PersonaFisicaDAOImpl;
+import TP_Back.appSpringTP.excepciones.HuespedNoEliminableException;
 import TP_Back.appSpringTP.modelo.pago.PersonaFisica;
 
 @Service
@@ -82,7 +83,10 @@ public class GestorHuespedes {
         }catch(Exception e){
             throw new RuntimeException("Error inesperado al registrar el responsable de pago", e);
         }
-        
+        Optional<PersonaFisica> buscarPersonaFisica = personaFisicaDAO.getByHuesped(huesped.getTipoDocumento(), huesped.getNumeroDocumento());
+        if(buscarPersonaFisica.isEmpty()){
+            throw new RuntimeException("Responsable de pago no guardado");
+        }
         Optional <HuespedDTO> resultado = huespedDAO.consultarDocumento(huesped.getTipoDocumento(), huesped.getNumeroDocumento());   
         if(resultado.isPresent()){
             return resultado.get();
@@ -106,9 +110,18 @@ public class GestorHuespedes {
         } 
     }
     
-    public Boolean eliminarHuesped(HuespedDTO hueped){
-        huespedDAO.eliminar(hueped);
-        return true;
+    public Boolean eliminarHuesped(HuespedDTO huesped){
+        Optional <HuespedDTO> huespedAEliminar = huespedDAO.consultarDocumento(huesped.getTipoDocumento(), huesped.getNumeroDocumento());
+        if(huespedAEliminar.isEmpty()){
+            throw new HuespedNoEncontradoException();
+        }
+        if(!huespedAEliminar.get().getAlojado()){
+            huespedDAO.eliminar(huesped);
+            Optional <HuespedDTO> huespedEncontrado = huespedDAO.consultarDocumento(huesped.getTipoDocumento(), huesped.getNumeroDocumento());
+            return huespedEncontrado.isEmpty();
+        }else{
+            throw new HuespedNoEliminableException();
+        }        
     }
     
     public List<HuespedDTO> buscarHuesped(String tipo, String numero, String nombre, String apellido){

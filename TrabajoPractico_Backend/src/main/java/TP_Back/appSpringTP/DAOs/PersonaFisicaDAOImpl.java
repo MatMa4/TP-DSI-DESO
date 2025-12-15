@@ -6,6 +6,7 @@ package TP_Back.appSpringTP.DAOs;
 
 import TP_Back.appSpringTP.modelo.pago.PersonaFisica;
 import TP_Back.appSpringTP.repositorios.RepositorioPersonaFisica;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -25,7 +26,7 @@ public class PersonaFisicaDAOImpl implements PersonaFisicaDAO {
     }
 
     @Override
-    public java.util.Optional<PersonaFisica> getByHuesped(String tipoDocumento, String numeroDocumento) {
+    public Optional<PersonaFisica> getByHuesped(String tipoDocumento, String numeroDocumento) {
         return repositorioPersonaFisica.findByHuespedDocumento(numeroDocumento, tipoDocumento);
     }
 }
