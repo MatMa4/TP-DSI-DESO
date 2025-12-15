@@ -1,5 +1,5 @@
 'use client'; 
-import React, { Fragment } from 'react'; // Importamos Fragment
+import React from 'react'; 
 import { SelectedReservation } from '../types/indexCU4-5-15'; 
 
 interface ReservaVerificationProps {

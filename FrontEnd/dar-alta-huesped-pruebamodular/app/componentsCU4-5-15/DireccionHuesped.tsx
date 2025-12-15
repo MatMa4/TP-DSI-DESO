@@ -1,16 +1,12 @@
 'use client'
 import React from 'react';
-// Fix: Se quita la extensión .tsx. Es más estándar no incluirla
-// y dejar que el bundler (Next.js/esbuild) resuelva el archivoo.
 import InputField from './InputField';
-// Fix: Se quita la extensión .tsx también aquí.
 import { Direccion } from '../types/indexCU4-5-15';
 
-// Tipos para las props
 export interface DireccionHuespedProps {
   direccion: Direccion;
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  errors: Record<string, string>; // Pasamos todos los errores
+  errors: Record<string, string>; 
 }
 
 const DireccionHuesped: React.FC<DireccionHuespedProps> = ({

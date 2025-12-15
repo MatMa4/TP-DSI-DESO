@@ -1,19 +1,6 @@
 'use client'
 import React from 'react';
 
-// Tipos para las propss
-interface ModalConfirmacionProps {
-  show: boolean;
-  title: string;
-  message: string | React.ReactNode;
-  icon: string;
-  onClose: () => void;
-  onConfirm: () => void;
-  closeText: string;
-  confirmText: string;
-  confirmClass?: string;
-}
-
 const ModalConfirmacion: React.FC<any> = ({
   show,
   title,

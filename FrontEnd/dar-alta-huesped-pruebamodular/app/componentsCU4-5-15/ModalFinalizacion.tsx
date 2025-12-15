@@ -1,7 +1,6 @@
 'use client'
 import React,{ useEffect, useCallback } from 'react';
 
-// Tipos para las props
 interface ModalExitoProps {
   show: boolean;
   message: string;

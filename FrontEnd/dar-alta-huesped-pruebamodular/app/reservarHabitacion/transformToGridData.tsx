@@ -1,9 +1,8 @@
 
-import { RoomStatusDTO, RoomCellData, ROOM_TYPES } from '../types/indexCU4-5-15';
+import { RoomStatusDTO, RoomCellData } from '../types/indexCU4-5-15';
 
 
 const formatToYMD = (dateStr: string): string => {
-    // Usamos el constructor de Date para manejar ISO y extraemos solo la fecha.
     const date = new Date(dateStr);
     const timezoneOffset = date.getTimezoneOffset() * 60000;
     const correctedDate = new Date(date.getTime() + timezoneOffset);

@@ -1,14 +1,13 @@
 'use client';
 import React from 'react';
-import '../styles/stylesCU4-5-15.css'; // Asegúrate de que esta ruta sea correcta
+import '../styles/stylesCU4-5-15.css'; 
 
 interface FlowDecisionModalProps {
     show: boolean;
     message: string;
-    // Callbacks para las tres acciones del flujo de trabajo
-    onContinue: () => void; // Seguir cargando huéspedes (CU15: BUSQUEDA_HUESPED)
-    onAnotherRoom: () => void; // Cargar otra habitación (Volver a GRILLA_DISPONIBILIDAD)
-    onExit: () => void; // Salir (Volver al menú principal)
+    onContinue: () => void; 
+    onAnotherRoom: () => void; 
+    onExit: () => void; 
 }
 
 const FlowDecisionModal: React.FC<FlowDecisionModalProps> = ({ 
@@ -33,8 +32,7 @@ const FlowDecisionModal: React.FC<FlowDecisionModalProps> = ({
                 </div>
                 
                 <div className="modal-footer" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    
-                    {/* Botón 1: Seguir Cargando Huéspedes */}
+
                     <button 
                         className="btn-accept" 
                         onClick={onContinue}
@@ -42,17 +40,15 @@ const FlowDecisionModal: React.FC<FlowDecisionModalProps> = ({
                         Seguir Cargando
                     </button>
 
-                    {/* Botón 2: Cargar Otra Habitación */}
                     <button 
                         className="btn-accept" 
                         onClick={onAnotherRoom}
                     >
                         Cargar Otra Habitación
                     </button>
-                    
-                    {/* Botón 3: Salir */}
+
                     <button 
-                        className="btn-cancel" // Puedes usar una clase de botón diferente para "Salir"
+                        className="btn-cancel" 
                         onClick={onExit}
                     >
                         Salir
