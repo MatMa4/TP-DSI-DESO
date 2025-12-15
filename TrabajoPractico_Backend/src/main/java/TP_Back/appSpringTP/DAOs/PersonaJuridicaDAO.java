@@ -8,6 +8,9 @@ package TP_Back.appSpringTP.DAOs;
  *
  * @author mateo
  */
+import TP_Back.appSpringTP.modelo.pago.PersonaJuridica;
+
 public interface PersonaJuridicaDAO {
-    
+    PersonaJuridica save(PersonaJuridica personaJuridica);
+    java.util.Optional<PersonaJuridica> buscarPorCuit(String cuit);
 }

@@ -9,19 +9,48 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/reservas") 
+@RequestMapping("/reservas")
 public class ControladorReserva {
 
     @Autowired
     private GestorDeReservas gestorDeReservas;
 
-    @PostMapping 
+    @PostMapping
     public ResponseEntity<?> crearReserva(@RequestBody List<ReservaDTO> reservaDTO) {
         try {
             List<Reserva> nuevaReserva = gestorDeReservas.crearReserva(reservaDTO);
             return ResponseEntity.ok(nuevaReserva);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/cancelar")
+    public ResponseEntity<?> cancelarReserva(@RequestBody Reserva reserva) {
+        try {
+            if (reserva.getIdReserva() == null) {
+                return ResponseEntity.badRequest().body("El ID de la reserva es obligatorio.");
+            }
+            gestorDeReservas.cancelarReserva(reserva.getIdReserva());
+            return ResponseEntity.ok("Reserva cancelada exitosamente.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error al cancelar la reserva: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/buscar")
+    public ResponseEntity<?> buscarReservas(
+            @RequestParam(required = false) String nombre,
+            @RequestParam String apellido) {
+        try {
+            List<Reserva> reservas = gestorDeReservas.buscarReservas(nombre.toUpperCase(), apellido.toUpperCase());
+            return ResponseEntity.ok(reservas);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error al buscar reservas: " + e.getMessage());
         }
     }
 }

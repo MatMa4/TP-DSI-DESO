@@ -28,13 +28,14 @@ public class GestorDeReservas {
             reserva.setFechaInicio(dto.getFechaInicio());
             reserva.setFechaFin(dto.getFechaFin());
             reserva.setEstado(dto.getEstado());
-            reserva.setNombre(dto.getNombre());
-            reserva.setApellido(dto.getApellido());
+            reserva.setNombre(dto.getNombre().toUpperCase());
+            reserva.setApellido(dto.getApellido().toUpperCase());
             reserva.setTelefono(dto.getTelefono());
 
             if (dto.getHabitacionNumero() != null) {
                 Habitacion habitacion = habitacionDAO.findById(dto.getHabitacionNumero())
-                        .orElseThrow(() -> new RuntimeException("Habitación no encontrada con número: " + dto.getHabitacionNumero()));
+                        .orElseThrow(() -> new RuntimeException(
+                                "Habitación no encontrada con número: " + dto.getHabitacionNumero()));
                 reserva.setHabitacion(habitacion);
             }
 
@@ -44,12 +45,26 @@ public class GestorDeReservas {
         return reservaDAO.saveAll(reservas);
     }
 
-
     public void cancelarReserva(Integer idReserva) {
-        reservaDAO.deleteById(idReserva);
+        Reserva reserva = reservaDAO.findById(idReserva)
+                .orElseThrow(() -> new RuntimeException("Reserva no encontrada con id: " + idReserva));
+        reserva.setEstado("CANCELADA");
+        reservaDAO.save(reserva);
     }
 
     public List<Reserva> buscarReservas() {
         return reservaDAO.findAll();
+    }
+
+    public List<Reserva> buscarReservas(String nombre, String apellido) {
+        if (apellido == null || apellido.trim().isEmpty()) {
+            throw new IllegalArgumentException("El apellido es obligatorio.");
+        }
+
+        if (nombre == null || nombre.trim().isEmpty()) {
+            return reservaDAO.findByApellidoContainingIgnoreCase(apellido);
+        } else {
+            return reservaDAO.findByNombreContainingIgnoreCaseOrApellidoContainingIgnoreCase(nombre, apellido);
+        }
     }
 }

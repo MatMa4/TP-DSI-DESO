@@ -14,4 +14,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface OcupacionDAO {
         public void crearOcupacion(Ocupacion ocupacion);
+        public Ocupacion getOcupacionPorHabitacionYFecha(int numero, java.util.Date fecha);
+        public Ocupacion getOcupacionById(int id);
 }

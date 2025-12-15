@@ -39,13 +39,13 @@ public class Huesped {
     private String posicionIVA;
     private boolean alojado;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumns({
         @JoinColumn(name = "direccion_calle", referencedColumnName = "calle"),
-        @JoinColumn(name = "direccion_numero", referencedColumnName = "numero"),
         @JoinColumn(name = "direccion_localidad", referencedColumnName = "localidad"),
-        @JoinColumn(name = "direccion_provincia", referencedColumnName = "provincia"),
-        @JoinColumn(name = "direccion_pais", referencedColumnName = "pais")
+        @JoinColumn(name = "direccion_numero", referencedColumnName = "numero"),
+        @JoinColumn(name = "direccion_pais", referencedColumnName = "pais"),
+        @JoinColumn(name = "direccion_provincia", referencedColumnName = "provincia")
     })
     private Direccion direccionHuesped;
  
