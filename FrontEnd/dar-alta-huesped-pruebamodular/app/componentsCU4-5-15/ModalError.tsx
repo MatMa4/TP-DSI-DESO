@@ -1,6 +1,6 @@
-// --- Archivo: app/components/ModalError.tsx (CORREGIDO) ---
 'use client'; 
 import React from 'react';
+import '../styles/stylesCU4-5-15.css'
 
 interface ModalErrorProps {
     show: boolean;

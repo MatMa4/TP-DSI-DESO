@@ -61,23 +61,21 @@ export interface RoomDetail {
     numero: number;
     costoPorNoche: number;
     capacidad: number;
-    estado: string; // "HABITABLE"
-    tipoHabitacion: string; // "IndividualEstándar"
+    estado: string; 
+    tipoHabitacion: string; 
     descripcion: null;
     camaDoble: number,
 }
 
 export interface OcupacionDetail {
-    fechaInicio: string; // Ej: "2025-12-01T03:00:00.000+00:00"
-    fechaFin: string;   // Ej: "2025-12-05T03:00:00.000+00:00"
-    // ... otros detalles de ocupación
+    fechaInicio: string; 
+    fechaFin: string;   
 }
 
-// Interfaz para la respuesta del Back-End (GET /habitaciones)
 export interface RoomStatusDTO {
     habitacion: RoomDetail;
     ocupaciones: OcupacionDetail[];
-    reservas: any[]; // Usamos 'any' si la estructura es desconocida o compleja
+    reservas: any[];
 }
 export interface HabitacionDTO {
     numero: number;

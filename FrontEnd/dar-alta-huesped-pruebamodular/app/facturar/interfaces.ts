@@ -45,9 +45,6 @@ export interface HabitacionDTO {
     camaKingsize: number;
     tipoHabitacion: string;
 }
-export interface consumoDTO{
-
-}
 export interface ItemConsumoDTO {
     idConsumo: number;
     tipoServicio: string;

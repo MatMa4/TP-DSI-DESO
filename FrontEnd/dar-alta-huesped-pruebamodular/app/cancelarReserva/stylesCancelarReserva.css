@@ -1,0 +1,234 @@
+.main-container-cancelar {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    background-color: #f5f5f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.cancelar-layout {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+/* --- PANEL IZQUIERDO --- */
+.left-pane-cancelar {
+    width: 35%;
+    padding: 40px;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    z-index: 10;
+    color: #000000;
+}
+
+.main_title {
+    color: #ffffff;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.form-container-cancelar {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-actions-cancelar {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+/* --- PANEL DERECHO --- */
+.right-pane-cancelar {
+    width: 65%;
+    background-color: #dbeafe; 
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow-y: auto;
+}
+
+.results-box-cancelar {
+    background-color: transparent;
+    width: 100%;
+    max-width: 800px;
+}
+
+.results-header {
+    text-align: center;
+    color: #1e3a8a;
+    margin-bottom: 20px;
+}
+
+/* --- TARJETAS DE RESERVA --- */
+.reserva-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+    cursor: pointer;
+    border: 1px solid transparent; 
+    position: relative;
+    padding-left: 50px;
+}
+.reserva-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+.reserva-card.selected {
+    border: 1px solid #1e3a8a;
+    background-color: #eff6ff;
+}
+
+.reserva-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.reserva-info strong {
+    color: #333;
+    font-size: 1.1em;
+}
+
+.reserva-info span {
+    color: #666;
+    font-size: 0.9em;
+}
+.reserva-checkbox {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #1e3a8a;
+}
+/* --- BARRA FLOTANTE DE ACCIONES --- */
+.bulk-actions-bar {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    /* Estado Oculto (Por defecto) */
+    transform: translate(-50%, 150%); /* Lo movemos hacia abajo (fuera de vista) */
+    opacity: 0;
+    
+    background-color: white;
+    padding: 15px 30px;
+    border-radius: 50px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 1000;
+    
+    /* La magia para que suba y baje suavemente */
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+    
+    /* Importante: Cuando está oculta, no debe bloquear clicks */
+    pointer-events: none; 
+}
+
+/* Estado Visible */
+.bulk-actions-bar.visible {
+    transform: translate(-50%, 0); /* Posición original */
+    opacity: 1;
+    pointer-events: all; /* Reactivamos los clicks */
+}
+
+.bulk-counter {
+    font-weight: bold;
+    color: #333;
+}
+
+/* --- BOTONES --- */
+.btn-search {
+    background-color: #1e3a8a;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background 0.3s;
+}
+
+.btn-search:hover {
+    background-color: #152c6b;
+}
+
+.btn-cancel {
+    background-color: #b0b0b0;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-cancelar-reserva {
+    background-color: #ef4444; 
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    
+}
+
+.btn-cancelar-reserva:hover {
+    background-color: #dc2626;
+}
+.input_box {
+    background-color: #C2C3C5 !important;
+    border: 1px solid #818283 !important;
+    border-radius: 30px !important;
+    height: 40px !important;
+    width: 350px !important;
+    padding-left: 20px !important;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+.box1_simplebox { 
+    width: 350px; 
+}
+
+.box1_simplebox label, .boxDocumento label {
+    font-size: 14px;
+    color: #444;
+    margin-left: 15px;
+    margin-bottom: 5px;
+    display: block;
+    text-align: left;
+}
+.header-title-box {
+    background-color: #6B99C3;
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 50px;
+    width: 470px;
+}
+.header-title-box h1 { margin: 0; font-size: inherit; line-height: 1.2; }
+.modal-actions{
+    display: flex;
+    justify-content: space-between;
+}

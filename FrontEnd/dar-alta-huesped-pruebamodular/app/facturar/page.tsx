@@ -64,6 +64,7 @@ export default function GenerarFactura() {
 
     // --- LÓGICA DE BÚSQUEDA (HANDLES)---
     const BASE_URL = 'http://localhost:8080';
+
     const handleSearch = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!validateForm()) return;
@@ -352,7 +353,6 @@ export default function GenerarFactura() {
                             type="number"
                         />
                         
-                        {/* Campo para la hora de salida */}
                         <InputField 
                             label="Hora de Salida" 
                             name="horaSalida" 
@@ -372,7 +372,7 @@ export default function GenerarFactura() {
                     </form>
                 </div>
 
-                {/* PANEL DERECHO (RESULTADOS) */}
+                {/* PANEL DERECHO */}
                 <div className="right-pane-facturar">
                     <div className="results-box-facturar">
                         <SeleccionHuespedes 
@@ -388,8 +388,8 @@ export default function GenerarFactura() {
             {showCuitModal && (
             <CuitInputModal 
                 show={showCuitModal}
-                onClose={() => setShowCuitModal(false)} // Vuelve a la selección de huésped
-                onNext={handleBuscarRazonSocial} // Llama a la simulación de búsqueda
+                onClose={() => setShowCuitModal(false)} 
+                onNext={handleBuscarRazonSocial} 
             />
             )}
 
@@ -397,8 +397,8 @@ export default function GenerarFactura() {
             <RazonSocialConfirmModal
                 show={showRazonSocialModal}
                 razonSocial={razonSocial}
-                onAccept={handleConfirmarRazonSocial} // Pasa al DetalleFacturaModal
-                onCancel={handleRechazarRazonSocial}  // Vuelve a CuitInputModal
+                onAccept={handleConfirmarRazonSocial}
+                onCancel={handleRechazarRazonSocial}
             />
             )}
 
@@ -407,7 +407,7 @@ export default function GenerarFactura() {
                 show={showDetalleModal}
                 onClose={handleCerrarModal}
                 responsable={responsableSeleccionado}
-                itemsPendientes={itemsPendientes} // La lista de ítems sin facturar
+                itemsPendientes={itemsPendientes}
                 onConfirmFactura={handleGenerarFactura}
                 precioEstadia={datosOcupacion.precioTotal}
                 estadiaYaFacturada={estadiaFacturada}
