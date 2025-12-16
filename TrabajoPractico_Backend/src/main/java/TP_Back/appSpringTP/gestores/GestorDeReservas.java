@@ -21,6 +21,9 @@ public class GestorDeReservas {
     private HabitacionDAO habitacionDAO;
 
     public List<Reserva> crearReserva(List<ReservaDTO> listaDto) {
+        if (listaDto == null || listaDto.isEmpty()) {
+            throw new IllegalArgumentException("La lista de reservas no puede ser nula o vacía.");
+        }
         List<Reserva> reservas = new ArrayList<>();
 
         for (ReservaDTO dto : listaDto) {
@@ -46,6 +49,9 @@ public class GestorDeReservas {
     }
 
     public void cancelarReserva(Integer idReserva) {
+        if (idReserva == null) {
+            throw new IllegalArgumentException("El ID de la reserva es obligatorio.");
+        }
         Reserva reserva = reservaDAO.findById(idReserva)
                 .orElseThrow(() -> new RuntimeException("Reserva no encontrada con id: " + idReserva));
         reserva.setEstado("CANCELADA");
@@ -53,6 +59,9 @@ public class GestorDeReservas {
     }
 
     public void cancelarReservas(List<Reserva> reservas) {
+        if (reservas == null || reservas.isEmpty()) {
+            throw new IllegalArgumentException("La lista de reservas a cancelar no puede ser nula o vacía.");
+        }
         for (Reserva reserva : reservas) {
             if (reserva.getIdReserva() == null) {
                 throw new IllegalArgumentException("El ID de la reserva es obligatorio para todas las reservas.");
