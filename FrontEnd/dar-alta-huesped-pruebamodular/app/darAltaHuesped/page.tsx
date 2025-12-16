@@ -62,28 +62,24 @@ export default function Home() {
     const checked = e.target.checked; 
     
     // LÓGICA DE MAYÚSCULAS:
-    // Si es checkbox usa 'checked'.
-    // Si es fecha (date), usa el valor original.
-    // Para todo lo demás (text, email, tel), lo convierte a UpperCase inmediatamente.
     const valorFinal = type === 'checkbox' 
         ? checked 
         : (type === 'date' ? value : value.toUpperCase());
 
     if (name.startsWith('direccionHuesped.')) {
       const field = name.split('.')[1];
-     setFormData((prev) => ({
+      setFormData((prev) => ({
          ...prev,
          direccionHuesped: {
-
            ...prev.direccionHuesped,
-           [field]: valorFinal, // Asignamos el valor ya en mayúscula
+           [field]: valorFinal, 
          },
       }));
       setErrors((prev) => ({ ...prev, [name]: '' })); 
     } else {
       setFormData({
         ...formData,
-        [name]: valorFinal, // Asignamos el valor ya en mayúscula
+        [name]: valorFinal, 
       });
       setErrors((prev) => ({ ...prev, [name]: '' }));
 
@@ -98,7 +94,7 @@ export default function Home() {
     setShowCancelModal(true);
   };
 
-  // --- FUNCIÓN AUXILIAR PARA GUARDAR (Definida una sola vez) ---
+  // --- FUNCIÓN AUXILIAR PARA GUARDAR ---
   const guardarHuespedDirecto = async (dataAGuardar: any) => {
       try {
           const res = await fetch('http://localhost:8080/huespedes', {
@@ -134,6 +130,9 @@ export default function Home() {
     if (Object.keys(newErrors).length === 0) {
   
       // 1. APLICAR TRIM() A TODO Y MAYÚSCULAS
+      // Usamos una función auxiliar para evitar errores con nulls
+      const safeTrim = (str: any) => (str || '').toString().trim();
+
       const transformedData = {
         ...formData, 
         // --- DATOS PERSONALES ---
@@ -154,7 +153,7 @@ export default function Home() {
         fechaNacimiento: formData.fechaNacimiento,
         alojado: formData.alojado,
         
-        // --- DIRECCIÓN (También aplicamos limpieza de espacios internos) ---
+        // --- DIRECCIÓN (Limpieza y Protección contra NULL) ---
         direccionHuesped: {
           calle: formData.direccionHuesped.calle.replace(/\s+/g, ' ').trim().toUpperCase(),
           departamento: formData.direccionHuesped.departamento.replace(/\s+/g, ' ').trim().toUpperCase(),
@@ -163,15 +162,14 @@ export default function Home() {
           pais: formData.direccionHuesped.pais.replace(/\s+/g, ' ').trim().toUpperCase(),
           numero: formData.direccionHuesped.numero.trim(),
           piso: formData.direccionHuesped.piso.trim(),
-          codigo: formData.direccionHuesped.codigo.trim(),
+          codigo: (formData.direccionHuesped.codigo || '').trim(),
         }
       };
       
       setFormData(transformedData);
       let finalData = transformedData;
     
-      // LOG PARA VER EL JSON
-      // JSON.stringify(objeto, null, 2) hace que se vea ordenado y legible en la consola
+      // LOG PARA VER EL JSON QUE SE ENVÍA
       console.log("📦 DATOS LIMPIOS A ENVIAR:", JSON.stringify(finalData, null, 2));
 
       try {
@@ -221,7 +219,7 @@ export default function Home() {
     setHighlightDocumento(false);
     if (!pendingFinalData) return;
     
-    // Si confirma conflicto, usamos la misma lógica de guardado (sobrescribe por ser PUT)
+    // Si confirma conflicto, usamos la misma lógica de guardado
     await guardarHuespedDirecto(pendingFinalData);
   };
 
