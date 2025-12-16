@@ -58,13 +58,12 @@ export default function ModificarHuesped() {
             const data = JSON.parse(datosGuardados);
             const dataFormateada = {
                 ...data,
-                // Asegurar formato fecha para el input date (YYYY-MM-DD)
                 fechaNacimiento: data.fechaNacimiento ? data.fechaNacimiento.split('T')[0] : '',
                 direccionHuesped: data.direccionHuesped || INITIAL_FORM.direccionHuesped
             };
 
             setFormData(dataFormateada);
-            setOriginalData(dataFormateada); // Guardamos el estado inicial exacto para el backend
+            setOriginalData(dataFormateada); 
         } catch (error) {
             console.error("Error al leer datos del storage", error);
             alert("Error al cargar los datos transferidos.");
@@ -116,21 +115,14 @@ export default function ModificarHuesped() {
   };
 
   // --- GUARDAR (CU10 - ACTUALIZAR) ---
-  // AHORA ES METODO POST Y RECIBE UN ARRAY DE 2 OBJETOS
   const guardarHuespedDirecto = async (dataAGuardar: any) => {
-      
-      // Construimos el body como indicaste: [Original, Nuevo]
-      // originalData sirve como la "Clave Primaria Compuesta" original para buscar en BD
-      const bodyPayload = [originalData, dataAGuardar];
+      const bodyPayload = [dataAGuardar, originalData];
 
       console.log("📡 --- INICIO PETICIÓN POST (CU10 Actualizar) ---");
-      console.log("1️⃣ Huésped Original (Para identificar):", originalData);
-      console.log("2️⃣ Huésped Modificado (Nuevos datos):", dataAGuardar);
-      console.log("📦 Body enviado (Array):", JSON.stringify(bodyPayload));
-      console.log("-----------------------------------------------");
+      console.log("1️⃣ Huésped Modificado:", dataAGuardar);
+      console.log("2️⃣ Huésped Original:", originalData);
 
       try {
-          // Cambiado a POST según tu instrucción
           const res = await fetch('http://localhost:8080/huespedes', {
             method: 'POST', 
             headers: { 'Content-Type': 'application/json' },
@@ -158,7 +150,6 @@ export default function ModificarHuesped() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      // 1. Preparar datos (Trim/Upper) - SIN ID
       const transformedData = {
         ...formData, 
         nombre: formData.nombre.trim(),
@@ -173,8 +164,6 @@ export default function ModificarHuesped() {
         posicionIVA: formData.posicionIVA.trim() ? formData.posicionIVA.trim() : "CONSUMIDOR FINAL",
         fechaNacimiento: formData.fechaNacimiento,
         
-        // ELIMINADO: id: formData.id (Ya no se usa ID, la PK es Tipo+Numero)
-        
         direccionHuesped: {
           calle: formData.direccionHuesped.calle.trim(),
           departamento: formData.direccionHuesped.departamento.trim(),
@@ -187,8 +176,6 @@ export default function ModificarHuesped() {
         }
       };
 
-      // 2. LÓGICA DE CAMBIO DE PK (Documento)
-      // Comparamos contra originalData para ver si tocó la clave compuesta
       const documentoCambio = 
           transformedData.tipoDocumento !== originalData.tipoDocumento || 
           transformedData.numeroDocumento !== originalData.numeroDocumento;
@@ -199,15 +186,12 @@ export default function ModificarHuesped() {
             params.append('tipo', transformedData.tipoDocumento);
             params.append('numero', transformedData.numeroDocumento);
             
-            // Verificamos si la NUEVA clave ya existe en otro lado
             const checkRes = await fetch(`http://localhost:8080/huespedes/consultarDocumento?${params.toString()}`);
 
             if (checkRes.ok) {
-                // Si está libre (OK), procedemos a actualizar
                 await guardarHuespedDirecto(transformedData);
             } 
             else if (checkRes.status === 409) {
-                // Conflicto: Ya existe alguien MÁS con ese DNI nuevo
                 setPendingFinalData(transformedData); 
                 setModalMessage(`¡CUIDADO! El tipo y número de documento ya existen en el sistema.`);
                 setShowModal(true);
@@ -217,7 +201,6 @@ export default function ModificarHuesped() {
             alert("Error conectando con servidor para validar documento.");
           }
       } else {
-          // No cambió la clave primaria, actualización directa
           await guardarHuespedDirecto(transformedData);
       }
     } 
@@ -225,50 +208,60 @@ export default function ModificarHuesped() {
 
   // --- LÓGICA BORRAR (CU11) ---
   const handleBorrarClick = () => {
-    // Protección extra: Si está alojado, no hace nada
-    if (formData.alojado) return;
-
     setDeleteMessage(`¿Está seguro que desea eliminar del sistema al huésped ${formData.nombre} ${formData.apellido}?`);
     setCanDelete(true); 
     setShowDeleteModal(true);
   };
 
   const confirmDelete = async () => {
+      // Función auxiliar para mostrar errores en el modal reutilizando lógica
+      const mostrarError = (mensaje: string) => {
+        setShowDeleteModal(false); 
+        setTimeout(() => {
+            setDeleteMessage(mensaje);
+            setCanDelete(false); // Quita el botón borrar, deja solo cerrar
+            setShowDeleteModal(true);
+        }, 100);
+      };
+
       try {
-          console.log("🗑️ Enviando DELETE con BODY:", formData);
+          console.log("🗑️ Enviando DELETE con BODY:", originalData);
           
           const res = await fetch('http://localhost:8080/huespedes', { 
               method: 'DELETE',
-              headers: { 
-                  'Content-Type': 'application/json' 
-              },
-              // En DELETE solemos mandar el objeto para identificar la PK compuesta
-              body: JSON.stringify(formData) 
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(originalData) 
           });
 
+          // --- MANEJO DE RESPUESTAS SEGÚN CU11 ---
           if (res.ok) {
+              // ÉXITO (200 OK)
               localStorage.removeItem('datosHuespedModificar');
               setShowDeleteModal(false);
               alert("Huésped eliminado correctamente.");
               router.push('/menuCU1'); 
           } 
           else if (res.status === 409) {
-              // ERROR 409: Conflicto por historial
-              setShowDeleteModal(false); 
-              setTimeout(() => {
-                  setDeleteMessage("El huésped NO puede ser eliminado pues se ha alojado en el Hotel en alguna oportunidad (Integridad Referencial).");
-                  setCanDelete(false); 
-                  setShowDeleteModal(true);
-              }, 100);
+              // CONFLICTO: Tiene facturas o historial
+              mostrarError("No se pudo eliminar al huésped porque tiene una factura a su nombre o registros asociados.");
           } 
+          else if (res.status === 400) {
+              // BAD REQUEST: Está alojado (Lógica de negocio)
+              mostrarError("El huésped estuvo ALOJADO en el hotel y no puede ser eliminado.");
+          }
+          else if (res.status === 404) {
+              // NOT FOUND: No existe
+              mostrarError("Error: No se encontró al huésped en la base de datos (quizás ya fue eliminado).");
+          }
           else {
-              console.error("Error al eliminar:", res.status);
-              alert(`Ocurrió un error al intentar eliminar. Código: ${res.status}`);
+              // OTROS ERRORES (500, etc)
+              console.error("Error desconocido al eliminar:", res.status);
+              mostrarError(`Ocurrió un error inesperado. Código: ${res.status}`);
           }
 
       } catch (e) {
           console.error(e);
-          alert("Error de conexión con el servidor.");
+          mostrarError("Error de conexión con el servidor.");
       }
   };
 
@@ -331,19 +324,12 @@ export default function ModificarHuesped() {
         <div className="container" style={{ justifyContent: 'space-between', marginTop: '20px' }}>
           <div className="box1" style={{ flex: 0 }}>
              
-             {/* BOTÓN BORRAR */}
+             {/* BOTÓN BORRAR: Siempre habilitado */}
              <button 
                 className="button2 red" 
                 type="button" 
                 onClick={handleBorrarClick}
-                disabled={formData.alojado}
-                title={formData.alojado ? "No se puede borrar un huésped alojado." : "Eliminar huésped"}
-                style={{
-                    backgroundColor: formData.alojado ? '#555555' : undefined,
-                    borderColor: formData.alojado ? '#444444' : undefined,
-                    cursor: formData.alojado ? 'not-allowed' : 'pointer',
-                    opacity: formData.alojado ? 0.7 : 1
-                }}
+                title="Eliminar huésped"
              >
                 BORRAR
              </button>
