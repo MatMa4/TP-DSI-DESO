@@ -1,5 +1,5 @@
 "# TP-DSI-DESO" 
-Podrá acceder a los archivos en "https://github.com/MatMa4/TP-Dise-o-de-Sistemas-Entrega-"
+Podrá acceder a los archivos en "https://github.com/MatMa4/TP-DSI-DESO"
 
 Para ejecutar la aplicación primero se deben seguir los siguientes pasos:
 1) Abrir la carpeta "TrabajoPractico_Backend" desde NetBeans. 
