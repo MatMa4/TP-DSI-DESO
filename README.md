@@ -6,13 +6,19 @@ Para ejecutar la aplicación primero se deben seguir los siguientes pasos:
 
 2) Ejecutar el contenido de la carpeta presionando el botón run.
 
-3) Acceder a la carpeta "FrontEnd", luego a la carpeta "dar-alta-huesped-pruebamodular".
+3) Descargar Node.js, es el entono necesario para ejecutar Next.js, de https://nodejs.org/es/download, 
+            una vez instalado verifica la instalacion abriendo una terminal y escribiendo el comando "node -v", 
+            deberia verse la version de node, esta debe ser v18 o superior.
 
-4) Abrir la terminal de Windows desde esta carpeta.
+4) Acceder a la carpeta "FrontEnd", luego a la carpeta "dar-alta-huesped-pruebamodular".
 
-5) Ingresar en la terminal el comando "npm run dev"
+5) Abrir la terminal de Windows desde esta carpeta.
 
-6) Si esto fue exitoso se mostrará en la consola:
+6) Ingresar en la terminal el comando "npm install", esto puede tardar unos minutos
+
+7) Ingresar en la terminal el comando "npm run dev", para levantar el front
+
+8) Si esto fue exitoso se mostrará en la consola:
 
 > dar-alta-huesped-pruebamodular@0.1.0 dev
 > next dev
@@ -24,8 +30,8 @@ Para ejecutar la aplicación primero se deben seguir los siguientes pasos:
 
  ✓ Starting...
 
-7) Una vez que estén iniciadas las aplicaciones de NetBeans y Next debe acceder al siguiente link desde un explorador: "http://localhost:3000"
+9) Una vez que estén iniciadas las aplicaciones de NetBeans y Next debe acceder al siguiente link desde un explorador: "http://localhost:3000"
 
-8) En el explorador se debería mostrar un formulario de login, el usuario es "Admin" y la contraseña es "1contraseña2Segura3"
+10) En el explorador se debería mostrar un formulario de login, el usuario es "Admin" y la contraseña es "1contraseña2Segura3"
 
-9) Si el logeado fue exitoso, se vera un menu que lleve a los distintos casos de uso implementados
+11) Si el logeado fue exitoso, se vera un menu que lleve a los distintos casos de uso implementados
