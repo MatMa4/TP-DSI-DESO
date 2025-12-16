@@ -18,7 +18,7 @@ public class ControladorReserva {
     @PostMapping
     public ResponseEntity<?> crearReserva(@RequestBody List<ReservaDTO> reservaDTO) {
         try {
-            List<Reserva> nuevaReserva = gestorDeReservas.crearReserva(reservaDTO);
+            List<ReservaDTO> nuevaReserva = gestorDeReservas.crearReserva(reservaDTO);
             return ResponseEntity.ok(nuevaReserva);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -26,7 +26,7 @@ public class ControladorReserva {
     }
 
     @PutMapping("/cancelar")
-    public ResponseEntity<?> cancelarReserva(@RequestBody List<Reserva> reservas) {
+    public ResponseEntity<?> cancelarReserva(@RequestBody List<ReservaDTO>reservas) {
         try {
             gestorDeReservas.cancelarReservas(reservas);
             return ResponseEntity.ok("Reservas canceladas exitosamente.");
@@ -44,7 +44,7 @@ public class ControladorReserva {
             @RequestParam(required = false) String nombre,
             @RequestParam String apellido) {
         try {
-            List<Reserva> reservas = gestorDeReservas.buscarReservas(nombre.toUpperCase(), apellido.toUpperCase());
+            List<ReservaDTO> reservas = gestorDeReservas.buscarReservas(nombre.toUpperCase(), apellido.toUpperCase());
             return ResponseEntity.ok(reservas);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -20,7 +20,7 @@ public class GestorDeReservas {
     @Autowired
     private HabitacionDAO habitacionDAO;
 
-    public List<Reserva> crearReserva(List<ReservaDTO> listaDto) {
+    public List<ReservaDTO> crearReserva(List<ReservaDTO> listaDto) {
         if (listaDto == null || listaDto.isEmpty()) {
             throw new IllegalArgumentException("La lista de reservas no puede ser nula o vacía.");
         }
@@ -58,11 +58,11 @@ public class GestorDeReservas {
         reservaDAO.save(reserva);
     }
 
-    public void cancelarReservas(List<Reserva> reservas) {
+    public void cancelarReservas(List<ReservaDTO> reservas) {
         if (reservas == null || reservas.isEmpty()) {
             throw new IllegalArgumentException("La lista de reservas a cancelar no puede ser nula o vacía.");
         }
-        for (Reserva reserva : reservas) {
+        for (ReservaDTO reserva : reservas) {
             if (reserva.getIdReserva() == null) {
                 throw new IllegalArgumentException("El ID de la reserva es obligatorio para todas las reservas.");
             }
@@ -70,11 +70,11 @@ public class GestorDeReservas {
         }
     }
 
-    public List<Reserva> buscarReservas() {
+    public List<ReservaDTO> buscarReservas() {
         return reservaDAO.findAll();
     }
 
-    public List<Reserva> buscarReservas(String nombre, String apellido) {
+    public List<ReservaDTO> buscarReservas(String nombre, String apellido) {
         if (apellido == null || apellido.trim().isEmpty()) {
             throw new IllegalArgumentException("El apellido es obligatorio.");
         }

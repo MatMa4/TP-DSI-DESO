@@ -15,4 +15,10 @@ public interface repositorioReserva extends JpaRepository<Reserva, Integer> {
        List<Reserva> buscarPorListaHabitaciones(@Param("habitaciones") List<Habitacion> habitaciones,
                      @Param("fechaInicio") Date fechaInicio,
                      @Param("fechaFin") Date fechaFin);
+        @Query("SELECT r FROM Reserva r WHERE UPPER(r.apellido) LIKE UPPER(CONCAT('%', :apellido, '%')) AND r.estado <> 'CANCELADA'")
+        List<Reserva> findByApellidoContainingIgnoreCase(@Param("apellido") String apellido);
+
+        @Query("SELECT r FROM Reserva r WHERE (UPPER(r.nombre) LIKE UPPER(CONCAT('%', :nombre, '%')) OR UPPER(r.apellido) LIKE UPPER(CONCAT('%', :apellido, '%'))) AND r.estado <> 'CANCELADA'")
+        List<Reserva> findByNombreContainingIgnoreCaseOrApellidoContainingIgnoreCase(@Param("nombre") String nombre,
+                @Param("apellido") String apellido);
 }

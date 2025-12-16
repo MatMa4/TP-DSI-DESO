@@ -1,18 +1,17 @@
 package TP_Back.appSpringTP.DAOs;
 
+import TP_Back.appSpringTP.DTOs.ReservaDTO;
 import TP_Back.appSpringTP.modelo.reserva.Reserva;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import java.util.List;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import java.util.Optional;
+import org.springframework.stereotype.Service;
 
-@Repository
-public interface ReservaDAO extends JpaRepository<Reserva, Integer> {
-    @Query("SELECT r FROM Reserva r WHERE UPPER(r.apellido) LIKE UPPER(CONCAT('%', :apellido, '%')) AND r.estado <> 'CANCELADA'")
-    List<Reserva> findByApellidoContainingIgnoreCase(@Param("apellido") String apellido);
-
-    @Query("SELECT r FROM Reserva r WHERE (UPPER(r.nombre) LIKE UPPER(CONCAT('%', :nombre, '%')) OR UPPER(r.apellido) LIKE UPPER(CONCAT('%', :apellido, '%'))) AND r.estado <> 'CANCELADA'")
-    List<Reserva> findByNombreContainingIgnoreCaseOrApellidoContainingIgnoreCase(@Param("nombre") String nombre,
-            @Param("apellido") String apellido);
+@Service
+public interface ReservaDAO{
+    Optional<Reserva> findById(Integer idReserva);
+    ReservaDTO save(Reserva reserva);
+    List<ReservaDTO> saveAll(List<Reserva> reservas);
+    List<ReservaDTO> findAll();
+    List<ReservaDTO> findByApellidoContainingIgnoreCase(String apellido);
+    List<ReservaDTO> findByNombreContainingIgnoreCaseOrApellidoContainingIgnoreCase(String nombre, String apellido);
 }
