@@ -29,4 +29,10 @@ public class PersonaFisicaDAOImpl implements PersonaFisicaDAO {
     public Optional<PersonaFisica> getByHuesped(String tipoDocumento, String numeroDocumento) {
         return repositorioPersonaFisica.findByHuespedDocumento(numeroDocumento, tipoDocumento);
     }
+    
+    @Override
+    public Integer getIdResponsablePagoConHuesped(String tipoDocumento, String numeroDocumento) {
+        Optional<PersonaFisica> persona = repositorioPersonaFisica.findByHuespedDocumento(numeroDocumento, tipoDocumento);
+        return persona.get().getIdResponsable();
+    }
 }

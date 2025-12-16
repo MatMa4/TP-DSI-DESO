@@ -25,10 +25,15 @@ import TP_Back.appSpringTP.modelo.direccion.Direccion;
 import TP_Back.appSpringTP.modelo.huesped.Huesped;
 import TP_Back.appSpringTP.DAOs.PersonaFisicaDAO;
 import TP_Back.appSpringTP.DAOs.PersonaFisicaDAOImpl;
+import TP_Back.appSpringTP.DAOs.ResponsablePagoDAO;
+import TP_Back.appSpringTP.DTOs.pago.PersonaFisicaDTO;
 import TP_Back.appSpringTP.excepciones.HuespedNoEliminableException;
 import TP_Back.appSpringTP.modelo.pago.PersonaFisica;
+import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 
 @Service
+@AllArgsConstructor
 public class GestorHuespedes {
     @Autowired
     private final HuespedDAO huespedDAO;
@@ -36,12 +41,8 @@ public class GestorHuespedes {
     private final DireccionDAO direccionDAO;
     @Autowired
     private final PersonaFisicaDAO personaFisicaDAO;
-
-    public GestorHuespedes(HuespedDAOImpl huespedDAO, DireccionDAOImpl direccionDAO, PersonaFisicaDAOImpl personaFisicaDAO) {
-        this.huespedDAO = huespedDAO;
-        this.direccionDAO = direccionDAO;
-        this.personaFisicaDAO = personaFisicaDAO;
-    }
+    @Autowired
+    private final ResponsablePagoDAO responsablePagoDAO;
 
     public HuespedDTO registrarHuesped(HuespedDTO h) throws HuespedNoEncontradoException {
         DireccionDTO direccionDto=h.getDireccionHuesped();
@@ -103,6 +104,7 @@ public class GestorHuespedes {
             throw new RuntimeException("Error inesperado al guardar el huésped modificado", e);
         }
         Optional <HuespedDTO> resultado = huespedDAO.consultarDocumento(huespedes.get(0).getTipoDocumento(), huespedes.get(0).getNumeroDocumento());   
+        
         if(resultado.isPresent()){
             return resultado.get();
         }else{
@@ -116,7 +118,14 @@ public class GestorHuespedes {
             throw new HuespedNoEncontradoException();
         }
         if(!huespedAEliminar.get().getAlojado()){
-            huespedDAO.eliminar(huesped);
+            Integer idResponsable = personaFisicaDAO.getIdResponsablePagoConHuesped(huesped.getTipoDocumento(), huesped.getNumeroDocumento());
+            try{
+                responsablePagoDAO.eliminar(idResponsable);
+            }catch(DataIntegrityViolationException e){
+                throw e;
+            }
+            huespedDAO.eliminar(huesped);       
+            
             Optional <HuespedDTO> huespedEncontrado = huespedDAO.consultarDocumento(huesped.getTipoDocumento(), huesped.getNumeroDocumento());
             return huespedEncontrado.isEmpty();
         }else{

@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
+import lombok.Getter;
 
 /**
  *
@@ -21,6 +22,7 @@ import jakarta.persistence.Table;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "DTYPE")
 @Table(name = "responsable_de_pago")
+@Getter
 public abstract class ResponsableDePago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
