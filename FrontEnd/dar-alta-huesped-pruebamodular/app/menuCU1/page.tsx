@@ -57,6 +57,16 @@ export default function MenuPage() {
             <h3>Ocupar Habitaciones</h3>
             <p>CU 15 - Check-in y ocupación.</p>
           </a>
+          <a href="/facturar" className="menuCard">
+            <div className="menuIcon">💲​</div>
+            <h3>Facturar Ocuaciones</h3>
+            <p>CU 7 - facturar</p>
+          </a>
+          <a href="/cancelarReserva" className="menuCard">
+            <div className="menuIcon">☝️​</div>
+            <h3>Cancelar Reserva</h3>
+            <p>CU 06 - Cancelar Reserva</p>
+          </a>
         </div>
       </main>
   );

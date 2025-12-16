@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {HuespedDTO,ItemConsumoDTO} from './interfaces';
 
 interface DetalleFacturaModalProps {
@@ -24,19 +24,24 @@ const DetalleFacturaModal: React.FC<DetalleFacturaModalProps> = ({
     itemsPendientes,
     onConfirmFactura, }) => {
     
-    const [isEstadiaSelected, setIsEstadiaSelected] = useState(true);
+    const [isEstadiaSelected, setIsEstadiaSelected] = useState(!estadiaYaFacturada);
     const [itemsSeleccionados, setItemsSeleccionados] = useState<ItemConsumoLocal[]>(() => {
 
     if (!Array.isArray(itemsPendientes)) {
         return [];
     }
-    // 2. Mapeo 'itemsPendientes'.
+    // Mapeo itemsPendientes
     return itemsPendientes.map(item => ({ 
         ...item, 
         seleccionado: true
     }));
     
 });
+    useEffect(() => {
+        if (estadiaYaFacturada) {
+            setIsEstadiaSelected(false);
+        }
+    }, [estadiaYaFacturada]);
     
     // FUNCIÓN PARA CALCULAR EL TOTAL
     const totalConsumo = useMemo(() => {
@@ -46,7 +51,7 @@ const DetalleFacturaModal: React.FC<DetalleFacturaModalProps> = ({
     }, [itemsSeleccionados]);
     
     // Cálculo final
-    const precioEstadiaCalculado = isEstadiaSelected ? precioEstadia : 0;
+    const precioEstadiaCalculado = (isEstadiaSelected && !estadiaYaFacturada) ? precioEstadia : 0;
     const subtotal = totalConsumo + precioEstadiaCalculado;
     const iva = subtotal * IVA_PERCENTAGE;
     const totalFinal = subtotal + iva;
@@ -68,7 +73,8 @@ const DetalleFacturaModal: React.FC<DetalleFacturaModalProps> = ({
             .filter(item => item.seleccionado)
             .map(item => item.idConsumo);
         
-        const hayAlgoSeleccionado = idsAFacturar.length > 0 || isEstadiaSelected;
+        const vaAFacturarEstadia = isEstadiaSelected && !estadiaYaFacturada;
+        const hayAlgoSeleccionado = idsAFacturar.length > 0 || vaAFacturarEstadia;
             
         if (!hayAlgoSeleccionado) {
         alert("Debe seleccionar al menos un ítem para facturar.");
@@ -138,7 +144,14 @@ const DetalleFacturaModal: React.FC<DetalleFacturaModalProps> = ({
                 <p style={{ textAlign:'left'}}>Tipo de factura: A</p>
                 <div className="modal-actions">
                     <button className="btn-cancel" onClick={onClose}>Atrás</button>
-                    <button className="btn-accept" onClick={handleConfirm}>ACEPTAR</button>
+                    <button 
+                        className="btn-accept" 
+                        onClick={handleConfirm}
+                        disabled={totalFinal === 0}
+                        style={{ opacity: totalFinal === 0 ? 0.5 : 1, cursor: totalFinal === 0 ? 'not-allowed' : 'pointer' }}
+                    >
+                        ACEPTAR
+                    </button>
                 </div>
             </div>
         </div>

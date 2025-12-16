@@ -7,6 +7,7 @@ import { InputField } from '../componentsCU4-5-15/InputField';
 import ModalError from '../componentsCU4-5-15/ModalError';
 import CuitInputModal from './CuitImputModal';
 import RazonSocialConfirmModal from './RazonSocialConfirmModal';
+import ModalFin from './ModalExito';
 import '../styles/stylesFacturar.css'; 
 import {OcupacionDTO,HuespedDTO,ItemConsumoDTO,PersonaJuridicaDTO} from './interfaces';
 
@@ -36,6 +37,7 @@ export default function GenerarFactura() {
     const [errorMessage, setErrorMessage] = useState('');
     const router = useRouter();
     const [busquedaRealizada, setBusquedaRealizada] = useState(false);
+    const [showModalExito, setShowModalExito] = useState(false);
     
     //CONSUMOS
     const [itemsConsumo, setItemsConsumo] = useState<ItemConsumoDTO[]>([]);
@@ -162,13 +164,12 @@ export default function GenerarFactura() {
 
     const handleGenerarFactura = async (itemsConsumoIds: number[], incluirEstadia: boolean) => {
     
-    // Verificaciones de seguridad
+    // Verificaciones 
     if (!responsableSeleccionado || !datosOcupacion) {
         console.error("Faltan datos de responsable o ocupación.");
         return;
     }
 
-    // 1. OBTENER LOS CONSUMOS SELECCIONADOS COMPLETOS
     const consumosSeleccionados = itemsConsumo
         .filter(item => itemsConsumoIds.includes(item.idConsumo))
         .map(item => {
@@ -176,7 +177,6 @@ export default function GenerarFactura() {
             return consumoOriginal; 
         });
 
-    // 2. AÑADIR EL ÍTEM DE ESTADÍA (Si fue seleccionado)
     if (incluirEstadia) {
         const itemEstadia: ItemConsumoDTO = {
             idConsumo: 0, 
@@ -188,7 +188,6 @@ export default function GenerarFactura() {
         consumosSeleccionados.push(itemEstadia);
     }
 
-    // 3. PREPARAR EL OBJETO HUESPED/RESPONSABLE
     let responsablePayload: any;
     if (esResponsableEmpresa) {
         responsablePayload = {
@@ -213,21 +212,19 @@ export default function GenerarFactura() {
             }
         }    
     };
-    //URL
+
     const endpoint = esResponsableEmpresa 
-        ? '/generar/juridica' // Para empresas
-        : '/generar/fisica';  // Para huéspedes personales
+        ? '/generar/juridica' 
+        : '/generar/fisica'; 
 
     const url = `${BASE_URL}/facturas${endpoint}`;
 
-    // 4. PAYLOAD FINAL
     const payloadFactura = {
         idOcupacion: datosOcupacion.id, 
         listaConsumos: consumosSeleccionados, 
         ...responsablePayload,
     };
 
-    // 5. ENVIAR AL BACK-END
     try {
         const response = await fetch(url, {
             method: 'POST',
@@ -236,26 +233,36 @@ export default function GenerarFactura() {
         });
 
         if (!response.ok) {
-            // Manejar errores 400 u otros
             const errorText = await response.text();
             throw new Error(`Error ${response.status}: ${errorText}`);
         }
 
-        setItemsConsumo(prevItems => 
-            prevItems.map(item => {
-                if (itemsConsumoIds.includes(item.idConsumo)) {
-                    return { ...item, facturado: true };
-                }
-                return item;
-            })
+        const nuevosItems = itemsConsumo.map(item => {
+            if (itemsConsumoIds.includes(item.idConsumo)) {
+                return { ...item, facturado: true };
+            }
+            return item;
+        });
 
-        );
+        const nuevaEstadiaFacturada = estadiaFacturada || incluirEstadia;
+
+        setItemsConsumo(nuevosItems);
         if (incluirEstadia) {
             setEstadiaFacturada(true);
         }
+
+        const quedanConsumosPendientes = nuevosItems.some(item => !item.facturado);
         
-        alert("Factura creada con éxito!");
-        handleCerrarModal();
+
+        const faltaEstadia = !nuevaEstadiaFacturada;
+
+        handleCerrarModal(); 
+
+        if (!quedanConsumosPendientes && !faltaEstadia) {
+            setShowModalExito(true); 
+        } else {
+            alert("Factura creada con éxito. Aún quedan ítems pendientes.");
+        }
 
     } catch (error) {
         setErrorMessage("No se pudo generar la factura: " + (error instanceof Error ? error.message : 'Error desconocido'));
@@ -299,7 +306,7 @@ export default function GenerarFactura() {
         } finally {
             setIsLoading(false);
         }
-};
+    };
 
     const handleConfirmarRazonSocial = () => {
         if (!empresaEncontrada) return;
@@ -332,9 +339,12 @@ export default function GenerarFactura() {
         setShowCuitModal(true);
     };
 
+    const handleFinalizarTodo = () => {
+    setShowModalExito(false);
+    router.push('/menuCU1'); 
+    };
 
     // --- RENDERIZADO (UI) ---
-
     return (
         <main className="main-container-facturar">
             <div className="facturar-layout">
@@ -418,6 +428,12 @@ export default function GenerarFactura() {
                 show={showErrorModal}
                 message={errorMessage}
                 onClose={() => setShowErrorModal(false)}
+            />
+            <ModalFin 
+                show={showModalExito}
+                message="Se han facturado todos los conceptos de la habitación. Presione cualquier tecla para continuar..."
+                onClose={handleFinalizarTodo}   
+                onConfirm={handleFinalizarTodo} 
             />
             
         </main>

@@ -52,7 +52,7 @@ export default function ReservarHabitacion() {
     console.log(`Comparando: ${f.desde} < ${today}`);
     if (!f.desde || !f.hasta) return 'Debe seleccionar ambas fechas.';
     if (f.desde < today) return 'La fecha inicial debe ser posterior o igual a la fecha actual.';
-    if (f.desde > f.hasta) return 'La fecha inicial no puede ser posterior a la fecha final.';
+    if (f.desde > f.hasta) return 'La fecha final no puede ser anterior a la fecha inicial.';
     return null;
   };
 
@@ -147,28 +147,25 @@ const handleHuespedSubmit = async (huespedData: EventualHuesped) => {
 
   if (Object.keys(validationErrors).length === 0) {
     
-    const reservationToSend = selectedReservations[0];
+    if (selectedReservations.length === 0) {
+        setErrorMessage("Error: No se encontró una selección de habitación válida.");
+        setShowErrorModal(true);
+        return;
+    }
 
-    if (!reservationToSend) {
-            setErrorMessage("Error: No se encontró una selección de habitación válida.");
-            setShowErrorModal(true);
-            return;
-        }
-        const toISODate = (ymdString: string) => {
-        // Garantiza que el Back-End de Java interprete la hora como medianoche del día
-        return new Date(ymdString + 'T00:00:00').toISOString(); 
+    const toISODate = (ymdString: string) => {
+        return new Date(ymdString + 'T00:00:00').toISOString();
     };
 
-    const reservaUnica = {
-            "fechaInicio": toISODate(reservationToSend.fechaInicio),
-            "fechaFin": toISODate(reservationToSend.fechaFin),
+    const payload = selectedReservations.map(reservation => ({
+            "fechaInicio": toISODate(reservation.fechaInicio),
+            "fechaFin": toISODate(reservation.fechaFin),
             "estado": "RESERVADA",
             "nombre": huespedData.nombre,
             "apellido": huespedData.apellido,
             "telefono": huespedData.telefono,
-            "habitacionNumero": parseInt(reservationToSend.roomId), 
-        };
-    const payload=[reservaUnica];
+            "habitacionNumero": parseInt(reservation.roomId), 
+    }));
 
     const BASE_URL = 'http://localhost:8080';
     const url = `${BASE_URL}/reservas`;
@@ -191,8 +188,9 @@ const handleHuespedSubmit = async (huespedData: EventualHuesped) => {
         }
         throw new Error(`Error ${response.status}: ${errorText.substring(0, 200)}...`);
       }
+      const cantidad = selectedReservations.length;
       setSuccessMessage(
-        `La reserva para ${huespedData.nombre} ${huespedData.apellido} ha sido realizada con éxito. \nPresione cualquier tecla para continuar...`
+        `Se han registrado con éxito ${cantidad} reserva(s) a nombre de ${huespedData.nombre} ${huespedData.apellido}. \nPresione cualquier tecla para continuar...`
       );
 
       setShowSuccessModal(true);
