@@ -9,7 +9,7 @@ import DocumentoField from '../components/DocumentoField';
 import DireccionHuesped from '../components/DireccionHuesped';
 import ModalConfirmacion from '../components/ModalConfirmacion';
 import ModalExitoModificacion from '../components/ModalExitoModificacion';
-import ModalExitoEliminacion from '../components/ModalExitoEliminacion'; // <--- AGREGADO: Para el éxito de eliminación (1 solo botón)
+import ModalExitoEliminacion from '../components/ModalExitoEliminacion';
 
 // --- IMPORTACIONES DE TIPOS Y LÓGICA ---
 import { FormData } from '../types';
@@ -61,6 +61,10 @@ export default function ModificarHuesped() {
     if (datosGuardados) {
         try {
             const data = JSON.parse(datosGuardados);
+            
+            // 🔍 LOG 1: DATOS QUE LLEGAN DEL CU2
+            console.log("📥 [CU2 -> CU10] Datos Originales recibidos (LocalStorage):", data);
+
             const safeStr = (val: any) => (val === null || val === undefined) ? '' : val;
 
             const dataFormateada: FormData = {
@@ -130,7 +134,10 @@ export default function ModificarHuesped() {
   // --- GUARDAR (CU10 - ACTUALIZAR) ---
   const guardarHuespedDirecto = async (dataAGuardar: any) => {
       const bodyPayload = [dataAGuardar, originalData];
+      
       console.log("📡 --- INICIO PETICIÓN POST (CU10 Actualizar) ---");
+      // 🔍 LOG 3: BODY COMPLETO
+      console.log("📦 BODY QUE SE ENVÍA AL BACK:", JSON.stringify(bodyPayload, null, 2));
 
       try {
           const res = await fetch('http://localhost:8080/huespedes', {
@@ -141,7 +148,7 @@ export default function ModificarHuesped() {
 
           if (res.ok) {
             setSuccessMessage('La operación ha culminado con éxito.'); 
-            setShowSuccessModal(true); // Usa ModalExitoModificacion (Mantenido)
+            setShowSuccessModal(true); 
             setPendingFinalData(null);
             localStorage.removeItem('datosHuespedModificar');
           } else {
@@ -160,30 +167,45 @@ export default function ModificarHuesped() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
+      
+      // Función para limpiar textos
+      const safeTrim = (value: any) => {
+          if (value === null || value === undefined) return '';
+          return value.toString().trim().toUpperCase();
+      };
+
       const transformedData = {
         ...formData, 
-        nombre: formData.nombre.trim(),
-        apellido: formData.apellido.trim(),
-        numeroDocumento: formData.numeroDocumento.trim(),
+        
+        nombre: safeTrim(formData.nombre),
+        apellido: safeTrim(formData.apellido),
+        numeroDocumento: safeTrim(formData.numeroDocumento),
         tipoDocumento: formData.tipoDocumento,
-        telefono: formData.telefono.trim(),
-        email: formData.email.trim(),
-        ocupacion: formData.ocupacion.trim(),
-        nacionalidad: formData.nacionalidad.trim(),
-        cuit: formData.cuit.trim(),
-        posicionIVA: formData.posicionIVA.trim() ? formData.posicionIVA.trim() : "CONSUMIDOR FINAL",
+        telefono: safeTrim(formData.telefono),
+        email: safeTrim(formData.email),
+        ocupacion: safeTrim(formData.ocupacion),
+        nacionalidad: safeTrim(formData.nacionalidad),
+        cuit: safeTrim(formData.cuit),
+        posicionIVA: formData.posicionIVA ? safeTrim(formData.posicionIVA) : "CONSUMIDOR FINAL",
         fechaNacimiento: formData.fechaNacimiento,
+        
         direccionHuesped: {
-          calle: formData.direccionHuesped.calle.trim(),
-          departamento: formData.direccionHuesped.departamento.trim(),
-          localidad: formData.direccionHuesped.localidad.trim(),
-          provincia: formData.direccionHuesped.provincia.trim(),
-          pais: formData.direccionHuesped.pais.trim(),
-          numero: formData.direccionHuesped.numero,
-          piso: formData.direccionHuesped.piso,
-          codigo: formData.direccionHuesped.codigo,
+          ...formData.direccionHuesped, // Mantiene el ID
+          calle: safeTrim(formData.direccionHuesped.calle),
+          departamento: safeTrim(formData.direccionHuesped.departamento),
+          localidad: safeTrim(formData.direccionHuesped.localidad),
+          provincia: safeTrim(formData.direccionHuesped.provincia),
+          pais: safeTrim(formData.direccionHuesped.pais),
+          numero: safeTrim(formData.direccionHuesped.numero),
+          piso: safeTrim(formData.direccionHuesped.piso),
+          
+          // --- REVERTIDO: SE ENVÍA COMO STRING (TEXTO) ---
+          codigo: safeTrim(formData.direccionHuesped.codigo),
         }
       };
+
+      // 🔍 LOG 2: HUESPED MODIFICADO
+      console.log("📝 HUÉSPED MODIFICADO (Datos procesados del formulario):", transformedData);
 
       const documentoCambio = 
           transformedData.tipoDocumento !== originalData.tipoDocumento || 
@@ -241,10 +263,8 @@ export default function ModificarHuesped() {
           });
 
           if (res.ok) {
-              // ÉXITO 200
               localStorage.removeItem('datosHuespedModificar');
               setShowDeleteModal(false);
-              // Activamos el modal de éxito de ELIMINACIÓN
               setShowDeleteSuccess(true);
           } 
           else if (res.status === 409) {
@@ -347,10 +367,8 @@ export default function ModificarHuesped() {
               onClose={() => setShowCancelModal(false)} onConfirm={handleConfirmCancel} 
           />
 
-          {/* Modal Éxito Modificación (Mantenemos el que tenías) */}
           <ModalExitoModificacion show={showSuccessModal} onConfirm={handleSuccessClose} />
 
-          {/* Modal Confirmación de Borrado / Error de Borrado */}
           <ModalConfirmacion 
               show={showDeleteModal} 
               title={canDelete ? "ELIMINAR HUÉSPED" : "NO SE PUEDE ELIMINAR"} 
@@ -363,7 +381,6 @@ export default function ModificarHuesped() {
               onConfirm={canDelete ? confirmDelete : undefined} 
           />
 
-          {/* NUEVO: Modal Éxito Eliminación (Usamos ModalExito para tener 1 solo botón y mensaje limpio) */}
           <ModalExitoEliminacion 
               show={showDeleteSuccess} 
               onConfirm={handleDeleteSuccessClose} 
