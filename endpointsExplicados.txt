@@ -1,0 +1,5 @@
+Endpoints (http://localhost:8080):
+	-(/facturas) Para facturas:
+		+PUT (/generar/fisica) Generar factura a persona fisica:
+			Recibe body: 
+	
