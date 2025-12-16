@@ -80,8 +80,6 @@ export default function CancelarReservaPage() {
 
             const url = `${BASE_URL}/reservas/buscar?${params.toString()}`;
             
-            console.log("🔍 Buscando en:", url);
-            
             const response = await fetch(url);
 
             if (!response.ok) {
@@ -130,6 +128,7 @@ export default function CancelarReservaPage() {
             if (!response.ok) throw new Error("Error al cancelar reservas");
             
             const idsCancelados = selectedReservas.map(r => r.idReserva);
+
             setReservasResultados(prev => 
                 prev.map(r => idsCancelados.includes(r.idReserva) ? { ...r, estado: 'CANCELADA' } : r)
             );
