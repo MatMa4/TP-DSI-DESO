@@ -32,7 +32,7 @@ export const validateHuespedForm = (formData: FormData): Record<string, string> 
   else if (!/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(formData.ocupacion)) newErrors.ocupacion = 'Solo se permiten letras';
 
   if (formData.posicionIVA.trim() && !opcionesIVA.includes(formData.posicionIVA.toUpperCase())) {
-    newErrors.posicionIVA = 'Posición IVA inválida';
+    newErrors.posicionIVA = 'Posición IVA inválida, debe ser una de las siguientes: RESPONSABLE INSCRIPTO, MONOTRIBUTISTA, EXENTO, CONSUMIDOR FINAL';
   }
 
   if (!formData.nacionalidad.trim()) newErrors.nacionalidad = 'Campo obligatorio';
