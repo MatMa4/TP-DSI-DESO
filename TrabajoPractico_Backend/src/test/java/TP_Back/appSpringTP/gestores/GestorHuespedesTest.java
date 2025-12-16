@@ -6,9 +6,7 @@ package TP_Back.appSpringTP.gestores;
 
 import TP_Back.appSpringTP.DAOs.DireccionDAOImpl;
 import TP_Back.appSpringTP.DAOs.HuespedDAOImpl;
-import TP_Back.appSpringTP.DAOs.PersonaFisicaDAO;
 import TP_Back.appSpringTP.DAOs.PersonaFisicaDAOImpl;
-import TP_Back.appSpringTP.DAOs.ResponsablePagoDAO;
 import TP_Back.appSpringTP.DAOs.ResponsablePagoDAOImpl;
 import TP_Back.appSpringTP.DTOs.DireccionDTO;
 import TP_Back.appSpringTP.DTOs.HuespedDTO;
@@ -483,7 +481,8 @@ public class GestorHuespedesTest {
         
         //Comprueba que se llamen los métodos
         verify(huespedDAO).modificarIDHuesped(huespedes.get(0), huespedes.get(1));
-        verify(huespedDAO).guardar(huespedes.get(0));
+        verify(direccionDAO).save(any(Direccion.class));
+        verify(huespedDAO).save(any(Huesped.class));
         verify(huespedDAO).consultarDocumento("DNI", "35123457");
 
 
@@ -548,12 +547,13 @@ public class GestorHuespedesTest {
         
         //Comprueba que se llamen los métodos
         verify(huespedDAO).modificarIDHuesped(huespedes.get(0), huespedes.get(1));
-        verify(huespedDAO, never()).guardar(huespedes.get(0));
+        verify(direccionDAO, never()).save(any(Direccion.class));
+        verify(huespedDAO, never()).save(any(Huesped.class));
         verify(huespedDAO, never()).consultarDocumento("DNI", "35123457");
     }
     
-        @Test
-    public void testModificarHuesped_errorAlGuardar() {
+    @Test
+    public void testModificarHuesped_errorAlGuardarHuesped() {
         //Creamos los datos que vamos a ingresar a la prueba
         DireccionDTO dirDto = new DireccionDTO();
         dirDto.setCalle("Av Corrientes");
@@ -591,8 +591,9 @@ public class GestorHuespedesTest {
         );
         
         //Establecemos el valor de retorno del método para evitar depenencia en la prueba
-        when(huespedDAO.guardar(any(HuespedDTO.class)))
-                .thenThrow(new RuntimeException("Error inesperado al guardar el huésped modificado"));
+        doThrow(new RuntimeException("Error inesperado al guardar el huésped modificado"))
+                .when(huespedDAO)
+                .save(any(Huesped.class));
 
         
         //Ejecutamos la prueba
@@ -601,9 +602,66 @@ public class GestorHuespedesTest {
         
         //Comprueba que se llamen los métodos
         verify(huespedDAO).modificarIDHuesped(huespedes.get(0), huespedes.get(1));
-        verify(huespedDAO).guardar(huespedes.get(0));
+        verify(direccionDAO).save(any(Direccion.class));
+        verify(huespedDAO).save(any(Huesped.class));
         verify(huespedDAO, never()).consultarDocumento("DNI", "35123457");
     }
+    
+    @Test
+    public void testModificarHuesped_errorAlGuardarDireccion() {
+        //Creamos los datos que vamos a ingresar a la prueba
+        DireccionDTO dirDto = new DireccionDTO();
+        dirDto.setCalle("Av Corrientes");
+        dirDto.setNumero(1234);
+        dirDto.setLocalidad("CABA");
+        dirDto.setProvincia("Buenos Aires");
+        dirDto.setPais("Argentina");
+        
+        //En la posición 0 el huesped modificado y en la 1 el existente
+        List<HuespedDTO> huespedes = Arrays.asList(
+        HuespedDTO.builder()
+                .nombre("Carlos Adrian")
+                .apellido("Gomez")
+                .tipoDocumento("DNI")
+                .numeroDocumento("35123457")
+                .fechaNacimiento(LocalDate.of(1990, 5, 20))
+                .telefono("3412345678")
+                .ocupacion("Contador")
+                .nacionalidad("Argentina")
+                .alojado(true)
+                .direccion(dirDto)
+                .build(), 
+        HuespedDTO.builder()
+                .nombre("Carlos Alberto")
+                .apellido("Gomez")
+                .tipoDocumento("DNI")
+                .numeroDocumento("35123457")
+                .fechaNacimiento(LocalDate.of(1990, 5, 20))
+                .telefono("3412345678")
+                .ocupacion("Ingeniero")
+                .nacionalidad("Argentina")
+                .alojado(true)
+                .direccion(dirDto)
+                .build()
+        );
+        
+        //Establecemos el valor de retorno del método para evitar depenencia en la prueba
+        doThrow(new RuntimeException("Error inesperado al guardar el huésped modificado"))
+                .when(direccionDAO)
+                .save(any(Direccion.class));
+
+        
+        //Ejecutamos la prueba
+        assertThrows(RuntimeException.class,
+            () -> gestorHuespedes.modificarHuesped(huespedes));
+        
+        //Comprueba que se llamen los métodos
+        verify(huespedDAO).modificarIDHuesped(huespedes.get(0), huespedes.get(1));
+        verify(direccionDAO).save(any(Direccion.class));
+        verify(huespedDAO, never()).save(any(Huesped.class));
+        verify(huespedDAO, never()).consultarDocumento("DNI", "35123457");
+    }
+    
     
     @Test
     public void testModificarHuesped_noEncontradoDespesDeGuardar() {
@@ -654,7 +712,8 @@ public class GestorHuespedesTest {
         
         //Comprueba que se llamen los métodos
         verify(huespedDAO).modificarIDHuesped(huespedes.get(0), huespedes.get(1));
-        verify(huespedDAO).guardar(huespedes.get(0));
+        verify(direccionDAO).save(any(Direccion.class));
+        verify(huespedDAO).save(any(Huesped.class));
         verify(huespedDAO).consultarDocumento("DNI", "35123457");
     }
     

@@ -98,8 +98,36 @@ public class GestorHuespedes {
     
     public HuespedDTO modificarHuesped(List<HuespedDTO> huespedes) throws HuespedNoEncontradoException{
         huespedDAO.modificarIDHuesped(huespedes.get(0), huespedes.get(1));
+        
+        DireccionDTO direccionDto=huespedes.get(0).getDireccionHuesped();
+        Direccion direccion = new Direccion();
+        direccion.setDepartamento(direccionDto.getDepartamento());
+        direccion.setCodigo(direccionDto.getCodigo());
+        direccion.setPiso(direccionDto.getPiso());
+        direccion.setId(direccionDto.getCalle(), direccionDto.getNumero(), direccionDto.getLocalidad(), direccionDto.getProvincia(), direccionDto.getPais());
         try{
-            huespedDAO.guardar(huespedes.get(0));
+            direccionDAO.save(direccion);
+        }catch(Exception e){
+            throw new RuntimeException("Error inesperado al modificar huésped", e);
+        }
+        
+        Huesped huesped = new Huesped();
+        huesped.setNombre(huespedes.get(0).getNombre());
+        huesped.setApellido(huespedes.get(0).getApellido());
+        huesped.setTipoDocumento(huespedes.get(0).getTipoDocumento());
+        huesped.setNumeroDocumento(huespedes.get(0).getNumeroDocumento());
+        huesped.setFechaNacimiento(huespedes.get(0).getFechaNacimiento());
+        huesped.setTelefono(huespedes.get(0).getTelefono());
+        huesped.setEmail(huespedes.get(0).getEmail());
+        huesped.setOcupacion(huespedes.get(0).getOcupacion());
+        huesped.setNacionalidad(huespedes.get(0).getNacionalidad());
+        huesped.setCuit(huespedes.get(0).getCuit());
+        huesped.setPosicionIVA(huespedes.get(0).getPosicionIVA());
+        huesped.setAlojado(huespedes.get(0).getAlojado());
+        huesped.setDireccionHuesped(direccion);
+        
+        try{
+            huespedDAO.save(huesped);
         }catch(Exception e){
             throw new RuntimeException("Error inesperado al guardar el huésped modificado", e);
         }
