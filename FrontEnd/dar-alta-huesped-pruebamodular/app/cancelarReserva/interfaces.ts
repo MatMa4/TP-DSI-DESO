@@ -35,16 +35,6 @@ estado: string;
 apellido: string;
 nombre: string;
 telefono: string;
-habitacion:HabitacionDTO;
-}
-export interface HabitacionDTO {
-    numero: number;
-    costoPorNoche: number;
-    capacidad: number;
-    estado: string; 
-    descripcion: null;
-    camasIndividuales: number;
-    camaDoble: number;
-    camaKingsize: number;
-    tipoHabitacion: string;
+habitacionNumero:number;
+tipohabitacion:string;
 }
