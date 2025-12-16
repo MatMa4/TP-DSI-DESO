@@ -62,6 +62,32 @@ public class GestorDeFacturasTest {
     }
 
     @Test
+    public void testGenerarFacturaFisicaSolicitudNula() {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            gestorDeFacturas.generarFacturaFisica(null);
+        });
+        assertEquals("La solicitud no puede ser nula.", exception.getMessage());
+    }
+
+    @Test
+    public void testGenerarFacturaFisicaIdOcupacionNulo() {
+        SolicitudFacturacionDTO solicitud = new SolicitudFacturacionDTO(null, new ArrayList<>(), new HuespedDTO());
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            gestorDeFacturas.generarFacturaFisica(solicitud);
+        });
+        assertEquals("El ID de ocupación es obligatorio.", exception.getMessage());
+    }
+
+    @Test
+    public void testGenerarFacturaFisicaListaConsumosNula() {
+        SolicitudFacturacionDTO solicitud = new SolicitudFacturacionDTO(1L, null, new HuespedDTO());
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            gestorDeFacturas.generarFacturaFisica(solicitud);
+        });
+        assertEquals("La lista de consumos es obligatoria.", exception.getMessage());
+    }
+
+    @Test
     public void testGenerarFacturaFisicaSinHuesped() {
         // Prepare data with null Huesped
         SolicitudFacturacionDTO solicitud = new SolicitudFacturacionDTO(1L, new ArrayList<>(), null);
@@ -122,6 +148,42 @@ public class GestorDeFacturasTest {
             gestorDeFacturas.generarFacturaJuridica(solicitud);
         });
 
+        assertEquals("El CUIT del responsable de pago es obligatorio para Factura Jurídica.", exception.getMessage());
+    }
+
+    @Test
+    public void testGenerarFacturaJuridicaSolicitudNula() {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            gestorDeFacturas.generarFacturaJuridica(null);
+        });
+        assertEquals("La solicitud no puede ser nula.", exception.getMessage());
+    }
+
+    @Test
+    public void testGenerarFacturaJuridicaIdOcupacionNulo() {
+        SolicitudFacturacionJuridicaDTO solicitud = new SolicitudFacturacionJuridicaDTO(null, new ArrayList<>(),
+                "20123456789");
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            gestorDeFacturas.generarFacturaJuridica(solicitud);
+        });
+        assertEquals("El ID de ocupación es obligatorio.", exception.getMessage());
+    }
+
+    @Test
+    public void testGenerarFacturaJuridicaListaConsumosNula() {
+        SolicitudFacturacionJuridicaDTO solicitud = new SolicitudFacturacionJuridicaDTO(1L, null, "20123456789");
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            gestorDeFacturas.generarFacturaJuridica(solicitud);
+        });
+        assertEquals("La lista de consumos es obligatoria.", exception.getMessage());
+    }
+
+    @Test
+    public void testGenerarFacturaJuridicaCuitEspacios() {
+        SolicitudFacturacionJuridicaDTO solicitud = new SolicitudFacturacionJuridicaDTO(1L, new ArrayList<>(), "   ");
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            gestorDeFacturas.generarFacturaJuridica(solicitud);
+        });
         assertEquals("El CUIT del responsable de pago es obligatorio para Factura Jurídica.", exception.getMessage());
     }
 }
