@@ -5,12 +5,14 @@
 package TP_Back.appSpringTP.controladores;
 import TP_Back.appSpringTP.DTOs.HuespedDTO;
 import TP_Back.appSpringTP.excepciones.HuespedExistenteException;
+import TP_Back.appSpringTP.excepciones.HuespedNoEliminableException;
 import TP_Back.appSpringTP.excepciones.HuespedNoEncontradoException;
 import TP_Back.appSpringTP.gestores.GestorHuespedes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +36,20 @@ public class ControladorHuesped {
     
     @DeleteMapping
     public ResponseEntity<?> eliminarHuesped(@RequestBody HuespedDTO huesped){
-        return ResponseEntity.ok(gestorHuespedes.eliminarHuesped(huesped));
+        try{
+            gestorHuespedes.eliminarHuesped(huesped);
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                                .body("No se puede eliminar el huésped porque existen facturas asociadas.");
+       } catch (HuespedNoEncontradoException e) {
+           return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                                .body("Huésped no encontrado.");
+       } catch (HuespedNoEliminableException e) {
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body("El huésped está alojado actualmente y no puede eliminarse.");
+       }
+
+        return ResponseEntity.ok(true);
     }
     
     @GetMapping("/buscar")

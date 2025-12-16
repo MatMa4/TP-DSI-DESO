@@ -6,7 +6,10 @@ package TP_Back.appSpringTP.gestores;
 
 import TP_Back.appSpringTP.DAOs.DireccionDAOImpl;
 import TP_Back.appSpringTP.DAOs.HuespedDAOImpl;
+import TP_Back.appSpringTP.DAOs.PersonaFisicaDAO;
 import TP_Back.appSpringTP.DAOs.PersonaFisicaDAOImpl;
+import TP_Back.appSpringTP.DAOs.ResponsablePagoDAO;
+import TP_Back.appSpringTP.DAOs.ResponsablePagoDAOImpl;
 import TP_Back.appSpringTP.DTOs.DireccionDTO;
 import TP_Back.appSpringTP.DTOs.HuespedDTO;
 import TP_Back.appSpringTP.excepciones.HuespedExistenteException;
@@ -37,6 +40,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 
 /**
  *
@@ -76,6 +81,9 @@ public class GestorHuespedesTest {
     
     @Mock
     private PersonaFisicaDAOImpl personaFisicaDAO;
+    
+    @Mock
+    private ResponsablePagoDAOImpl responsablePagoDAO;
 
     @InjectMocks
     private GestorHuespedes gestorHuespedes;
@@ -683,12 +691,17 @@ public class GestorHuespedesTest {
                 .thenReturn(Optional.of(huesped))
                 .thenReturn(Optional.empty());
         
+        when(personaFisicaDAO.getIdResponsablePagoConHuesped(any(String.class), any(String.class)))
+                .thenReturn(123);
+        
         //Ejecutamos la prueba
         Boolean resultado = gestorHuespedes.eliminarHuesped(huesped);
 
         //Comprueba que se llamen los métodos
         verify(huespedDAO).eliminar(any(HuespedDTO.class));
         verify(huespedDAO, times(2)).consultarDocumento(any(String.class), any(String.class));
+        verify(personaFisicaDAO).getIdResponsablePagoConHuesped(any(String.class), any(String.class));
+        verify(responsablePagoDAO).eliminar(123);
         
         //Verificamos que el resultado sea el esperado
         assertEquals(true, resultado);
@@ -730,6 +743,8 @@ public class GestorHuespedesTest {
         //Comprueba que se llamen los métodos
         verify(huespedDAO, never()).eliminar(any(HuespedDTO.class));
         verify(huespedDAO, times(1)).consultarDocumento(any(String.class), any(String.class));
+        verify(personaFisicaDAO, never()).getIdResponsablePagoConHuesped(any(String.class), any(String.class));
+        verify(responsablePagoDAO, never()).eliminar(123);
     }
    
     @Test
@@ -758,8 +773,7 @@ public class GestorHuespedesTest {
         //Establecemos el valor de retorno del método para evitar depenencia en la prueba
         //La primera vez se retorna un Optional con un huesped y la segunda vez un Optional vacío
         when(huespedDAO.consultarDocumento(any(String.class), any(String.class)))
-                .thenReturn(Optional.of(huesped))
-                .thenReturn(Optional.empty());
+                .thenReturn(Optional.of(huesped));
         
         //Ejecutamos la prueba
         assertThrows(HuespedNoEliminableException.class,
@@ -767,10 +781,58 @@ public class GestorHuespedesTest {
 
         //Comprueba que se llamen los métodos
         verify(huespedDAO, never()).eliminar(any(HuespedDTO.class));
-        verify(huespedDAO, times(1)).consultarDocumento(any(String.class), any(String.class));      
+        verify(huespedDAO, times(1)).consultarDocumento(any(String.class), any(String.class));
+        verify(personaFisicaDAO, never()).getIdResponsablePagoConHuesped(any(String.class), any(String.class));
+        verify(responsablePagoDAO, never()).eliminar(123);
     }
     
-        @Test
+    @Test
+    public void testEliminarHuesped_existeFacturaRelacionada(){
+        //Creamos los datos que vamos a ingresar a la prueba
+        DireccionDTO dirDto = new DireccionDTO();
+        dirDto.setCalle("Av Corrientes");
+        dirDto.setNumero(1234);
+        dirDto.setLocalidad("CABA");
+        dirDto.setProvincia("Buenos Aires");
+        dirDto.setPais("Argentina");
+        
+        HuespedDTO huesped = HuespedDTO.builder()
+                .nombre("Carlos Adrian")
+                .apellido("Gomez")
+                .tipoDocumento("DNI")
+                .numeroDocumento("35123457")
+                .fechaNacimiento(LocalDate.of(1990, 5, 20))
+                .telefono("3412345678")
+                .ocupacion("Contador")
+                .nacionalidad("Argentina")
+                .alojado(false)
+                .direccion(dirDto)
+                .build();
+        
+        //Establecemos el valor de retorno del método para evitar depenencia en la prueba
+        //La primera vez se retorna un Optional con un huesped y la segunda vez un Optional vacío
+        when(huespedDAO.consultarDocumento(any(String.class), any(String.class)))
+                .thenReturn(Optional.of(huesped));
+        
+        when(personaFisicaDAO.getIdResponsablePagoConHuesped(any(String.class), any(String.class)))
+                .thenReturn(123);
+        
+        doThrow(new DataIntegrityViolationException("el huesped tiene una factura asociada"))
+                .when(responsablePagoDAO)
+                .eliminar(123);
+        
+        //Ejecutamos la prueba
+        assertThrows(DataIntegrityViolationException.class,
+            () -> gestorHuespedes.eliminarHuesped(huesped));
+
+        //Comprueba que se llamen los métodos
+        verify(huespedDAO, never()).eliminar(any(HuespedDTO.class));
+        verify(huespedDAO, times(1)).consultarDocumento(any(String.class), any(String.class));
+        verify(personaFisicaDAO).getIdResponsablePagoConHuesped(any(String.class), any(String.class));
+        verify(responsablePagoDAO).eliminar(123);
+    }
+    
+    @Test
     public void testEliminarHuesped_huespedNoEliminado(){
         //Creamos los datos que vamos a ingresar a la prueba
         DireccionDTO dirDto = new DireccionDTO();
@@ -805,6 +867,7 @@ public class GestorHuespedesTest {
         //Comprueba que se llamen los métodos
         verify(huespedDAO).eliminar(any(HuespedDTO.class));
         verify(huespedDAO, times(2)).consultarDocumento(any(String.class), any(String.class));
+        verify(personaFisicaDAO).getIdResponsablePagoConHuesped(any(String.class), any(String.class));
         
         //Verificamos que el resultado sea el esperado
         assertEquals(false, resultado);
