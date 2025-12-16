@@ -6,8 +6,8 @@ Para ejecutar la aplicación primero se deben seguir los siguientes pasos:
 
 2) Ejecutar el contenido de la carpeta presionando el botón run.
 
-3) Descargar Node.js, es el entono necesario apra ejecutar Next.js, de https://nodejs.org/es/download, 
-            una vez instalado verifica la isntalacion abriendo una terminal y escribiendo el comando "node -v", 
+3) Descargar Node.js, es el entono necesario para ejecutar Next.js, de https://nodejs.org/es/download, 
+            una vez instalado verifica la instalacion abriendo una terminal y escribiendo el comando "node -v", 
             deberia verse la version de node, esta debe ser v18 o superior.
 
 4) Acceder a la carpeta "FrontEnd", luego a la carpeta "dar-alta-huesped-pruebamodular".
