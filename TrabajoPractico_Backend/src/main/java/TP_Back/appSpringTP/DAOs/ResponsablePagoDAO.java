@@ -9,5 +9,5 @@ package TP_Back.appSpringTP.DAOs;
  * @author mateo
  */
 public interface ResponsablePagoDAO {
-    
+    public void eliminar(Integer id);
 }

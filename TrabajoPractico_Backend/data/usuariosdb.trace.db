@@ -1059,3 +1059,7 @@ ON UPDATE CASCADE [42122-232]
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
 	at java.base/java.lang.Thread.run(Thread.java:1474)
+2025-12-15 22:36:31.377425-03:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "[*]PAGOS"; se esperaba "PREPARE"
+Syntax error in SQL statement "[*]PAGOS"; expected "PREPARE"; SQL statement:
+PAGOS [42001-232]
