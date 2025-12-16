@@ -14,7 +14,7 @@ Para ejecutar la aplicación primero se deben seguir los siguientes pasos:
 
 5) Abrir la terminal de Windows desde esta carpeta.
 
-6) Ingresar en la terminal el comando "npm install", esto peude tardar unos minutos
+6) Ingresar en la terminal el comando "npm install", esto puede tardar unos minutos
 
 7) Ingresar en la terminal el comando "npm run dev", para levantar el front
 
