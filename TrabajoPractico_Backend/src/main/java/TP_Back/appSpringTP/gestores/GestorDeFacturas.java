@@ -3,6 +3,7 @@ package TP_Back.appSpringTP.gestores;
 import TP_Back.appSpringTP.DAOs.FacturaDAO;
 import TP_Back.appSpringTP.DAOs.NotaDeCreditoDAO;
 import TP_Back.appSpringTP.DTOs.NotaDeCreditoDTO;
+import TP_Back.appSpringTP.DTOs.SolicitudFacturacionJuridicaDTO;
 import TP_Back.appSpringTP.modelo.factura.Factura;
 import TP_Back.appSpringTP.modelo.factura.NotaDeCredito;
 import TP_Back.appSpringTP.gestores.factories.FacturaFisicaFactory;
@@ -48,7 +49,7 @@ public class GestorDeFacturas {
                 solicitud.getHuesped());
     }
 
-    public Factura generarFacturaJuridica(TP_Back.appSpringTP.DTOs.SolicitudFacturacionJuridicaDTO solicitud) {
+    public Factura generarFacturaJuridica(SolicitudFacturacionJuridicaDTO solicitud) {
         if (solicitud == null) {
             throw new RuntimeException("La solicitud no puede ser nula.");
         }
