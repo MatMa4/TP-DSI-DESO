@@ -49,21 +49,4 @@ public class GestorDeFacturas {
                 solicitud.getListaConsumos(),
                 solicitud.getCuitResponsable());
     }
-
-    public NotaDeCredito ingresarNotaDeCredito(NotaDeCreditoDTO notaDTO) {
-        NotaDeCredito nota = new NotaDeCredito();
-        nota.setFecha(notaDTO.getFecha());
-        nota.setImporte(notaDTO.getImporte());
-
-        if (notaDTO.getFacturaNumero() != null) {
-            Optional<Factura> factura = facturaDAO.findById(notaDTO.getFacturaNumero());
-            factura.ifPresent(nota::setFactura);
-        }
-
-        return notaDeCreditoDAO.save(nota);
-    }
-
-    public List<Factura> listarFacturas() {
-        return facturaDAO.findAll();
-    }
 }

@@ -9,6 +9,7 @@ import DocumentoField from '../components/DocumentoField';
 import DireccionHuesped from '../components/DireccionHuesped';
 import ModalConfirmacion from '../components/ModalConfirmacion';
 import ModalExitoModificacion from '../components/ModalExitoModificacion';
+import ModalExitoEliminacion from '../components/ModalExitoEliminacion';
 
 // --- IMPORTACIONES DE TIPOS Y LÓGICA ---
 import { FormData } from '../types';
@@ -38,6 +39,7 @@ export default function ModificarHuesped() {
   const [modalMessage, setModalMessage] = useState('');
   const [pendingFinalData, setPendingFinalData] = useState<any | null>(null);
   
+  // Modal Éxito Modificación (CU10)
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   
@@ -46,25 +48,48 @@ export default function ModificarHuesped() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteMessage, setDeleteMessage] = useState('');
   const [canDelete, setCanDelete] = useState(false);
+
+  // Modal Éxito Eliminación (CU11)
+  const [showDeleteSuccess, setShowDeleteSuccess] = useState(false);
   
   const [highlightDocumento, setHighlightDocumento] = useState(false);
 
-  // --- CARGA DE DATOS DESDE LOCALSTORAGE ---
+  // --- CARGA DE DATOS ---
   useEffect(() => {
     const datosGuardados = localStorage.getItem('datosHuespedModificar');
 
     if (datosGuardados) {
         try {
             const data = JSON.parse(datosGuardados);
-            const dataFormateada = {
+            
+            // 🔍 LOG 1: DATOS QUE LLEGAN DEL CU2
+            console.log("📥 [CU2 -> CU10] Datos Originales recibidos (LocalStorage):", data);
+
+            const safeStr = (val: any) => (val === null || val === undefined) ? '' : val;
+
+            const dataFormateada: FormData = {
                 ...data,
-                // Asegurar formato fecha para el input date (YYYY-MM-DD)
+                cuit: safeStr(data.cuit),
+                posicionIVA: safeStr(data.posicionIVA),
+                telefono: safeStr(data.telefono),
+                email: safeStr(data.email),
+                ocupacion: safeStr(data.ocupacion),
+                nacionalidad: safeStr(data.nacionalidad),
                 fechaNacimiento: data.fechaNacimiento ? data.fechaNacimiento.split('T')[0] : '',
-                direccionHuesped: data.direccionHuesped || INITIAL_FORM.direccionHuesped
+                direccionHuesped: {
+                    calle: safeStr(data.direccionHuesped?.calle),
+                    numero: safeStr(data.direccionHuesped?.numero),
+                    departamento: safeStr(data.direccionHuesped?.departamento),
+                    piso: safeStr(data.direccionHuesped?.piso),
+                    codigo: safeStr(data.direccionHuesped?.codigo),
+                    localidad: safeStr(data.direccionHuesped?.localidad),
+                    provincia: safeStr(data.direccionHuesped?.provincia),
+                    pais: safeStr(data.direccionHuesped?.pais),
+                }
             };
 
             setFormData(dataFormateada);
-            setOriginalData(dataFormateada); // Guardamos el estado inicial exacto para el backend
+            setOriginalData(dataFormateada); 
         } catch (error) {
             console.error("Error al leer datos del storage", error);
             alert("Error al cargar los datos transferidos.");
@@ -82,26 +107,17 @@ export default function ModificarHuesped() {
       const { name, value, type } = e.target;
       // @ts-ignore
       const checked = e.target.checked; 
-      
-      const valorFinal = type === 'checkbox' 
-          ? checked 
-          : (type === 'date' ? value : value.toUpperCase());
+      const valorFinal = type === 'checkbox' ? checked : (type === 'date' ? value : value.toUpperCase());
   
       if (name.startsWith('direccionHuesped.')) {
         const field = name.split('.')[1];
         setFormData((prev) => ({
            ...prev,
-           direccionHuesped: {
-             ...prev.direccionHuesped,
-             [field]: valorFinal,
-           },
+           direccionHuesped: { ...prev.direccionHuesped, [field]: valorFinal },
         }));
         setErrors((prev) => ({ ...prev, [name]: '' })); 
       } else {
-        setFormData({
-          ...formData,
-          [name]: valorFinal,
-        });
+        setFormData({ ...formData, [name]: valorFinal });
         setErrors((prev) => ({ ...prev, [name]: '' }));
   
         if (name === 'numeroDocumento' || name === 'tipoDocumento') {
@@ -116,21 +132,14 @@ export default function ModificarHuesped() {
   };
 
   // --- GUARDAR (CU10 - ACTUALIZAR) ---
-  // AHORA ES METODO POST Y RECIBE UN ARRAY DE 2 OBJETOS
   const guardarHuespedDirecto = async (dataAGuardar: any) => {
+      const bodyPayload = [dataAGuardar, originalData];
       
-      // Construimos el body como indicaste: [Original, Nuevo]
-      // originalData sirve como la "Clave Primaria Compuesta" original para buscar en BD
-      const bodyPayload = [originalData, dataAGuardar];
-
       console.log("📡 --- INICIO PETICIÓN POST (CU10 Actualizar) ---");
-      console.log("1️⃣ Huésped Original (Para identificar):", originalData);
-      console.log("2️⃣ Huésped Modificado (Nuevos datos):", dataAGuardar);
-      console.log("📦 Body enviado (Array):", JSON.stringify(bodyPayload));
-      console.log("-----------------------------------------------");
+      // 🔍 LOG 3: BODY COMPLETO
+      console.log("📦 BODY QUE SE ENVÍA AL BACK:", JSON.stringify(bodyPayload, null, 2));
 
       try {
-          // Cambiado a POST según tu instrucción
           const res = await fetch('http://localhost:8080/huespedes', {
             method: 'POST', 
             headers: { 'Content-Type': 'application/json' },
@@ -139,7 +148,7 @@ export default function ModificarHuesped() {
 
           if (res.ok) {
             setSuccessMessage('La operación ha culminado con éxito.'); 
-            setShowSuccessModal(true);
+            setShowSuccessModal(true); 
             setPendingFinalData(null);
             localStorage.removeItem('datosHuespedModificar');
           } else {
@@ -158,37 +167,46 @@ export default function ModificarHuesped() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      // 1. Preparar datos (Trim/Upper) - SIN ID
+      
+      // Función para limpiar textos
+      const safeTrim = (value: any) => {
+          if (value === null || value === undefined) return '';
+          return value.toString().trim().toUpperCase();
+      };
+
       const transformedData = {
         ...formData, 
-        nombre: formData.nombre.trim(),
-        apellido: formData.apellido.trim(),
-        numeroDocumento: formData.numeroDocumento.trim(),
+        
+        nombre: safeTrim(formData.nombre),
+        apellido: safeTrim(formData.apellido),
+        numeroDocumento: safeTrim(formData.numeroDocumento),
         tipoDocumento: formData.tipoDocumento,
-        telefono: formData.telefono.trim(),
-        email: formData.email.trim(),
-        ocupacion: formData.ocupacion.trim(),
-        nacionalidad: formData.nacionalidad.trim(),
-        cuit: formData.cuit.trim(),
-        posicionIVA: formData.posicionIVA.trim() ? formData.posicionIVA.trim() : "CONSUMIDOR FINAL",
+        telefono: safeTrim(formData.telefono),
+        email: safeTrim(formData.email),
+        ocupacion: safeTrim(formData.ocupacion),
+        nacionalidad: safeTrim(formData.nacionalidad),
+        cuit: safeTrim(formData.cuit),
+        posicionIVA: formData.posicionIVA ? safeTrim(formData.posicionIVA) : "CONSUMIDOR FINAL",
         fechaNacimiento: formData.fechaNacimiento,
         
-        // ELIMINADO: id: formData.id (Ya no se usa ID, la PK es Tipo+Numero)
-        
         direccionHuesped: {
-          calle: formData.direccionHuesped.calle.trim(),
-          departamento: formData.direccionHuesped.departamento.trim(),
-          localidad: formData.direccionHuesped.localidad.trim(),
-          provincia: formData.direccionHuesped.provincia.trim(),
-          pais: formData.direccionHuesped.pais.trim(),
-          numero: formData.direccionHuesped.numero,
-          piso: formData.direccionHuesped.piso,
-          codigo: formData.direccionHuesped.codigo,
+          ...formData.direccionHuesped, // Mantiene el ID
+          calle: safeTrim(formData.direccionHuesped.calle),
+          departamento: safeTrim(formData.direccionHuesped.departamento),
+          localidad: safeTrim(formData.direccionHuesped.localidad),
+          provincia: safeTrim(formData.direccionHuesped.provincia),
+          pais: safeTrim(formData.direccionHuesped.pais),
+          numero: safeTrim(formData.direccionHuesped.numero),
+          piso: safeTrim(formData.direccionHuesped.piso),
+          
+          // --- REVERTIDO: SE ENVÍA COMO STRING (TEXTO) ---
+          codigo: safeTrim(formData.direccionHuesped.codigo),
         }
       };
 
-      // 2. LÓGICA DE CAMBIO DE PK (Documento)
-      // Comparamos contra originalData para ver si tocó la clave compuesta
+      // 🔍 LOG 2: HUESPED MODIFICADO
+      console.log("📝 HUÉSPED MODIFICADO (Datos procesados del formulario):", transformedData);
+
       const documentoCambio = 
           transformedData.tipoDocumento !== originalData.tipoDocumento || 
           transformedData.numeroDocumento !== originalData.numeroDocumento;
@@ -199,15 +217,11 @@ export default function ModificarHuesped() {
             params.append('tipo', transformedData.tipoDocumento);
             params.append('numero', transformedData.numeroDocumento);
             
-            // Verificamos si la NUEVA clave ya existe en otro lado
             const checkRes = await fetch(`http://localhost:8080/huespedes/consultarDocumento?${params.toString()}`);
 
             if (checkRes.ok) {
-                // Si está libre (OK), procedemos a actualizar
                 await guardarHuespedDirecto(transformedData);
-            } 
-            else if (checkRes.status === 409) {
-                // Conflicto: Ya existe alguien MÁS con ese DNI nuevo
+            } else if (checkRes.status === 409) {
                 setPendingFinalData(transformedData); 
                 setModalMessage(`¡CUIDADO! El tipo y número de documento ya existen en el sistema.`);
                 setShowModal(true);
@@ -217,7 +231,6 @@ export default function ModificarHuesped() {
             alert("Error conectando con servidor para validar documento.");
           }
       } else {
-          // No cambió la clave primaria, actualización directa
           await guardarHuespedDirecto(transformedData);
       }
     } 
@@ -225,50 +238,52 @@ export default function ModificarHuesped() {
 
   // --- LÓGICA BORRAR (CU11) ---
   const handleBorrarClick = () => {
-    // Protección extra: Si está alojado, no hace nada
-    if (formData.alojado) return;
-
     setDeleteMessage(`¿Está seguro que desea eliminar del sistema al huésped ${formData.nombre} ${formData.apellido}?`);
     setCanDelete(true); 
     setShowDeleteModal(true);
   };
 
   const confirmDelete = async () => {
+      const mostrarError = (mensaje: string) => {
+        setShowDeleteModal(false); 
+        setTimeout(() => {
+            setDeleteMessage(mensaje);
+            setCanDelete(false); 
+            setShowDeleteModal(true);
+        }, 100);
+      };
+
       try {
-          console.log("🗑️ Enviando DELETE con BODY:", formData);
+          console.log("🗑️ Enviando DELETE con BODY:", originalData);
           
           const res = await fetch('http://localhost:8080/huespedes', { 
               method: 'DELETE',
-              headers: { 
-                  'Content-Type': 'application/json' 
-              },
-              // En DELETE solemos mandar el objeto para identificar la PK compuesta
-              body: JSON.stringify(formData) 
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(originalData) 
           });
 
           if (res.ok) {
               localStorage.removeItem('datosHuespedModificar');
               setShowDeleteModal(false);
-              alert("Huésped eliminado correctamente.");
-              router.push('/menuCU1'); 
+              setShowDeleteSuccess(true);
           } 
           else if (res.status === 409) {
-              // ERROR 409: Conflicto por historial
-              setShowDeleteModal(false); 
-              setTimeout(() => {
-                  setDeleteMessage("El huésped NO puede ser eliminado pues se ha alojado en el Hotel en alguna oportunidad (Integridad Referencial).");
-                  setCanDelete(false); 
-                  setShowDeleteModal(true);
-              }, 100);
+              mostrarError("No se pudo eliminar al huésped porque tiene una factura a su nombre o registros asociados.");
           } 
+          else if (res.status === 400) {
+              mostrarError("El huésped se encuentra actualmente ALOJADO en el hotel y no puede ser eliminado.");
+          }
+          else if (res.status === 404) {
+              mostrarError("Error: No se encontró al huésped en la base de datos (quizás ya fue eliminado).");
+          }
           else {
-              console.error("Error al eliminar:", res.status);
-              alert(`Ocurrió un error al intentar eliminar. Código: ${res.status}`);
+              console.error("Error desconocido al eliminar:", res.status);
+              mostrarError(`Ocurrió un error inesperado. Código: ${res.status}`);
           }
 
       } catch (e) {
           console.error(e);
-          alert("Error de conexión con el servidor.");
+          mostrarError("Error de conexión con el servidor.");
       }
   };
 
@@ -288,8 +303,14 @@ export default function ModificarHuesped() {
       localStorage.removeItem('datosHuespedModificar');
       router.back();
   };
+  
   const handleSuccessClose = () => {
       setShowSuccessModal(false);
+      router.push('/menuCU1');
+  };
+
+  const handleDeleteSuccessClose = () => {
+      setShowDeleteSuccess(false);
       router.push('/menuCU1');
   };
 
@@ -311,13 +332,7 @@ export default function ModificarHuesped() {
             <InputField label="Teléfono" name="telefono" value={formData.telefono} onChange={handleChange} error={errors.telefono} type="tel" isRequired={true} />
             <InputField label="Posición IVA" name="posicionIVA" value={formData.posicionIVA} onChange={handleChange} error={errors.posicionIVA} />
           </div>
-          <DocumentoField 
-             tipoDocumento={formData.tipoDocumento} 
-             numeroDocumento={formData.numeroDocumento} 
-             onChange={handleChange} 
-             error={errors.numeroDocumento} 
-             highlight={highlightDocumento} 
-          />
+          <DocumentoField tipoDocumento={formData.tipoDocumento} numeroDocumento={formData.numeroDocumento} onChange={handleChange} error={errors.numeroDocumento} highlight={highlightDocumento} />
         </div>
 
         <DireccionHuesped direccion={formData.direccionHuesped} onChange={handleChange} errors={errors} />
@@ -330,24 +345,7 @@ export default function ModificarHuesped() {
 
         <div className="container" style={{ justifyContent: 'space-between', marginTop: '20px' }}>
           <div className="box1" style={{ flex: 0 }}>
-             
-             {/* BOTÓN BORRAR */}
-             <button 
-                className="button2 red" 
-                type="button" 
-                onClick={handleBorrarClick}
-                disabled={formData.alojado}
-                title={formData.alojado ? "No se puede borrar un huésped alojado." : "Eliminar huésped"}
-                style={{
-                    backgroundColor: formData.alojado ? '#555555' : undefined,
-                    borderColor: formData.alojado ? '#444444' : undefined,
-                    cursor: formData.alojado ? 'not-allowed' : 'pointer',
-                    opacity: formData.alojado ? 0.7 : 1
-                }}
-             >
-                BORRAR
-             </button>
-
+             <button className="button2 red" type="button" onClick={handleBorrarClick} title="Eliminar huésped">BORRAR</button>
           </div>
           <div className="box1" style={{ display: 'flex', gap: '15px' }}>
             <button className="button2" type="button" onClick={handleCancelClick}>CANCELAR</button>
@@ -358,33 +356,18 @@ export default function ModificarHuesped() {
 
       {/* --- MODALES --- */}
           <ModalConfirmacion 
-              show={showModal} 
-              title="¡CUIDADO!" 
-              message={modalMessage} 
-              icon="⚠️" 
-              closeText="CORREGIR" 
-              confirmText="ACEPTAR IGUALMENTE" 
-              confirmClass="btn-accept yellow" 
-              onClose={handleCloseConflict} 
-              onConfirm={handleConfirmConflict} 
+              show={showModal} title="¡CUIDADO!" message={modalMessage} icon="⚠️" 
+              closeText="CORREGIR" confirmText="ACEPTAR IGUALMENTE" confirmClass="btn-accept yellow" 
+              onClose={handleCloseConflict} onConfirm={handleConfirmConflict} 
           />
 
           <ModalConfirmacion 
-              show={showCancelModal} 
-              title="CANCELAR" 
-              message="¿Desea cancelar la modificación?" 
-              icon="⚠️" 
-              closeText="NO" 
-              confirmText="SI" 
-              confirmClass="btn-accept yellow" 
-              onClose={() => setShowCancelModal(false)} 
-              onConfirm={handleConfirmCancel} 
+              show={showCancelModal} title="CANCELAR" message="¿Desea cancelar la modificación?" icon="⚠️" 
+              closeText="NO" confirmText="SI" confirmClass="btn-accept yellow" 
+              onClose={() => setShowCancelModal(false)} onConfirm={handleConfirmCancel} 
           />
 
-          <ModalExitoModificacion
-              show={showSuccessModal} 
-              onConfirm={handleSuccessClose} 
-          />
+          <ModalExitoModificacion show={showSuccessModal} onConfirm={handleSuccessClose} />
 
           <ModalConfirmacion 
               show={showDeleteModal} 
@@ -396,6 +379,11 @@ export default function ModificarHuesped() {
               confirmClass={canDelete ? "btn-accept red" : "hidden"} 
               onClose={() => setShowDeleteModal(false)} 
               onConfirm={canDelete ? confirmDelete : undefined} 
+          />
+
+          <ModalExitoEliminacion 
+              show={showDeleteSuccess} 
+              onConfirm={handleDeleteSuccessClose} 
           />
     </main>
   );
