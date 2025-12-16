@@ -2,4 +2,348 @@ Endpoints (http://localhost:8080):
 	-(/facturas) Para facturas:
 		+PUT (/generar/fisica) Generar factura a persona fisica:
 			Recibe body: 
+			{
+				idOcupacion: long,
+				listaConsumos: [{
+					idConsumo: Integer,
+					tipoServicio: Text,
+					detalle: Text,
+					monto: Float,
+					facturado Boolean
+				}, ... ]
+				huesped: {
+					"numeroDocumento": Text,
+					"tipoDocumento": Text,
+					"apellido": Text,
+					"nombre": Text,
+					"fechaNacimiento": Text,
+					"telefono": Text,
+					"email": Text,
+					"ocupacion": Text,
+					"nacionalidad": Text,
+					"cuit": Text,
+					"posicionIVA": Text,
+					"alojado": Boolean,
+					"direccionHuesped": {
+						"calle": Text,
+						"numero": Text,
+						"departamento": Text,
+						"piso": Integer,
+						"codigo": Integer,
+						"localidad": Text,
+						"provincia": Text,
+						"pais": Text
+					}
+				}
+			}
+		
+		+PUT (/generar/juridica) Generar factura a persona juridica:
+			Recibe body:
+			{
+				idOcupacion: long,
+				listaConsumos: [{
+					idConsumo: Integer,
+					tipoServicio: Text,
+					detalle: Text,
+					monto: Float,
+					facturado Boolean
+				}, ... ]
+				huesped: {
+					"numeroDocumento": Text,
+					"tipoDocumento": Text,
+					"apellido": Text,
+					"nombre": Text,
+					"fechaNacimiento": Text,
+					"telefono": Text,
+					"email": Text,
+					"ocupacion": Text,
+					"nacionalidad": Text,
+					"cuit": Text,
+					"posicionIVA": Text,
+					"alojado": Boolean,
+					"direccionHuesped": {
+						"calle": Text,
+						"numero": Text,
+						"departamento": Text,
+						"piso": Integer,
+						"codigo": Integer,
+						"localidad": Text,
+						"provincia": Text,
+						"pais": Text
+					}
+				}
+			}
 	
+	-(/habitaciones):
+		+GET obtener estado de habitaciones:
+			Recibe parámetros: fechaInicio, fechaFin (formato yyyy-MM-dd)
+			(http://localhost:8080/habitaciones?fechaInicio=yyyy-MM-dd&&fechaFino=yyyy-MM-dd)
+	
+	-(/huespedes):
+		+PUT registrar huesped:
+			Recibe body:
+			{
+				"numeroDocumento": Text,
+				"tipoDocumento": Text,
+				"apellido": Text,
+				"nombre": Text,
+				"fechaNacimiento": Text,
+				"telefono": Text,
+				"email": Text,
+				"ocupacion": Text,
+				"nacionalidad": Text,
+				"cuit": Text,
+				"posicionIVA": Text,
+				"alojado": Boolean,
+				"direccionHuesped": {
+					"calle": Text,
+					"numero": Text,
+					"departamento": Text,
+					"piso": Integer,
+					"codigo": Integer,
+					"localidad": Text,
+					"provincia": Text,
+					"pais": Text
+				}
+			}
+
+		+POST modificar huesped:
+			Recibe body: (dos HuespedDTO, el primero es el modificado, el segundo es el original)
+			{
+				[
+					{
+						"numeroDocumento": Text,
+						"tipoDocumento": Text,
+						"apellido": Text,
+						"nombre": Text,
+						"fechaNacimiento": Text,
+						"telefono": Text,
+						"email": Text,
+						"ocupacion": Text,
+						"nacionalidad": Text,
+						"cuit": Text,
+						"posicionIVA": Text,
+						"alojado": Boolean,
+						"direccionHuesped": {
+							"calle": Text,
+							"numero": Text,
+							"departamento": Text,
+							"piso": Integer,
+							"codigo": Integer,
+							"localidad": Text,
+							"provincia": Text,
+							"pais": Text
+						}
+					},
+					{
+						"numeroDocumento": Text,
+						"tipoDocumento": Text,
+						"apellido": Text,
+						"nombre": Text,
+						"fechaNacimiento": Text,
+						"telefono": Text,
+						"email": Text,
+						"ocupacion": Text,
+						"nacionalidad": Text,
+						"cuit": Text,
+						"posicionIVA": Text,
+						"alojado": Boolean,
+						"direccionHuesped": {
+							"calle": Text,
+							"numero": Text,
+							"departamento": Text,
+							"piso": Integer,
+							"codigo": Integer,
+							"localidad": Text,
+							"provincia": Text,
+							"pais": Text
+						}
+					}
+				]
+			}
+
+		+DELETE eliminar huesped:
+			Recibe body:
+			{
+				"numeroDocumento": Text,
+				"tipoDocumento": Text,
+				"apellido": Text,
+				"nombre": Text,
+				"fechaNacimiento": Text,
+				"telefono": Text,
+				"email": Text,
+				"ocupacion": Text,
+				"nacionalidad": Text,
+				"cuit": Text,
+				"posicionIVA": Text,
+				"alojado": Boolean,
+				"direccionHuesped": {
+					"calle": Text,
+					"numero": Text,
+					"departamento": Text,
+					"piso": Integer,
+					"codigo": Integer,
+					"localidad": Text,
+					"provincia": Text,
+					"pais": Text
+				}
+			}
+
+		+GET (/buscar) buscar huespedes:
+			Recibe parámetros: nombre, apellido, tipo, numero
+			(http://localhost:8080/huespedes/buscar?nombre=text&&apellido=text&&tipo=text&&numero=text)
+
+		+GET (/consultarDocumento) consultar huesped por su documento:
+			Recibe parámetros: tipo, numero
+			(http://localhost:8080/huespedes/consultarDocumento?tipo=text&&numero=text)
+
+		+GET (/huespedExistente) verifica si el huesped modificado tiene el mismo docuemto que alguno ya guardado y diferente al original
+			Recibe parámetros: tipoModificado, numeroModificado, tipoOriginal, numeroOriginal
+			(http://localhost:8080/huespedes/huespedExistente?tipoModificado=text&&numeroModificado=text&&tipoOriginal=text&&numeroOriginal=text)
+
+		+GET (/listarTodos) retorna todos los huespedes del sistema
+			No requiere parámetros ni body
+	
+	-(/Ocupacion):
+		+POST crear ocupacion
+			Recibe body:
+			{
+				"habitacion": {
+						"numero": Integer,
+						"costoPorNoche": Float,
+						"capacidad": Integer,
+						"estado": Text,
+						"descripcion": Text,
+						"camasIndividuales": Integer,
+						"camaDoble": Integer,
+						"camaKingsize": Integer,
+						"tipoHabitacion": Text
+					},
+				"fechaInicio": Text(yyyy-MM-dd), 
+				"fechaFin": Text(yyyy-MM-dd),
+				"checkIn": Text,
+				"checkOut": Text,
+				"huespedes": [
+					{
+						"numeroDocumento": Text,
+						"tipoDocumento": Text,
+						"apellido": Text,
+						"nombre": Text,
+						"fechaNacimiento": Text,
+						"telefono": Text,
+						"email": Text,
+						"ocupacion": Text,
+						"nacionalidad": Text,
+						"cuit": Text,
+						"posicionIVA": Text,
+						"alojado": Boolean,
+						"direccionHuesped": {
+							"calle": Text,
+							"numero": Text,
+							"departamento": Text,
+							"piso": Integer,
+							"codigo": Integer,
+							"localidad": Text,
+							"provincia": Text,
+							"pais": Text
+						}
+					}, ...  
+				]
+			}
+
+		+POST (/agregarConsumo) agregar consumo a una ocupacion
+			Recibe body:
+			{
+				idOcupacion: Integer,
+				consumo: {
+					idConsumo: Integer,
+					tipoServicio;
+					detalle,
+					monto: Float,
+					facturado: Boolean,
+				}
+			}
+
+		+GET buscar ocupacion
+			Recibe parametos: numero, hora. (numero de habitacion y hora de checkout)
+			(http://localhost:8080/Ocupacion?numero=text&&hora=hh:mm:ss)
+
+	-(/reservas)
+		+PUT (/cancelar) cancelar una reserva
+			Recibe body:
+			{
+				[
+					{
+						"idReserva": Integer,
+						"fechaInicio": Text (yyyy-MM-dd),
+						"fechaFin": Text (yyyy-MM-dd),
+						"estado": Text,
+						"nombre": Text,
+						"apellido": Text,
+						"telefono": Text,
+						"habitacionNumero": Integer,
+						"tipoHabitacion": Integer
+					}
+				]
+			}
+
+		+POST crear reserva:
+			Recibe body:
+			{
+				[
+					{
+						"idReserva": Integer,
+						"fechaInicio": Text (yyyy-MM-dd),
+						"fechaFin": Text (yyyy-MM-dd),
+						"estado": Text,
+						"nombre": Text,
+						"apellido": Text,
+						"telefono": Text,
+						"habitacionNumero": Integer,
+						"tipoHabitacion": Integer
+					}
+				]
+			}
+
+		+GET (/buscar) buscar las reservas
+			No recibe parámetros ni body
+
+	-(/responsable-pago)
+		+POST (/juridica) registrar una persona juridica
+			Recibe body:
+			{
+				"razonSocial": Text,
+				"cuit": Text,
+				"telefono": Text,
+				"direccion":{
+					"calle": Text,
+					"numero": Text,
+					"departamento": Text,
+					"piso": Integer,
+					"codigo": Integer,
+					"localidad": Text,
+					"provincia": Text,
+					"pais": Text
+				}
+			}
+
+		+GET (/juridica) obtener persona juridica
+			Recibe parámeto: cuit
+			(https://localhost:8080/juridica?cuit=text)
+
+	-(/usuario)
+		+POST (/login) login
+			Recibe body:
+			{
+				"username": Text,
+				"passw": Text,
+				"rol": Text
+			}
+
+		+POST (/crear) crear usuario
+			Recibe body:
+			{
+				"username": Text,
+				"passw": Text,
+				"rol": Text
+			}
