@@ -168,39 +168,54 @@ export default function ModificarHuesped() {
 
     if (Object.keys(newErrors).length === 0) {
       
-      // Función para limpiar textos
-      const safeTrim = (value: any) => {
-          if (value === null || value === undefined) return '';
-          return value.toString().trim().toUpperCase();
+      // 1. Limpieza PROFUNDA (Saca espacios extra en el medio + trim + mayúsculas)
+      // Aplica a campos de texto libre donde el usuario puede escribir frases
+      const cleanString = (val: any) => {
+          if (!val) return '';
+          return val.toString().replace(/\s+/g, ' ').trim().toUpperCase();
+      };
+
+      // 2. Limpieza BÁSICA (Solo trim + mayúsculas)
+      // Aplica a campos codificados o simples (Email, DNI, etc)
+      const cleanBasic = (val: any) => {
+          if (!val) return '';
+          return val.toString().trim().toUpperCase();
       };
 
       const transformedData = {
         ...formData, 
         
-        nombre: safeTrim(formData.nombre),
-        apellido: safeTrim(formData.apellido),
-        numeroDocumento: safeTrim(formData.numeroDocumento),
-        tipoDocumento: formData.tipoDocumento,
-        telefono: safeTrim(formData.telefono),
-        email: safeTrim(formData.email),
-        ocupacion: safeTrim(formData.ocupacion),
-        nacionalidad: safeTrim(formData.nacionalidad),
-        cuit: safeTrim(formData.cuit),
-        posicionIVA: formData.posicionIVA ? safeTrim(formData.posicionIVA) : "CONSUMIDOR FINAL",
+        // --- Aplicando limpieza profunda (replace) ---
+        nombre: cleanString(formData.nombre),
+        apellido: cleanString(formData.apellido),
+        ocupacion: cleanString(formData.ocupacion),
+        nacionalidad: cleanString(formData.nacionalidad),
+        
+        // --- Limpieza básica ---
+        email: cleanBasic(formData.email), 
+        posicionIVA: formData.posicionIVA ? cleanBasic(formData.posicionIVA) : "CONSUMIDOR FINAL",
+        
+        // Números y Fechas (Solo trim para seguridad, sin uppercase)
+        cuit: formData.cuit ? formData.cuit.toString().trim() : '',
+        telefono: formData.telefono ? formData.telefono.toString().trim() : '',
         fechaNacimiento: formData.fechaNacimiento,
+        
+        numeroDocumento: cleanBasic(formData.numeroDocumento), 
+        tipoDocumento: formData.tipoDocumento,
         
         direccionHuesped: {
           ...formData.direccionHuesped, // Mantiene el ID
-          calle: safeTrim(formData.direccionHuesped.calle),
-          departamento: safeTrim(formData.direccionHuesped.departamento),
-          localidad: safeTrim(formData.direccionHuesped.localidad),
-          provincia: safeTrim(formData.direccionHuesped.provincia),
-          pais: safeTrim(formData.direccionHuesped.pais),
-          numero: safeTrim(formData.direccionHuesped.numero),
-          piso: safeTrim(formData.direccionHuesped.piso),
+          // --- Dirección con limpieza profunda ---
+          calle: cleanString(formData.direccionHuesped.calle),
+          departamento: cleanString(formData.direccionHuesped.departamento),
+          localidad: cleanString(formData.direccionHuesped.localidad),
+          provincia: cleanString(formData.direccionHuesped.provincia),
+          pais: cleanString(formData.direccionHuesped.pais),
           
-          // --- REVERTIDO: SE ENVÍA COMO STRING (TEXTO) ---
-          codigo: safeTrim(formData.direccionHuesped.codigo),
+          // Numeraciones de dirección
+          numero: formData.direccionHuesped.numero,
+          piso: formData.direccionHuesped.piso,
+          codigo: formData.direccionHuesped.codigo,
         }
       };
 
@@ -271,7 +286,7 @@ export default function ModificarHuesped() {
               mostrarError("No se pudo eliminar al huésped porque tiene una factura a su nombre o registros asociados.");
           } 
           else if (res.status === 400) {
-              mostrarError("El huésped se encuentra actualmente ALOJADO en el hotel y no puede ser eliminado.");
+              mostrarError("El huésped se ALOJÓ en el hotel y no puede ser eliminado.");
           }
           else if (res.status === 404) {
               mostrarError("Error: No se encontró al huésped en la base de datos (quizás ya fue eliminado).");
