@@ -56,10 +56,27 @@ public class GestorDeReservasTest {
             }
         };
         habitacion.setNumero(101);
-        
 
         when(habitacionDAO.findById(101)).thenReturn(Optional.of(habitacion));
-        when(reservaDAO.saveAll(anyList())).thenAnswer(invocation -> invocation.getArgument(0));
+        when(reservaDAO.saveAll(anyList())).thenAnswer(invocation -> {
+            List<Reserva> reservas = invocation.getArgument(0);
+            List<ReservaDTO> dtos = new ArrayList<>();
+            for (Reserva r : reservas) {
+                ReservaDTO d = new ReservaDTO();
+                d.setIdReserva(r.getIdReserva());
+                d.setFechaInicio(r.getFechaInicio());
+                d.setFechaFin(r.getFechaFin());
+                d.setEstado(r.getEstado());
+                d.setNombre(r.getNombre());
+                d.setApellido(r.getApellido());
+                d.setTelefono(r.getTelefono());
+                if (r.getHabitacion() != null) {
+                    d.setHabitacionNumero(r.getHabitacion().getNumero());
+                }
+                dtos.add(d);
+            }
+            return dtos;
+        });
 
         // Act
         List<ReservaDTO> resultado = gestorDeReservas.crearReserva(listaDto);
@@ -153,11 +170,11 @@ public class GestorDeReservasTest {
         r1.setIdReserva(1);
         Reserva r2 = new Reserva();
         r2.setIdReserva(2);
-        
+
         ReservaDTO r1Dto = new ReservaDTO();
-        r1.setIdReserva(1);
+        r1Dto.setIdReserva(1);
         ReservaDTO r2Dto = new ReservaDTO();
-        r2.setIdReserva(2);
+        r2Dto.setIdReserva(2);
         List<ReservaDTO> lista = Arrays.asList(r1Dto, r2Dto);
 
         when(reservaDAO.findById(1)).thenReturn(Optional.of(r1));
