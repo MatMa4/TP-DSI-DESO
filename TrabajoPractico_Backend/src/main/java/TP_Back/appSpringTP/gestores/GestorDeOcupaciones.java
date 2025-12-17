@@ -15,6 +15,13 @@ import TP_Back.appSpringTP.modelo.ocupacion.Ocupacion;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import TP_Back.appSpringTP.mappers.OcupacionMapper;
+import java.time.LocalTime;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+import TP_Back.appSpringTP.DTOs.ocupacion.SolicitudConsumoDTO;
+import TP_Back.appSpringTP.modelo.ocupacion.Consumo;
 
 /**
  *
@@ -35,7 +42,7 @@ public class GestorDeOcupaciones {
     private final HuespedMapper huespedMapper;
 
     @Autowired
-    private final TP_Back.appSpringTP.mappers.OcupacionMapper ocupacionMapper;
+    private final OcupacionMapper ocupacionMapper;
 
     public void crearOcupacion(OcupacionDTO ocupacion) {
         Ocupacion ocupacionNueva = new Ocupacion();
@@ -46,23 +53,23 @@ public class GestorDeOcupaciones {
         ocupacionNueva.setCheckOut(ocupacion.getCheckOut());
         ocupacionNueva.setHuespedes(huespedMapper.toEntityList(ocupacion.getHuespedes()));
         ocupacionDAO.crearOcupacion(ocupacionNueva);
-        
-        for (HuespedDTO h : ocupacion.getHuespedes()){
+
+        for (HuespedDTO h : ocupacion.getHuespedes()) {
             HuespedDTO huesped = huespedDAO.consultarDocumento(h.getTipoDocumento(), h.getNumeroDocumento()).get();
             huesped.setAlojado(true);
             huespedDAO.guardar(huesped);
         }
     }
 
-    public OcupacionDTO obtenerOcupacionActual(int numeroHabitacion, java.time.LocalTime hora) {
+    public OcupacionDTO obtenerOcupacionActual(int numeroHabitacion, LocalTime hora) {
         // Assume 'today' is the current date
-        java.util.Calendar calendar = java.util.Calendar.getInstance();
-        calendar.setTime(new java.util.Date());
-        calendar.add(java.util.Calendar.DAY_OF_YEAR, -1);
-        calendar.set(java.util.Calendar.HOUR_OF_DAY, 23);
-        calendar.set(java.util.Calendar.MINUTE, 59);
-        calendar.set(java.util.Calendar.SECOND, 0);
-        java.util.Date fechaActual = calendar.getTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 0);
+        Date fechaActual = calendar.getTime();
 
         Ocupacion ocupacion = ocupacionDAO.getOcupacionPorHabitacionYFecha(numeroHabitacion, fechaActual);
 
@@ -71,8 +78,8 @@ public class GestorDeOcupaciones {
 
             // Calculate total price
             long diffInMillies = Math.abs(ocupacion.getFechaFin().getTime() - ocupacion.getFechaInicio().getTime());
-            long diff = java.util.concurrent.TimeUnit.DAYS.convert(diffInMillies,
-                    java.util.concurrent.TimeUnit.MILLISECONDS);
+            long diff = TimeUnit.DAYS.convert(diffInMillies,
+                    TimeUnit.MILLISECONDS);
 
             double costoEstadia = diff * dto.getHabitacion().getCostoPorNoche();
 
@@ -84,10 +91,10 @@ public class GestorDeOcupaciones {
         return null;
     }
 
-    public void agregarConsumo(TP_Back.appSpringTP.DTOs.ocupacion.SolicitudConsumoDTO solicitud) {
+    public void agregarConsumo(SolicitudConsumoDTO solicitud) {
         Ocupacion ocupacion = ocupacionDAO.getOcupacionById(solicitud.getIdOcupacion());
         if (ocupacion != null) {
-            TP_Back.appSpringTP.modelo.ocupacion.Consumo consumo = new TP_Back.appSpringTP.modelo.ocupacion.Consumo();
+            Consumo consumo = new Consumo();
             consumo.setTipoServicio(solicitud.getConsumo().getTipoServicio());
             consumo.setDetalle(solicitud.getConsumo().getDetalle());
             consumo.setMonto(solicitud.getConsumo().getMonto());

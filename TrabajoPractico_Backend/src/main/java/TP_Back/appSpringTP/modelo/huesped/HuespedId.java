@@ -20,29 +20,39 @@ public class HuespedId implements Serializable {
     private String tipoDocumento;
 
     // Constructor vacío obligatorio
-    public HuespedId() {}
+    public HuespedId() {
+    }
 
     public HuespedId(String numeroDocumento, String tipoDocumento) {
         this.numeroDocumento = numeroDocumento;
         this.tipoDocumento = tipoDocumento;
     }
 
-    public String getNumeroDocumento() { return numeroDocumento; }
-    public void setNumeroDocumento(String numeroDocumento) { this.numeroDocumento = numeroDocumento; }
+    public String getNumeroDocumento() {
+        return numeroDocumento;
+    }
 
-    public String getTipoDocumento() { return tipoDocumento; }
-    public void setTipoDocumento(String tipoDocumento) { this.tipoDocumento = tipoDocumento; }
+    public void setNumeroDocumento(String numeroDocumento) {
+        this.numeroDocumento = numeroDocumento;
+    }
 
-    // ================================
-    // equals() y hashCode() obligatorios
-    // ================================
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof HuespedId)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof HuespedId))
+            return false;
         HuespedId that = (HuespedId) o;
         return Objects.equals(numeroDocumento, that.numeroDocumento) &&
-               Objects.equals(tipoDocumento, that.tipoDocumento);
+                Objects.equals(tipoDocumento, that.tipoDocumento);
     }
 
     @Override
@@ -81,4 +91,3 @@ public class HuespedId implements Serializable {
         }
     }
 }
-

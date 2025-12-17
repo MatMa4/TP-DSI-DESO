@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
@@ -38,10 +38,9 @@ public class ControladorResponsableDePago {
             return ResponseEntity.internalServerError().body("Error al registrar persona jurídica: " + causeMessage);
         }
     }
-    
-    
+
     @GetMapping("/juridica")
-    public ResponseEntity<?> getPersonaJuridica(@org.springframework.web.bind.annotation.RequestParam String cuit) {
+    public ResponseEntity<?> getPersonaJuridica(@RequestParam String cuit) {
         try {
             PersonaJuridicaDTO dto = gestorResponsableDePago.buscarPersonaJuridica(cuit);
             return ResponseEntity.ok(dto);

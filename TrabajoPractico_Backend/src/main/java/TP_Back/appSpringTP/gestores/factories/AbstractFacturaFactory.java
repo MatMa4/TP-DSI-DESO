@@ -32,7 +32,7 @@ public abstract class AbstractFacturaFactory {
 
         validarSolicitud(idOcupacion, listaConsumos);
 
-        // 1. Obtener Responsable (Template Method hook)
+        // 1. Obtener Responsable
         ResponsableDePago responsable = obtenerResponsable(identificadorResponsable);
         if (responsable == null) {
             throw new RuntimeException("No se pudo identificar al Responsable de Pago.");
@@ -67,7 +67,6 @@ public abstract class AbstractFacturaFactory {
             throw new IllegalArgumentException("El monto total de la factura debe ser mayor a 0.");
         }
 
-        // 5. Persistir
         return facturaDAO.save(factura);
     }
 

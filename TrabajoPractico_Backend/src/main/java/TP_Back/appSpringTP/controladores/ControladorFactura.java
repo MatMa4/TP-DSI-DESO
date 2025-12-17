@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import TP_Back.appSpringTP.DTOs.SolicitudFacturacionJuridicaDTO;
 
 @RestController
 @RequestMapping("/facturas")
@@ -21,17 +22,17 @@ public class ControladorFactura {
     public ResponseEntity<?> generarFacturaFisica(@RequestBody SolicitudFacturacionDTO solicitud) {
         try {
             Factura factura = gestorDeFacturas.generarFacturaFisica(solicitud);
-            return ResponseEntity.ok(factura.getNumero()); 
+            return ResponseEntity.ok(factura.getNumero());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PostMapping("/generar/juridica")
-    public ResponseEntity<?> generarFacturaJuridica(@RequestBody TP_Back.appSpringTP.DTOs.SolicitudFacturacionJuridicaDTO solicitud) {
+    public ResponseEntity<?> generarFacturaJuridica(@RequestBody SolicitudFacturacionJuridicaDTO solicitud) {
         try {
             Factura factura = gestorDeFacturas.generarFacturaJuridica(solicitud);
-            return ResponseEntity.ok(factura.getNumero()); 
+            return ResponseEntity.ok(factura.getNumero());
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

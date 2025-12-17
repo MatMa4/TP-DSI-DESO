@@ -8,6 +8,7 @@ import TP_Back.appSpringTP.modelo.pago.PersonaJuridica;
 import TP_Back.appSpringTP.repositorios.RepositorioPersonaJuridica;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
 /**
  *
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class PersonaJuridicaDAOImpl implements PersonaJuridicaDAO {
-    
+
     @Autowired
     private RepositorioPersonaJuridica repositorioPersonaJuridica;
 
@@ -25,7 +26,7 @@ public class PersonaJuridicaDAOImpl implements PersonaJuridicaDAO {
     }
 
     @Override
-    public java.util.Optional<PersonaJuridica> buscarPorCuit(String cuit) {
+    public Optional<PersonaJuridica> buscarPorCuit(String cuit) {
         return repositorioPersonaJuridica.findByCuit(cuit);
     }
 }

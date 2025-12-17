@@ -4,30 +4,30 @@
  */
 package TP_Back.appSpringTP.DAOs;
 
-import TP_Back.appSpringTP.DTOs.ocupacion.OcupacionDTO;
-import TP_Back.appSpringTP.mappers.HabitacionMapper;
-import TP_Back.appSpringTP.mappers.OcupacionMapper;
 import TP_Back.appSpringTP.modelo.ocupacion.Ocupacion;
 import TP_Back.appSpringTP.repositorios.repositorioOcupacion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
  * @author mateo
  */
 @Service
-public class OcupacionDAOImpl implements OcupacionDAO{
+public class OcupacionDAOImpl implements OcupacionDAO {
     @Autowired
     private repositorioOcupacion repoOcupacion;
+
     @Override
-    public void crearOcupacion(Ocupacion ocupacion){
+    public void crearOcupacion(Ocupacion ocupacion) {
         repoOcupacion.save(ocupacion);
     }
 
     @Override
-    public Ocupacion getOcupacionPorHabitacionYFecha(int numero, java.util.Date fecha) {
-        java.util.List<Ocupacion> ocupaciones = repoOcupacion.findOcupacionPorHabitacionYFecha(numero, fecha);
+    public Ocupacion getOcupacionPorHabitacionYFecha(int numero, Date fecha) {
+        List<Ocupacion> ocupaciones = repoOcupacion.findOcupacionPorHabitacionYFecha(numero, fecha);
         if (ocupaciones != null && !ocupaciones.isEmpty()) {
             return ocupaciones.get(0);
         }

@@ -1,27 +1,15 @@
 package TP_Back.appSpringTP.gestores;
 
-import TP_Back.appSpringTP.DAOs.FacturaDAO;
-import TP_Back.appSpringTP.DAOs.NotaDeCreditoDAO;
-import TP_Back.appSpringTP.DTOs.NotaDeCreditoDTO;
 import TP_Back.appSpringTP.DTOs.SolicitudFacturacionJuridicaDTO;
 import TP_Back.appSpringTP.modelo.factura.Factura;
-import TP_Back.appSpringTP.modelo.factura.NotaDeCredito;
 import TP_Back.appSpringTP.gestores.factories.FacturaFisicaFactory;
 import TP_Back.appSpringTP.gestores.factories.FacturaJuridicaFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
+import TP_Back.appSpringTP.DTOs.SolicitudFacturacionDTO;
 
 @Service
 public class GestorDeFacturas {
-
-    @Autowired
-    private FacturaDAO facturaDAO;
-
-    @Autowired
-    private NotaDeCreditoDAO notaDeCreditoDAO;
 
     @Autowired
     private FacturaFisicaFactory facturaFisicaFactory;
@@ -29,7 +17,7 @@ public class GestorDeFacturas {
     @Autowired
     private FacturaJuridicaFactory facturaJuridicaFactory;
 
-    public Factura generarFacturaFisica(TP_Back.appSpringTP.DTOs.SolicitudFacturacionDTO solicitud) {
+    public Factura generarFacturaFisica(SolicitudFacturacionDTO solicitud) {
         if (solicitud == null) {
             throw new RuntimeException("La solicitud no puede ser nula.");
         }

@@ -22,7 +22,6 @@ public class Usuario {
     @Column(name = "rol", length = 20, nullable = false)
     private String rol;
 
-    // Constructor vacío necesario para JPA
     public Usuario() {
     }
 

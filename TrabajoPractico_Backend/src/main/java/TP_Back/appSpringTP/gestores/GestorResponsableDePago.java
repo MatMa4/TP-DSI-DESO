@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GestorResponsableDePago {
-    
+
     @Autowired
     private PersonaJuridicaDAO personaJuridicaDAO;
-    
+
     @Autowired
     private DireccionDAO direccionDAO;
 
@@ -36,21 +36,24 @@ public class GestorResponsableDePago {
         direccion.setDepartamento(dirDto.getDepartamento());
         direccion.setCodigo(dirDto.getCodigo());
         direccion.setPiso(dirDto.getPiso());
-        
+
         // Asignar ID
-        direccion.setId(dirDto.getCalle(), dirDto.getNumero(), dirDto.getLocalidad(), dirDto.getProvincia(), dirDto.getPais());
-        
+        direccion.setId(dirDto.getCalle(), dirDto.getNumero(), dirDto.getLocalidad(), dirDto.getProvincia(),
+                dirDto.getPais());
+
         // Crear ID objeto para busqueda
         DireccionId id = new DireccionId(dirDto.getCalle(), dirDto.getNumero());
-        // Completar el ID con los otros campos para la busqueda completa (aunque el constructor de DireccionId solo toma calle y numero?? Revisemos DireccionId)
-        // DireccionId.java tiene calle, numero, localidad, provincia, pais. El constructor de 2 args solo setea calle y numero.
+        // Completar el ID con los otros campos para la busqueda completa (aunque el
+        // constructor de DireccionId solo toma calle y numero?? Revisemos DireccionId)
+        // DireccionId.java tiene calle, numero, localidad, provincia, pais. El
+        // constructor de 2 args solo setea calle y numero.
         // Pero el equals usa todos. Necesitamos setear todos.
         id.setLocalidad(dirDto.getLocalidad());
         id.setProvincia(dirDto.getProvincia());
         id.setPais(dirDto.getPais());
 
         Optional<Direccion> existingDir = repoDireccion.findById(id);
-        
+
         if (existingDir.isPresent()) {
             direccion = existingDir.get();
         } else {
@@ -67,30 +70,30 @@ public class GestorResponsableDePago {
         pj.setCuit(dto.getCuit());
         pj.setTelefono(dto.getTelefono());
         pj.setDireccion(direccion); // Asignar la direccion (existente o nueva)
-        
+
         try {
             personaJuridicaDAO.save(pj);
         } catch (Exception e) {
-             throw new RuntimeException("Error al guardar la persona jurídica", e);
+            throw new RuntimeException("Error al guardar la persona jurídica", e);
         }
     }
+
     public PersonaJuridicaDTO buscarPersonaJuridica(String cuit) {
         Optional<PersonaJuridica> pjOpt = personaJuridicaDAO.buscarPorCuit(cuit);
-        
+
         if (pjOpt.isEmpty()) {
             throw new EntityNotFoundException("No se encontró una persona jurídica con CUIT: " + cuit);
         }
-        
+
         PersonaJuridica pj = pjOpt.get();
         PersonaJuridicaDTO dto = new PersonaJuridicaDTO();
         dto.setRazonSocial(pj.getRazonSocial());
         dto.setCuit(pj.getCuit());
         dto.setTelefono(pj.getTelefono());
-        
+
         if (pj.getDireccion() != null) {
             Direccion dir = pj.getDireccion();
             DireccionDTO dirDto = new DireccionDTO();
-            // Asumiendo que DireccionDTO tiene setters para estos campos o un constructor compatible
             dirDto.setCalle(dir.getCalle());
             dirDto.setNumero(dir.getNumero());
             dirDto.setLocalidad(dir.getLocalidad());
@@ -101,7 +104,7 @@ public class GestorResponsableDePago {
             dirDto.setCodigo(dir.getCodigo());
             dto.setDireccion(dirDto);
         }
-        
+
         return dto;
     }
 }

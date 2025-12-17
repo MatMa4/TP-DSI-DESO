@@ -12,7 +12,9 @@ import java.util.Optional;
  * @author mateo
  */
 public interface PersonaFisicaDAO {
-    PersonaFisica save(TP_Back.appSpringTP.modelo.pago.PersonaFisica personaFisica);
-    Optional<TP_Back.appSpringTP.modelo.pago.PersonaFisica> getByHuesped(String tipoDocumento, String numeroDocumento);
+    PersonaFisica save(PersonaFisica personaFisica);
+
+    Optional<PersonaFisica> getByHuesped(String tipoDocumento, String numeroDocumento);
+
     Integer getIdResponsablePagoConHuesped(String tipoDocumento, String numeroDocumento);
 }
