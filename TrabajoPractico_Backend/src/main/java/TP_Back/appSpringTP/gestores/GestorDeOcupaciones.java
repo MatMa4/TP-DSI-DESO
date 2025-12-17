@@ -5,7 +5,9 @@
 package TP_Back.appSpringTP.gestores;
 
 import TP_Back.appSpringTP.DAOs.ConsumoDAO;
+import TP_Back.appSpringTP.DAOs.HuespedDAO;
 import TP_Back.appSpringTP.DAOs.OcupacionDAO;
+import TP_Back.appSpringTP.DTOs.HuespedDTO;
 import TP_Back.appSpringTP.DTOs.ocupacion.OcupacionDTO;
 import TP_Back.appSpringTP.mappers.HabitacionMapper;
 import TP_Back.appSpringTP.mappers.HuespedMapper;
@@ -26,6 +28,8 @@ public class GestorDeOcupaciones {
     @Autowired
     private final ConsumoDAO consumoDAO;
     @Autowired
+    private final HuespedDAO huespedDAO;
+    @Autowired
     private final HabitacionMapper habitacionMapper;
     @Autowired
     private final HuespedMapper huespedMapper;
@@ -42,6 +46,12 @@ public class GestorDeOcupaciones {
         ocupacionNueva.setCheckOut(ocupacion.getCheckOut());
         ocupacionNueva.setHuespedes(huespedMapper.toEntityList(ocupacion.getHuespedes()));
         ocupacionDAO.crearOcupacion(ocupacionNueva);
+        
+        for (HuespedDTO h : ocupacion.getHuespedes()){
+            HuespedDTO huesped = huespedDAO.consultarDocumento(h.getTipoDocumento(), h.getNumeroDocumento()).get();
+            huesped.setAlojado(true);
+            huespedDAO.guardar(huesped);
+        }
     }
 
     public OcupacionDTO obtenerOcupacionActual(int numeroHabitacion, java.time.LocalTime hora) {

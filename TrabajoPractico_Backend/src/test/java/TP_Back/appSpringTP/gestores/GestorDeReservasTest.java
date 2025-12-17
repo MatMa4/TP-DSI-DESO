@@ -56,18 +56,19 @@ public class GestorDeReservasTest {
             }
         };
         habitacion.setNumero(101);
+        
 
         when(habitacionDAO.findById(101)).thenReturn(Optional.of(habitacion));
         when(reservaDAO.saveAll(anyList())).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Act
-        List<Reserva> resultado = gestorDeReservas.crearReserva(listaDto);
+        List<ReservaDTO> resultado = gestorDeReservas.crearReserva(listaDto);
 
         // Assert
         assertNotNull(resultado);
         assertEquals(1, resultado.size());
         assertEquals("JUAN", resultado.get(0).getNombre());
-        assertEquals(habitacion, resultado.get(0).getHabitacion());
+        assertEquals(habitacion.getNumero(), resultado.get(0).getHabitacionNumero());
         verify(habitacionDAO).findById(101);
         verify(reservaDAO).saveAll(anyList());
     }
@@ -152,7 +153,12 @@ public class GestorDeReservasTest {
         r1.setIdReserva(1);
         Reserva r2 = new Reserva();
         r2.setIdReserva(2);
-        List<Reserva> lista = Arrays.asList(r1, r2);
+        
+        ReservaDTO r1Dto = new ReservaDTO();
+        r1.setIdReserva(1);
+        ReservaDTO r2Dto = new ReservaDTO();
+        r2.setIdReserva(2);
+        List<ReservaDTO> lista = Arrays.asList(r1Dto, r2Dto);
 
         when(reservaDAO.findById(1)).thenReturn(Optional.of(r1));
         when(reservaDAO.findById(2)).thenReturn(Optional.of(r2));
