@@ -40,7 +40,7 @@ const ListaReservas: React.FC<ListaReservasProps> = ({ reservas, onToggleReserva
                             readOnly 
                         />
                     <div className="reserva-info">
-                        <strong>Reserva #{reserva.idReserva} - {reserva.habitacion.tipoHabitacion} (Habitación. {reserva.habitacion.numero})</strong>
+                        <strong>Reserva #{reserva.idReserva} - {reserva.tipoHabitacion} (Habitación. {reserva.habitacionNumero})</strong>
                         <span>Huésped: {reserva.nombre} {reserva.apellido}</span>
                         <span>Fecha: {reserva.fechaInicio} al {reserva.fechaFin}</span>
                     </div>

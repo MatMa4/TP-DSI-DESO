@@ -36,5 +36,5 @@ apellido: string;
 nombre: string;
 telefono: string;
 habitacionNumero:number;
-tipohabitacion:string;
+tipoHabitacion:string;
 }

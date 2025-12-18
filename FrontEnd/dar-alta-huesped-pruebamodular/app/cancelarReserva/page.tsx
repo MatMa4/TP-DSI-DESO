@@ -2,13 +2,11 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-// Importa tus componentes reutilizables existentes
 import { InputField } from '../componentsCU4-5-15/InputField'; 
 import ModalError from '../componentsCU4-5-15/ModalError';
 import ModalConfirmarCancelacion from './ModalConfirmarCancelacion';
-import ModalFin from '../componentsCU4-5-15/ModalFinalizacion';
+import ModalFin from './ModalFin';
 
-// Importa los nuevos creados para este CU
 import ListaReservas from './Listareservas';
 import './stylesCancelarReserva.css'; 
 import { ReservaDTO, CriterioBusquedaReserva } from './interfaces';
@@ -79,7 +77,7 @@ export default function CancelarReservaPage() {
             }
 
             const url = `${BASE_URL}/reservas/buscar?${params.toString()}`;
-            
+            console.log(url);
             const response = await fetch(url);
 
             if (!response.ok) {

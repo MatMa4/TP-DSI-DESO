@@ -42,7 +42,7 @@ const ModalConfirmarCancelacion: React.FC<ModalConfirmarCancelacionProps> = ({
                 }}>
                     {reservas.map(reserva => (
                         <div key={reserva.idReserva} style={{ borderBottom: '1px solid #eee', padding: '8px 0', fontSize: '0.9em' }}>
-                            <strong>#{reserva.idReserva}</strong> - Hab. {reserva.habitacion.numero} ({reserva.apellido})
+                            <strong>#{reserva.idReserva}</strong> - Hab. {reserva.habitacionNumero} ({reserva.apellido})
                             <br/>
                             <span style={{color: '#666', fontSize: '0.85em'}}>
                                 {reserva.fechaInicio} al {reserva.fechaFin}
