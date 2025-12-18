@@ -176,7 +176,7 @@ export default function GenerarFactura() {
             const { seleccionado, id, ...consumoOriginal } = item as any; 
             return consumoOriginal; 
         });
-
+        /*
     if (incluirEstadia) {
         const itemEstadia: ItemConsumoDTO = {
             idConsumo: 0, 
@@ -187,6 +187,7 @@ export default function GenerarFactura() {
         };
         consumosSeleccionados.push(itemEstadia);
     }
+    */
 
     let responsablePayload: any;
     if (esResponsableEmpresa) {
@@ -224,7 +225,9 @@ export default function GenerarFactura() {
         listaConsumos: consumosSeleccionados, 
         ...responsablePayload,
     };
-
+    if (!incluirEstadia){
+        payloadFactura.idOcupacion = 0;
+    }
     try {
         const response = await fetch(url, {
             method: 'POST',
