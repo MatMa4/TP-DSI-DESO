@@ -59,10 +59,11 @@ public abstract class AbstractFacturaFactory {
 
         // 4. Calcular Montos y Actualizar Estados
         float total = calcularTotalYActualizarEstados(ocupacion, listaConsumos);
+        float iva = total * 0.30f;
 
         if (total > 0) {
-            factura.setMontoTotal(total);
-            factura.setIva(total * 0.30f);
+            factura.setMontoTotal(total + iva);
+            factura.setIva(iva);
         } else {
             throw new IllegalArgumentException("El monto total de la factura debe ser mayor a 0.");
         }
